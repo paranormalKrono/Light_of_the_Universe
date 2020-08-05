@@ -1,0 +1,13 @@
+<gametext>
+  
+  <goals>
+    <goal>Найти и победить команду соперника</goal>
+  </goals>
+
+
+  <startdialogs>
+    <dialog nameid ="7">
+      <text>Новое утро, пилоты! Сегодня обычный бой 5 на 5. Поехали!</text>
+    </dialog>
+  </startdialogs>
+</gametext>

@@ -1,0 +1,99 @@
+<gametext>
+  
+  <goals>
+    <goal>Обойти все препятствия и дойти до конца</goal>
+    <goal>Пострелять мишени</goal>
+    <goal>Двигаться дальше</goal>
+    <goal>Уничтожить всех противников</goal>
+    <goal>Лететь вперёд</goal>
+  </goals>
+
+
+  <ingamedialogs>
+    <ingamedialog time="7">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Постреляйте все мишени, поворачивая корабль в нужном направлении.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    <ingamedialog time="3">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Круто.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    <ingamedialog time="7">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Вы добрались до арены. Теперь уничтожьте всех противников, чтобы пройти дальше.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    <ingamedialog time="5">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>У вас получилось... очень хорошо. Выход открыт.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    <ingamedialog time="6">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Вот вы и прошли обучение.  Что будет дальше не знаю, но вы готовы. Удачи!</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+  </ingamedialogs>
+
+
+  <startdialogs>
+    <dialog nameid ="4">
+      <text>Да, да, принесите мне напиток "Help". Что? Как нет?..</text>
+    </dialog>
+    <dialog nameid ="6">
+      <text>Вы уже выпили все "Help".</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>... (короткое молчание) Да?</text>
+    </dialog>
+    <dialog nameid ="6">
+      <text>Может быть кофе?</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Да это же прошлый век! Ну ладно... давай кофе.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Кхэ-кхм.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Ах да. Я совсем про вас забыл.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Каин, сегодня ваш счастливый день! Вы стали победителем викторины... Стоп... это не тот текст...</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Извините.
+      (Кто-то встал с кресла, после чего послышались громкие крики и непечатные слова)</text>
+    </dialog>
+    <dialog nameid ="4">
+      <prevtext>(Кто-то сел)
+      </prevtext>
+      <text>Давайте начнём с начала. Каин, сегодня ваш великий день! Вы были выбраны "Советом", как наиболее перспективный пилот в нашей академии.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Ваше обучение будет ускорено и вскоре вы сможете отправиться в космическое путешествие! Поздравляем!</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Большая честь... Каин, вы готовы?</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Да.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Ну... вперёд!</text>
+    </dialog>
+    
+  </startdialogs>
+</gametext>

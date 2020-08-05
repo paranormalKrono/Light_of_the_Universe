@@ -1,0 +1,29 @@
+<gametext>
+
+  
+  <goals>
+    <goal></goal>
+  </goals>
+
+  
+  <ingamedialogs>
+    <ingamedialog time="">
+      <dialogs>
+        <dialog nameid ="" textsize ="">
+          <text></text>
+        </dialog>
+
+      </dialogs>
+    </ingamedialog>
+    
+  </ingamedialogs>
+
+
+  <startdialogs>
+    <dialog nameid ="" textsize ="">
+      <prevtext></prevtext>
+      <text></text>
+    </dialog>
+    
+  </startdialogs>
+</gametext>

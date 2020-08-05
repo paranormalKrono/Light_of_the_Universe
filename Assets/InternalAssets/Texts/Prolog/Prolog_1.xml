@@ -1,0 +1,37 @@
+<gametext>
+  
+  <goals>
+    <goal>Обойти все препятствия и дойти до конца</goal>
+  </goals>
+
+
+  <ingamedialogs>
+    <ingamedialog time="3">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Неплохо, по сравнению с другими...</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+  </ingamedialogs>
+
+
+  <startdialogs>
+    <dialog nameid ="4">
+      <text>Что?! Ещё один новобранец!? Ладно, что у нас тут...</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Каин, сегодня вам предстоит пройти проверку самых базовых знаний управления космическим кораблём на нашей тренировочной базе, созданной специально для новичков, и... мне уже надоело это читать, давайте это пропустим.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Вы готовы?</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Готов.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Тогда, не разбейте, пожалуйста, корабль. Можете лететь.</text>
+    </dialog>
+    
+  </startdialogs>
+</gametext>

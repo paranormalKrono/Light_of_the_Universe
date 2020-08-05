@@ -1,0 +1,14 @@
+<gametext>
+  
+  <goals>
+    <goal>Прилететь первым</goal>
+  </goals>
+
+
+  <startdialogs>
+    <dialog nameid ="7">
+      <text>Новое утро. Сегодня ещё одна гонка. Всего - 8 участников. Кто прилетит первым, тот победит. Удачи!</text>
+    </dialog>
+    
+  </startdialogs>
+</gametext>

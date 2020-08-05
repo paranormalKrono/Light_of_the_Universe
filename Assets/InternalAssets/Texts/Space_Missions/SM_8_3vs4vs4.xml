@@ -1,0 +1,40 @@
+<gametext>
+  
+  <goals>
+    <goal>Найти и победить команды соперников</goal>
+  </goals>
+
+
+  <startdialogs>
+    <dialog nameid ="7">
+      <text>Что?! Как нет?! Не может быть! А где он?</text>
+    </dialog>
+    <dialog nameid ="10">
+      <text>Сотрудник Харн в данный момент не может наблюдать за боем.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Как не может?</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>Что случилось?</text>
+    </dialog>
+    <dialog nameid ="10">
+      <text>Этого я не знаю. Похоже...</text>
+    </dialog>
+    <dialog nameid ="11">
+      <text>У старика, похоже, крыша поехала! Совсем с ума сошёл со своими чертежами. Ну честное слово, кого этот идиот может обучить?</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>Без оскорблений, пожалуйста.</text>
+    </dialog>
+    <dialog nameid ="11">
+      <text>А кто-то считает по-другому?</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>К вашему сведению, этот, как вы выразились, "идиот", умом и рангом выше всех здесь присутствующих, в том числе вас.</text>
+    </dialog>
+    <dialog nameid ="11">
+      <text>По уму - нет, а вот о ранге спорить не могу.</text>
+    </dialog>
+  </startdialogs>
+</gametext>

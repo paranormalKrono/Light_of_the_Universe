@@ -1,0 +1,62 @@
+<gametext>
+  
+  <goals>
+    <goal>Долететь до конца, пока не закончилось время</goal>
+  </goals>
+
+
+  <startdialogs>
+    <dialog nameid ="4">
+      <text>Так, кто там на поле?</text>
+    </dialog>
+    <dialog nameid ="10">
+      <text>Каин.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Что за имя такое?</text>
+    </dialog>
+    <dialog nameid ="10">
+      <text>Обычное имя.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Нуууу, я не могу согласиться...</text>
+    </dialog>
+    <dialog nameid ="10">
+      <text>О человеке не судят по его имени.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Да, скорее всего, ты права. Ну что ж, здравствуйте, Каин!..</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Вы здесь?.. </text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Проверь связь.</text>
+    </dialog>
+    <dialog nameid ="10">
+      <text>Он всё слышит.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Вы диктор?</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Что?.. А, нет. Меня зовут Павел. Человека, с которым вы, скорее всего, были знакомы, зовут Пётр. Он мой брат и живёт на Земле.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Вы братья?</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>Да. А теперь, не разбейте, пожалуйста, корабль...</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>Шучу. Ваша задача - пролететь все точки за определённое время.</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>На вашем корабле есть радар, который позволит вам ориентироваться. Используйте его и все свои знания, чтобы как можно быстрее пролететь все маркеры.</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>Можете лететь.</text>
+    </dialog>
+    
+  </startdialogs>
+</gametext>

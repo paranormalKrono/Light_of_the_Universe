@@ -1,0 +1,113 @@
+<textbasegoals>
+
+  <collectionname>Задания уровня</collectionname>
+  <goalname>Задание</goalname>
+  
+  <goals>
+    
+    <goal id="0" goalid="1" missionnameid ="0" fielddescriptionid="0">
+      <header>Участник</header>
+      <text>Пилот &lt;color=#c0c0c0ff>D08&lt;/color>.</text>
+    </goal>
+    
+    <goal id="1" goalid="1" missionnameid ="1" fielddescriptionid="1">
+      <header>Участники</header>
+      <text>Команда 1: 	пилот &lt;color=#c0c0c0ff>D08&lt;/color>.</text>
+      <text>Команда 2: 	пилот &lt;color=#c0c0c0ff>D17&lt;/color>.</text>
+    </goal>
+    
+    <goal id="2" goalid="2" missionnameid ="1" fielddescriptionid="1">
+      <header>Участники</header>
+      <text>Команда 1: 	пилоты &lt;color=#c0c0c0ff>D08&lt;/color>, &lt;color=#c0c0c0ff>D07&lt;/color>, &lt;color=#c0c0c0ff>D06&lt;/color>.</text>
+      <text>Команда 2: 	пилоты &lt;color=#c0c0c0ff>D18&lt;/color>, &lt;color=#c0c0c0ff>D23&lt;/color>, &lt;color=#c0c0c0ff>D27&lt;/color>.</text>
+    </goal>
+    
+    <goal id="3" goalid="3" missionnameid ="1" fielddescriptionid="1">
+      <header>Участники</header>
+      <text>Команда 1: 	пилоты &lt;color=#c0c0c0ff>D08&lt;/color>, &lt;color=#c0c0c0ff>D02&lt;/color>, &lt;color=#c0c0c0ff>D03&lt;/color>, &lt;color=#c0c0c0ff>D04&lt;/color>, &lt;color=#c0c0c0ff>D07&lt;/color>.</text>
+      <text>Команда 2: 	пилоты &lt;color=#c0c0c0ff>D20&lt;/color>, &lt;color=#c0c0c0ff>D19&lt;/color>, &lt;color=#c0c0c0ff>D36&lt;/color>, &lt;color=#c0c0c0ff>D40&lt;/color>, &lt;color=#c0c0c0ff>D52&lt;/color>.</text>
+    </goal>
+    
+    <goal id="4" goalid="1" missionnameid ="2" fielddescriptionid="2">
+      <header>Участники</header>
+      <text>Пилоты &lt;color=#c0c0c0ff>D08&lt;/color>, &lt;color=#c0c0c0ff>D18&lt;/color>, &lt;color=#c0c0c0ff>D20&lt;/color>, &lt;color=#c0c0c0ff>D26&lt;/color>, &lt;color=#c0c0c0ff>D36&lt;/color>, &lt;color=#c0c0c0ff>D39&lt;/color>.</text>
+    </goal>
+    
+    <goal id="5" goalid="1" missionnameid ="3" fielddescriptionid="2">
+      <header>Участники</header>
+      <text>Команда 1: 	пилоты &lt;color=#c0c0c0ff>D08&lt;/color>, &lt;color=#c0c0c0ff>D02&lt;/color>, &lt;color=#c0c0c0ff>D07&lt;/color>, &lt;color=#c0c0c0ff>D03&lt;/color>.</text>
+      <text>Команда 2: 	пилоты &lt;color=#c0c0c0ff>D23&lt;/color>, &lt;color=#c0c0c0ff>D24&lt;/color>, &lt;color=#c0c0c0ff>D33&lt;/color>, &lt;color=#c0c0c0ff>D35&lt;/color>.</text>
+    </goal>
+    
+    <goal id="6" goalid="1" missionnameid ="4" fielddescriptionid="2">
+      <header>Участники</header>
+      <text>Команда 1: 	пилоты &lt;color=#c0c0c0ff>D08&lt;/color>, &lt;color=#c0c0c0ff>D03&lt;/color>, &lt;color=#c0c0c0ff>D07&lt;/color>.</text>
+      <text>Команда 2: 	пилоты &lt;color=#c0c0c0ff>D25&lt;/color>, &lt;color=#c0c0c0ff>D28&lt;/color>, &lt;color=#c0c0c0ff>D27&lt;/color>.</text>
+      <text>Команда 3: 	пилот &lt;color=#1f75fe>С01&lt;/color></text>
+    </goal>
+    
+    <goal id="7" goalid="2" missionnameid ="0" fielddescriptionid="3">
+      <header>Участник</header>
+      <text>Пилот &lt;color=#1f75fe>С08&lt;/color>.</text>
+    </goal>
+    
+    <goal id="8" goalid="2" missionnameid ="4" fielddescriptionid="2">
+      <header>Участники</header>
+      <text>Команда 1: 	пилоты &lt;color=#1f75fe>С08&lt;/color>, &lt;color=#1f75fe>С07&lt;/color>, &lt;color=#1f75fe>С03&lt;/color>.</text>
+      <text>Команда 2: 	пилоты &lt;color=#c0c0c0ff>D23&lt;/color>, &lt;color=#c0c0c0ff>D25&lt;/color>, &lt;color=#c0c0c0ff>D27&lt;/color>, &lt;color=#c0c0c0ff>D28&lt;/color>, &lt;color=#c0c0c0ff>D32&lt;/color>, &lt;color=#c0c0c0ff>D34&lt;/color>, &lt;color=#c0c0c0ff="">D35&lt;/color>, &lt;color=#c0c0c0ff>D36&lt;/color>.</text>
+    </goal>
+    
+    <goal id="9" goalid="3" missionnameid ="4" fielddescriptionid="2">
+      <header>Участники</header>
+      <text>Команда 1: 	пилоты &lt;color=#1f75fe>С08&lt;/color>, &lt;color=#1f75fe>С07&lt;/color>, &lt;color=#1f75fe>С03&lt;/color>, &lt;color=#c0c0c0ff>D02&lt;/color>, &lt;color=#c0c0c0ff>D05&lt;/color>, &lt;color=#c0c0c0ff>D04&lt;/color>.</text>
+      <text>Команда 2: 	пилоты &lt;color=#c0c0c0ff>D23&lt;/color>, &lt;color=#c0c0c0ff>D25&lt;/color>, &lt;color=#c0c0c0ff>D27&lt;/color>, &lt;color=#c0c0c0ff>D28&lt;/color>.</text>
+      <text>Команда 3: 	пилоты &lt;color=#c0c0c0ff>D32&lt;/color>, &lt;color=#c0c0c0ff>D34&lt;/color>, &lt;color=#c0c0c0ff>D35&lt;/color>, &lt;color=#c0c0c0ff>D36&lt;/color>.</text>
+      <text>Команда 4: 	пилоты &lt;color=#c0c0c0ff>D45&lt;/color>, &lt;color=#c0c0c0ff>D47&lt;/color>, &lt;color=#c0c0c0ff>D49&lt;/color>, &lt;color=#c0c0c0ff>D51&lt;/color>.</text>
+    </goal>
+    
+    <goal id="10" goalid="2" missionnameid ="2" fielddescriptionid="3">
+      <header>Участники</header>
+      <text>Пилоты &lt;color=#1f75fe>С08&lt;/color>, &lt;color=#1f75fe>С09&lt;/color>, &lt;color=#1f75fe>С10&lt;/color>, &lt;color=#1f75fe>С12&lt;/color>, &lt;color=#1f75fe>С14&lt;/color>, &lt;color=#1f75fe>С16&lt;/color>, &lt;color=#1f75fe>С18&lt;/color>, &lt;color=#1f75fe>С20&lt;/color>.</text>
+    </goal>
+    
+    <goal id="11" goalid="4" missionnameid ="1" fielddescriptionid="2">
+      <header>Участники</header>
+      <text>Команда 1: 	пилоты &lt;color=#1f75fe>С05&lt;/color>, &lt;color=#1f75fe>С06&lt;/color>, &lt;color=#1f75fe>С18&lt;/color>.</text>
+      <text>Команда 2: 	пилоты &lt;color=#1f75fe>С13&lt;/color>, &lt;color=#1f75fe>С14&lt;/color>, &lt;color=#1f75fe>С15&lt;/color>.</text>
+      <text>Команда 3: 	пилоты &lt;color=#1f75fe>С08&lt;/color>, &lt;color=#1f75fe>С07&lt;/color>, &lt;color=#1f75fe>С03&lt;/color>.</text>
+    </goal>
+    
+    <goal id="12" goalid="1" missionnameid ="5" fielddescriptionid="4">
+      <header>Союзники</header>
+      <text>Корабль-крейсер &lt;color=#f75216>"Восток"&lt;/color>;</text>
+      <text>Пилоты-умельцы: &lt;color=#1f75fe>С07&lt;/color>, &lt;color=#1f75fe>С08&lt;/color>, &lt;color=#1f75fe>С03&lt;/color>, &lt;color=#1f75fe>С01&lt;/color>, &lt;color=#1f75fe>С02&lt;/color>, &lt;color=#1f75fe>С06&lt;/color>.</text>
+      <text></text>
+      <text>Противники</text>
+      <text>Корветы: 8-10 кораблей</text>
+    </goal>
+    
+  </goals>
+
+  <fieldname>Поле</fieldname>
+
+  <fielddescriptions>
+    <field id="0">Стандартная трасса.</field>
+    <field id="1">Стандартное поле для боёв среди новичков. Для 2-х команд.</field>
+    <field id="2">Нестандартное поле для смешанных тренировочных боёв. Для 3-х или 4-х команд.</field>
+    <field id="3">Стандартная трасса другого цвета.</field>
+    <field id="4">Пустота с астеройдами.</field>
+  </fielddescriptions>
+
+  <missionnames>
+    <missionname id="0">Полёт на время</missionname>
+    <missionname id="1">Тренировочный бой</missionname>
+    <missionname id="2">Тренировочная гонка</missionname>
+    <missionname id="3">Тактический бой</missionname>
+    <missionname id="4">Смешанный бой</missionname>
+    <missionname id="5">Миссия</missionname>
+  </missionnames>
+  
+  <reward>Награда за выполнение</reward>
+  <rewardtext>кредитов.</rewardtext>
+  
+</textbasegoals>

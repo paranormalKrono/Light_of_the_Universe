@@ -1,0 +1,28 @@
+<gametext>
+  
+  <goals>
+    <goal>Найти и победить команду соперника</goal>
+  </goals>
+
+
+  <startdialogs>
+    <dialog nameid ="7">
+      <text>Дорое утро! Для победы вам нужно первыми полностью уничтожить команду противника. И с этого момента за каждым из вас будут наблюдать наставники и оценивать ваши действия.</text>
+    </dialog>
+    <dialog nameid ="8">
+      <text>А кто они?</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>Наставники? Они бывшие эксперты военного дела, а может быть и ещё кто. Все разные. У каждого своя история. Иногда даже секретная.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Секретная?</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>Да, но об этом лучше не говорить.</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>На этом всё. Начинаем!</text>
+    </dialog>
+  </startdialogs>
+</gametext>

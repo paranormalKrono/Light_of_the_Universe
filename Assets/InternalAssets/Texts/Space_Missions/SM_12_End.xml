@@ -1,0 +1,79 @@
+<gametext>
+  
+  <goals>
+    <goal>Лететь вперёд</goal>
+    <goal>Уничтожить противника</goal>
+  </goals>
+
+  <ingamedialogs>
+    
+    <ingamedialog time="5">
+      <dialogs>
+        <dialog nameid ="13">
+          <text>Поехали!</text>
+        </dialog>
+        <dialog nameid ="3">
+          <text>Я скажу, когда будет момент. А пока выполняем задание.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog time="7">
+      <dialogs>
+        <dialog nameid ="13">
+          <text>Они среди астероидов, будьте бдительны.</text>
+        </dialog>
+        <dialog nameid ="14">
+          <text>Что? Кто летит? Что за чёрт! (непечатное слово) уже. Ну! Идите сюда!</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog time="5">
+      <dialogs>
+        <dialog nameid ="13">
+          <text>Вы победили!</text>
+        </dialog>
+        <dialog nameid ="13">
+          <text>Подождите... наши радары засекли множество целей.</text>
+        </dialog>
+        <dialog nameid ="14">
+          <text>Вперёд армада!!</text>
+        </dialog>
+        <dialog nameid ="13">
+          <text>Мы отправляем к вам дополнительный отряд.</text>
+        </dialog>
+        <dialog nameid ="3">
+          <text>Можем бежать сейчас. Лети вперёд, дальше от крейсера, а я догоню.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog time="6">
+      <dialogs>
+        <dialog nameid ="3">
+          <text>Похоже, мне не суждено улететь. Лети без меня!</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog time="7">
+      <dialogs>
+        <dialog nameid ="3">
+          <text>Наши союзники вырубили связь и атакуют. Давай выбираться и побыстрее.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+  </ingamedialogs>
+
+  <startdialogs>
+    <dialog nameid ="12">
+      <text>Здравствуйте инопланетяне! Говорит командующий крейсера "Восток". Нас попросили прикрыть вас на время вашей миссии. Но вступать в бой без особой нужды мы не будем, так что держитесь.</text>
+    </dialog>
+    <dialog nameid ="13">
+      <text>Итак, впереди вас находится небольшое скопление пиратских кораблей. Они регулярно грабят мирные станции. Ваша задача уничтожить их. Будьте осторожны.</text>
+    </dialog>
+    
+  </startdialogs>
+</gametext>

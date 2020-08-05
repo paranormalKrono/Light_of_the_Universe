@@ -1,0 +1,47 @@
+<gametext>
+  
+  <goals>
+    <goal>Обойти все препятствия и дойти до конца</goal>
+  </goals>
+
+
+  <ingamedialogs>
+    <ingamedialog time="7">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Вы можете использовать свободный полёт, чтобы не тормозить движение корабля при отпускании управления.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    <ingamedialog time="7">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Скованный полёт позволит вам более легко пробраться через узкие пространства и увеличит мощность вашего двигателя</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+  </ingamedialogs>
+
+
+  <startdialogs>
+    <dialog nameid ="4">
+      <text>Как там вас зовут? Каин, у вас огромные успехи в пилотировании, и вам дали возможность испытать себя на более продвинутом уровне...</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Спасибо.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>... (короткое молчание)</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>На данном этапе вам предстоит пройти более сложную практику. У вас теперь есть панель, показывающая режим полёта. Разные режимы полёта дают серьёзные преимущества в определённых ситуациях. Вы готовы?</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Да.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Тогда начнём.</text>
+    </dialog>
+    
+  </startdialogs>
+</gametext>

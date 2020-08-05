@@ -1,0 +1,25 @@
+<gametext>
+  
+  <goals>
+    <goal>Найти и победить соперника</goal>
+  </goals>
+
+
+  <startdialogs>
+    <dialog nameid ="7">
+      <text>Снова вы! Удивительно!</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>...</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>Ладно, не важно. Никак не могу привыкнуть к вашему имени.</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>На другом конце поля стоит вражеский корабль. Ваша задача - победить противника. Для этого нужно его уничтожить. Все противники маркируются на радаре.</text>
+    </dialog>
+    <dialog nameid ="7">
+      <text>Удачи!</text>
+    </dialog>
+  </startdialogs>
+</gametext>
