@@ -3,9 +3,11 @@
   <goals>
     <goal>Обойти все препятствия и дойти до конца</goal>
     <goal>Пострелять мишени</goal>
-    <goal>Двигаться дальше</goal>
-    <goal>Уничтожить всех противников</goal>
     <goal>Лететь вперёд</goal>
+    <goal>Уничтожить всех противников</goal>
+    <goal>Найти выход</goal>
+    <goal>Открыть выход</goal>
+    <goal>Вернуться к выходу</goal>
   </goals>
 
 
@@ -17,7 +19,7 @@
         </dialog>
       </dialogs>
     </ingamedialog>
-    <ingamedialog time="3">
+    <ingamedialog time="4">
       <dialogs>
         <dialog nameid ="4">
           <text>Круто.</text>
@@ -27,21 +29,45 @@
     <ingamedialog time="7">
       <dialogs>
         <dialog nameid ="4">
-          <text>Вы добрались до арены. Теперь уничтожьте всех противников, чтобы пройти дальше.</text>
-        </dialog>
-      </dialogs>
-    </ingamedialog>
-    <ingamedialog time="5">
-      <dialogs>
-        <dialog nameid ="4">
-          <text>У вас получилось... очень хорошо. Выход открыт.</text>
+          <text>Вы добрались до арены. Уничтожьте всех противников, чтобы пройти дальше.</text>
         </dialog>
       </dialogs>
     </ingamedialog>
     <ingamedialog time="6">
       <dialogs>
         <dialog nameid ="4">
-          <text>Вот вы и прошли обучение.  Что будет дальше не знаю, но вы готовы. Удачи!</text>
+          <text>У вас получилось... очень хорошо. Выход открыт.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    <ingamedialog time="8">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Раньше прямо здесь был большой склад с вооружением.</text>
+        </dialog>
+        <dialog nameid ="4">
+          <text>Устарело и было переработано.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    <ingamedialog time="6">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>О, а я и забыл, что эта дверь закрыта.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    <ingamedialog time="5">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Связь пропадает. Ты... шш влет... шшшШ ШШшш куб... шшШШш</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    <ingamedialog time="9">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Вернулся! Ничего не произошло? Хорошо! Теперь ты готов.</text>
         </dialog>
       </dialogs>
     </ingamedialog>
@@ -68,7 +94,7 @@
       <text>Кхэ-кхм.</text>
     </dialog>
     <dialog nameid ="4">
-      <text>Ах да. Я совсем про вас забыл.</text>
+      <text>А. Я про вас уже забыл.</text>
     </dialog>
     <dialog nameid ="4">
       <text>Каин, сегодня ваш счастливый день! Вы стали победителем викторины... Стоп... это не тот текст...</text>
@@ -86,13 +112,13 @@
       <text>Ваше обучение будет ускорено и вскоре вы сможете отправиться в космическое путешествие! Поздравляем!</text>
     </dialog>
     <dialog nameid ="4">
-      <text>Большая честь... Каин, вы готовы?</text>
+      <text>Совет, перспективный пилот, космическое путешествие. Что за бред? Пора это выбросить. Готов?</text>
     </dialog>
     <dialog nameid ="5">
       <text>Да.</text>
     </dialog>
     <dialog nameid ="4">
-      <text>Ну... вперёд!</text>
+      <text>Ну, вперёд!</text>
     </dialog>
     
   </startdialogs>

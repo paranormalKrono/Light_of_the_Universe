@@ -9,21 +9,21 @@ public class GameGoals : MonoBehaviour, IDeactivated
     private string[] Goals;
     private int goalNow;
 
-    public delegate void Event();
-    public static Event NextGoalEvent;
+    public delegate void Event(int id);
+    public static Event ShowGoalEvent;
 
     public delegate void EventB(bool b);
     public static EventB SetActiveGoalEvent;
 
     private void Awake()
     {
-        NextGoalEvent = NextGoal;
+        ShowGoalEvent = ShowGoal;
         SetActiveGoalEvent = SetActiveGoal;
     }
 
-    private void NextGoal()
+    private void ShowGoal(int goalID)
     {
-        goalNow += 1;
+        goalNow = goalID;
         UpdateGoal();
     }
 

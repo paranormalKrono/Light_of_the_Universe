@@ -1,0 +1,123 @@
+<dialogue>
+  <node id ="0" nameid="4">
+    <text>Поздравляю с полным прохождением обучения в нашей академии! Теперь вы можете отправиться в космос!</text>
+    <answers>
+      <answer tonode = "1">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="1" nameid="4">
+    <text>Когда-то можно было... Теперь нет.</text>
+    <answers>
+      <answer tonode = "2">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="2" nameid="5">
+    <text>И что же мне делать?</text>
+    <answers>
+      <answer tonode = "3">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="3" nameid="4">
+    <text>Не знаю.</text>
+    <answers>
+      <answer tonode = "4">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="4" nameid="4">
+    <text>Если даже попытаться... полететь на том корабле в космос. Противо-воздушная оборона Земли всё равно собьёт его. Обойти её невозможно.</text>
+    <answers>
+      <answer tonode = "5">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="5" nameid="4">
+    <text>Но на вашем месте я бы не сдавался. Вы хороший пилот, и мне что-то подсказывает, что в вас есть некий потенциал, который только предстоит развить...</text>
+    <answers>
+      <answer tonode = "6">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="6" nameid="4">
+    <text>Расскажу вам историю об одном из своих учеников. Он был одним из лучших. Юный, молодцеватый мальчик, перспективный, словами руководства...</text>
+    <answers>
+      <answer tonode = "7">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="7" nameid="4">
+    <text>Вы когда-нибудь видели небо?</text>
+    <answers>
+      <answer tonode = "8">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="8" nameid="5">
+    <text>Никогда...</text>
+    <answers>
+      <answer tonode = "9">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="9" nameid="4">
+    <text>Он вместе с остальными отправился в космос, и после того полёта мог целыми днями рассказывать о той невиданной красоте тёмно-белого неба на фоне ярко-красного оранжевого заката Солнца.</text>
+    <answers>
+      <answer tonode = "10">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="10" nameid="4">
+    <text>Ведь его всегда тянуло прыгнуть выше своей головы и увидеть то, что находится за высоким забором. Увидеть звёзды, а, возможно, и достичь их.</text>
+    <answers>
+      <answer tonode = "11">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="11" nameid="4">
+    <text>Там наверху он стал лучшим командиром и получил в распоряжение огромный крейсер. Но в армии не всегда дают справедливые приказы и последний из них был чудовищным. В решающий момент он отказался выполнить его.</text>
+    <answers>
+      <answer tonode = "12">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="12" nameid="4">
+  <text>Он понимал, что это действие не пройдёт даром и сбежал, забрав и крейсер, и команду.</text>
+  <answers>
+    <answer tonode = "13">
+      <text>...</text>
+    </answer>
+  </answers>
+</node>
+  <node id ="13" nameid="4">
+    <text>Не знаю, может быть это и была та причина, по которой сейчас пилотированию обучают только богатых или надёжных людей. Ведь в космосе в последнее время не спокойно.</text>
+    <answers>
+      <answer tonode = "14">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="14" nameid="4">
+    <text>Вы на него очень похожи и я не думаю, что ваш путь закончится здесь. Так что я желаю вам... удачи!</text>
+    <answers>
+      <answer>
+        <text>Уйти...</text>
+        <end>true</end>
+      </answer>
+    </answers>
+  </node>
+</dialogue>

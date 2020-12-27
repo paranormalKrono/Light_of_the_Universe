@@ -27,11 +27,11 @@ public class CameraPointsController : MonoBehaviour
 
     private IEnumerator IMoveCameraWithDark(Transform Tr)
     {
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         transform.position = Tr.position;
         transform.rotation = Tr.rotation;
         OnCameraMoved?.Invoke();
-        yield return StartCoroutine(ScreenDark.ITransparentEvent());
+        yield return StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private IEnumerator IMoveCamera(Vector3 TargetPos, Quaternion TargetRot)

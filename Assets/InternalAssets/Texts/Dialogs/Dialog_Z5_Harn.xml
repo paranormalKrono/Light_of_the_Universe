@@ -1,0 +1,112 @@
+<dialogue>
+  <!-- Встреча -->
+  <node id ="0" nameid="16" isDescription ="false">
+    <text>Спасибо...</text>
+    <answers>
+      <answer tonode = "1"><text>...</text></answer>
+    </answers>
+  </node>
+  <node id ="1" nameid="16" isDescription ="false">
+    <text>С уверенностью надеюсь, что вы добрались сюда без происшествий. Не каждый способен втайне пролететь мимо всех возможных радаров на крейсере и вернуться на Землю. Вы нарушили множество законов, установленных нашим управлением. Однако, здесь вы оказались по другой причине.</text>
+    <answers>
+      <answer tonode = "2"><text>...</text></answer>
+    </answers>
+  </node>
+  <node id ="2" nameid="16" isDescription ="false">
+    <text>Незарегистрированный корабль-крейсер "Предел" с хорошо обученной командой вошёл в запретное пространство. И, спустя месяц, вернулся с единственным выжившим...</text>
+    <answers>
+      <answer tonode = "3">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="3" nameid="16" isDescription ="false">
+    <text>Пустота притягивает многих искателей и исследователей, господин Харн, но поверьте мне, никому из них так и не удалось вернуться живым. Хотите рассказать об увиденном?</text>
+    <answers>
+      <answer tonode = "4">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="4" nameid="17" isDescription ="false">
+    <text>...</text>
+    <answers>
+      <answer tonode = "5">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="5" nameid="16" isDescription ="false">
+    <text>Конечно, вы потеряли многих друзей, и... возможно, более близкого вам человека...</text>
+    <answers>
+      <answer tonode = "6">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="6" nameid="17" isDescription ="false">
+    <text>Что? О чём вы говорите?</text>
+    <answers>
+      <answer tonode = "7">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="7" nameid="16" isDescription ="false">
+    <text>Я думаю, вы прекрасно понимаете, о чём я говорю. В тот холодный дождливый день ей пришлось отдать все свои сбережения за билет в один конец на одного.</text>
+    <answers>
+      <answer tonode = "8">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="8" nameid="16" isDescription ="false">
+    <text>Вашему сыну было тяжело найти дорогу на тот поезд, и мы нашли его и помогли.</text>
+    <answers>
+      <answer tonode = "9">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="9" nameid="17" isDescription ="false">
+    <text>Нет. Вы не могли...</text>
+    <answers>
+      <answer tonode = "10">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="10" nameid="16" isDescription ="false">
+    <text>Да! Вы думали, вы могли скрыть от нас свою семью?</text>
+    <answers>
+      <answer tonode = "11">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="11" nameid="17">
+    <text>Нет. Я не верю ни единому слову...</text>
+    <answers>
+      <answer tonode = "12">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="12" nameid="16">
+    <text>Вера ненадёжна, а надежда - вымысел. Вера не даст человеку ничего. Ваш сын получил письмо. Можете не беспокоиться об этом.</text>
+    <answers>
+      <answer tonode = "13">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="13" nameid="16">
+    <text>А теперь вы должны рассказать нам всё. О той далёкой, тёмной бездне.</text>
+    <answers>
+      <answer>
+        <text>...</text>
+        <end>true</end>
+      </answer>
+    </answers>
+  </node>
+</dialogue>

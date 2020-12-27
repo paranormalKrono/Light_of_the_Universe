@@ -1,20 +1,22 @@
 <names>
   <names>
     <name id="0" name="Бармен" namecolor ="BE382E" textcolor ="9D4F48"></name>
-    <name id="1" name="Наставник Харн" namecolor ="FF6300" textcolor ="DE7A1A"></name>
+    <name id="1" name="Наставник Харн" namecolor ="7d7f7d" textcolor ="808080"></name>
     <name id="2" name="Разумник" namecolor ="B6DAFF" textcolor ="79B1D4"></name>
     <name id="3" name="Пилот C07" namecolor ="5FFF5A" textcolor ="4FC84B"></name>
     <name id="4" name="Диктор" textcolor ="B7B7B7"></name>
     <name id="5" name="Каин" namecolor ="FBFF5A" textcolor ="FBFF5A"></name>
     <name id="6" name="Ассистентка" textcolor ="C89090"></name>
-    <name id="7" name="Диктор (Павел)" textcolor ="B7B7B7"></name>
+    <name id="7" name="Павел" textcolor ="B7B7B7"></name>
     <name id="8" name="Пилот D07" textcolor ="5FFF5A"></name>
     <name id="9" name="Пилот С01" textcolor ="1775FF"></name>
     <name id="10" name="Диспетчер" textcolor ="C89191"></name>
     <name id="11" name="Чужой наставник" textcolor ="B90010"></name>
-    <name id="12" name="Кто-то" textcolor ="F75216"></name>
+    <name id="12" name="Кто-то" namecolor ="7d7f7d" textcolor ="7d7f7d"></name>
     <name id="13" name="Командующий крейсера &quot;Восток&quot;" textcolor ="F75216"></name>
     <name id="14" name="Пират" textcolor ="000000"></name>
     <name id="15" name="Письмо" namecolor ="000000" textcolor ="000000"></name>
+    <name id="16" name="Zero-?" namecolor ="ff0000" textcolor ="f80000"></name>
+    <name id="17" name="Харн" namecolor ="7d7f7d" textcolor ="808080"></name>
   </names>
 </names>

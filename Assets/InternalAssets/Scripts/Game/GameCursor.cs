@@ -8,7 +8,7 @@ public static class GameCursor
     {
         lockCursor = value;
         if (!lockCursor)
-        {//we force unlock the cursor if the user disable the cursor locking helper
+        {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
@@ -17,8 +17,5 @@ public static class GameCursor
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
-        //Debug.Log(GetCursorState());
     }
-
-    public static string GetCursorState() => $"CursorState: Lock - {Cursor.lockState.ToString()}  Visible - {Cursor.visible.ToString()}";
 }

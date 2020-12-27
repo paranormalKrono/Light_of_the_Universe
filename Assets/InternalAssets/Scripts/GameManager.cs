@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
         if (!isCreated)
         {
             isCreated = true;
+            Saves.Initialise();
+            SceneController.Initialise();
             GameObject G = Instantiate(Resources.Load<GameObject>(GameManagerPath));
             DontDestroyOnLoad(G);
         }

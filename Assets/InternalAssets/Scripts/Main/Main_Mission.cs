@@ -17,6 +17,7 @@ public abstract class Main_Mission : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
+        GameScreenDark.SetDarkEvent(true);
         SceneController.LoadAdditiveScene(sceneLocationName);
 
         GameText.DeactivateEvent();
@@ -24,13 +25,12 @@ public abstract class Main_Mission : MonoBehaviour
 
         playerCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Player_Camera_Controller>();
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Starship_Controller>();
-        playerController.GetComponent<Health>().DeathEvent += RestartGame;
+        playerController.GetComponent<Health>().OnDeath += RestartGame;
     }
 
     private void Start()
     {
         MStart();
-
 
         if (!StaticSettings.isRestart)
         {
@@ -45,8 +45,7 @@ public abstract class Main_Mission : MonoBehaviour
         }
         playerCamera.UpdatePlayerLookPosition();
 
-        ScreenDark.SetDarkEvent(true);
-        StartCoroutine(ScreenDark.ITransparentEvent());
+        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void Update()

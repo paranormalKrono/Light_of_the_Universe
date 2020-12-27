@@ -4,10 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof (System_TimeRace), typeof (System_Starships), typeof(StarshipsSpawnMover))]
 public class Main_Space_TimeRace : Main_Mission
 {
-    [SerializeField] private Scenes nextSceneToLoad;
-    [SerializeField] private bool isEquationsAndSlides;
-    [SerializeField] private int nextSlidesID;
-    [SerializeField] private int nextEquationsID;
     private System_TimeRace system_TimeRace;
 
     protected override void MStart()
@@ -45,7 +41,7 @@ public class Main_Space_TimeRace : Main_Mission
         GameTimer.StopTimerEvent();
         GameWinLose.ActivateLoseTextEvent();
         yield return new WaitForSeconds(2);
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         GameWinLose.DisactivateTextEvent();
         SceneController.RestartScene();
     }
@@ -62,28 +58,14 @@ public class Main_Space_TimeRace : Main_Mission
 
         GameAudio.StopAudioEvent();
 
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
 
         GameTimer.DeactivateEvent();
 
         GameWinLose.DisactivateTextEvent();
         GameReward.HideRewardEvent();
 
-        StaticSettings.GameProgress = (int)SpaceMission + 1;
-
-
-        if (nextSceneToLoad == Scenes.Space_Base)
-        {
-            StaticSettings.MissionStagesProgress += 1;
-        }
-        if (isEquationsAndSlides)
-        {
-            SceneController.LoadEquationsAndSlides(nextSceneToLoad, nextEquationsID, nextSlidesID);
-        }
-        else
-        {
-            SceneController.LoadEquations(nextSceneToLoad, nextEquationsID);
-        }
+        SceneController.LoadNextStoryScene();
     }
 
 

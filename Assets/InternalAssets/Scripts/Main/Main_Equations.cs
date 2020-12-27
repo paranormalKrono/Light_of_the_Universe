@@ -10,16 +10,17 @@ public class Main_Equations : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
+        GameScreenDark.SetDarkEvent(true);
         foreach (System_Equation SS in systemEquations)
         {
             SS.gameObject.SetActive(false);
         }
-        systemEquations[StaticSettings.EquationsID].gameObject.SetActive(true);
-        systemEquations[StaticSettings.EquationsID].RightEvent = EquationsRight;
+        int id = SceneController.EquationsID;
+        systemEquations[id].gameObject.SetActive(true);
+        systemEquations[id].RightEvent = EquationsRight;
 
         GameMenu.DisactivateGameMenuEvent();
-        ScreenDark.SetDarkEvent(true);
-        StartCoroutine(ScreenDark.ITransparentEvent());
+        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void Update()
@@ -42,16 +43,8 @@ public class Main_Equations : MonoBehaviour
         if (!isEnd)
         {
             isEnd = true;
-            yield return StartCoroutine(ScreenDark.IDarkEvent());
-            if (StaticSettings.isNextSlides)
-            {
-                StaticSettings.isNextSlides = false;
-                SceneController.LoadSlides();
-            }
-            else
-            {
-                SceneController.LoadScene(StaticSettings.nextSceneToLoad);
-            }
+            yield return StartCoroutine(GameScreenDark.IDarkEvent());
+            SceneController.LoadNextStoryScene();
         }
     }
 }

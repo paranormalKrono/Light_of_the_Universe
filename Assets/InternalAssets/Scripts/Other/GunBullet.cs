@@ -12,10 +12,10 @@ public class GunBullet : MonoBehaviour
 
     private Vector3 forward = Vector3.forward;
 
-    private void Start()
+    private void Awake()
     {
+        GetComponentInParent<Guns>().InitializeGun(Shoot, shootForce / BulletGameobject.GetComponent<Rigidbody>().mass, out colliders);
         gunAudioSource = GetComponent<AudioSource>();
-        GetComponentInParent<Guns>().InitializeGun(Shoot, 1 * shootForce / BulletGameobject.GetComponent<Rigidbody>().mass, out colliders);
     }
 
     private void Shoot(RigidbodyConstraints rigidbodyConstraints, Vector3 velocity, out Vector3 shootReverseForce)

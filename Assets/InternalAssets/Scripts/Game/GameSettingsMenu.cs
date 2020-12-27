@@ -17,20 +17,12 @@ public class GameSettingsMenu : MonoBehaviour
 	[SerializeField] private Slider sliderSensitivity;
 	[SerializeField] private Text textSensitivity;
 	[SerializeField] private Text textSensitivityNow;
-	[SerializeField] private SettingsVolume[] SettingsVolumes;
+	[SerializeField] private SettingsMixerVolume[] SettingsMixerVolumes;
 
 	[SerializeField] private Button buttonConfirm;
 	[SerializeField] private Button buttonSave;
 
-	[SerializeField] private GameObject SettingsPanel;
 	[SerializeField] private AudioMixer AudioMixer;
-
-	public delegate void EventHandlerG(GameObject G);
-	public static EventHandlerG OpenMenuEvent;
-	public delegate void EventHandler();
-	public static EventHandler CloseMenuEvent;
-
-	private GameObject menuToOpen;
 
 	private bool isNormallyLoaded;
 
@@ -39,15 +31,8 @@ public class GameSettingsMenu : MonoBehaviour
 		if (Settings.TryLoad())
 		{
 			isNormallyLoaded = true;
-			UpdateGameSettings();
+			ApplySettings();
 		}
-		else
-		{
-			ResetSettings();
-		}
-
-		OpenMenuEvent = OpenMenu;
-		CloseMenuEvent = CloseMenu;
 
 		if (!Settings.isModified)
 		{
@@ -55,28 +40,31 @@ public class GameSettingsMenu : MonoBehaviour
 			buttonSave.interactable = false;
 		}
 
-		Resolution[] resolutionsList = Screen.resolutions;
+		InitialiseResolutionMenu();
+	}
+	private void Start()
+	{
+		if (isNormallyLoaded) // Не переносить в Awake, AudioMixer грузится в Awake
+		{
+			UpdateMixerVolumesBySettingsVolumes();
+		}
+		else
+		{
+			ResetSettings();
+			UpdateSettingsVolumesByMixerVolumes();
+		}
+		ResetMenusValues();
+	}
 
+	private void InitialiseResolutionMenu()
+	{
+		Resolution[] resolutionsList = Screen.resolutions;
 		ddResolution.options = new List<Dropdown.OptionData>();
 		foreach (Resolution R in resolutionsList)
 		{
 			ddResolution.options.Add(new Dropdown.OptionData(R.width + "x" + R.height + " " + R.refreshRate + "Hz"));
 		}
-		ResetOptions();
-
 	}
-	private void Start()
-	{
-		if (isNormallyLoaded)
-		{
-			UpdateAudioMixer();
-		}
-		else
-		{
-			ResetAudioMixer();
-		}
-	}
-
 
 	public void SetSomething()
 	{
@@ -91,28 +79,12 @@ public class GameSettingsMenu : MonoBehaviour
 
 	public void Save()
 	{
-		Confirm();
+		LoadMenusValuesInSettings();
 		Settings.Save();
-		buttonConfirm.interactable = false;
 		buttonSave.interactable = false;
 	}
 
-	public void OpenMenu(GameObject G)
-	{
-		menuToOpen = G;
-		SettingsPanel.SetActive(true);
-	}
-
-	public void CloseMenu()
-	{
-		SettingsPanel.SetActive(false);
-		if (menuToOpen)
-		{
-			menuToOpen.SetActive(true);
-		}
-	}
-
-	public void Confirm()
+	public void LoadMenusValuesInSettings()
 	{
 		buttonConfirm.interactable = false;
 		Settings.isModified = true;
@@ -123,19 +95,19 @@ public class GameSettingsMenu : MonoBehaviour
 		Settings.antiAliasing = ddAntiAliasing.value;
 		Settings.shadowQuality = ddShadowQuality.value;
 		Settings.shadowResolution = ddShadowResolution.value;
+		Settings.Sensitivity = (int)(sliderSensitivity.value * 100);
 
-		for (int i = 0; i < SettingsVolumes.Length; ++i)
+		for (int i = 0; i < SettingsMixerVolumes.Length; ++i)
 		{
-			SettingsVolumes[i].Confirm();
+			SettingsMixerVolumes[i].Confirm();
 		}
 
-		Settings.Sensitivity = (int)(sliderSensitivity.value * 100);
 		textSensitivityNow.text = string.Format("{0:f2}", sliderSensitivity.value);
 
-		UpdateGameSettings();
+		ApplySettings();
 	}
 
-	public void ResetOptions()
+	public void ResetMenusValues()
 	{
 		ddResolution.value = Settings.resolution;
 		ddTextureQuality.value = Settings.textureQuality;
@@ -148,15 +120,14 @@ public class GameSettingsMenu : MonoBehaviour
 		textSensitivityNow.text = string.Format("{0:f2}", (float)Settings.Sensitivity / 100);
 		textSensitivity.text = string.Format("{0:f2}", (float)Settings.Sensitivity / 100); 
 		
-		for (int i = 0; i < SettingsVolumes.Length; ++i)
+		for (int i = 0; i < SettingsMixerVolumes.Length; ++i)
 		{
-			SettingsVolumes[i].ResetOptions();
+			SettingsMixerVolumes[i].ResetMenuValues();
 		}
 	}
 
 	private void ResetSettings()
 	{
-		Debug.Log("ResetSettings");
 		for (int i = 0; i < Screen.resolutions.Length; ++i)
 		{
 			if (Screen.currentResolution.Equals(Screen.resolutions[i]))
@@ -172,11 +143,16 @@ public class GameSettingsMenu : MonoBehaviour
 		Settings.shadowQuality = (int)QualitySettings.shadows;
 		Settings.shadowResolution = (int)QualitySettings.shadowResolution;
 		Settings.Sensitivity = (int)(Settings.SensetivityDefault * 100);
+
+		for (int i = 0; i < SettingsMixerVolumes.Length; ++i)
+		{
+			SettingsMixerVolumes[i].ResetValues(AudioMixer);
+		}
+
 	}
 
-	public void UpdateGameSettings()
+	public void ApplySettings()
 	{
-		Debug.Log("UpdateSettings");
 		Screen.SetResolution(Screen.resolutions[Settings.resolution].width, Screen.resolutions[Settings.resolution].height, (FullScreenMode)Settings.fullScreenMode, Screen.resolutions[Settings.resolution].refreshRate);
 		QualitySettings.masterTextureLimit = Settings.textureQuality;
 		QualitySettings.vSyncCount = Settings.vSyncCount;
@@ -184,48 +160,63 @@ public class GameSettingsMenu : MonoBehaviour
 		QualitySettings.shadows = (ShadowQuality)Settings.shadowQuality;
 		QualitySettings.shadowResolution = (ShadowResolution)Settings.shadowResolution;
 
-		UpdateAudioMixer();
+		UpdateMixerVolumesBySettingsVolumes();
 	}
 
-	private void ResetAudioMixer()
+	private void UpdateSettingsVolumesByMixerVolumes()
 	{
-		float f;
+		float mixerVolume;
 		AudioMixerExposedParameter parameter;
-		for (int i = 0; i < SettingsVolumes.Length; ++i)
+		for (int i = 0; i < SettingsMixerVolumes.Length; ++i)
 		{
-			parameter = SettingsVolumes[i].GetParameter();
-			AudioMixer.GetFloat(parameter.ToString(), out f);
-			f += 80;
-			if (f < 20)
-			{
-				f /= 3f;
-			}
-			else if (f < 80)
-			{
-				f = (f - 60) * 3 + 20;
-			}
-			Settings.volumes[(int)parameter] = (int)f;
+			parameter = SettingsMixerVolumes[i].GetParameter();
+
+			AudioMixer.GetFloat(parameter.ToString(), out mixerVolume);
+			
+			Settings.volumes[(int)parameter] = (int)MixerToPlayerVolume(mixerVolume);
+		}
+	}
+	private void UpdateMixerVolumesBySettingsVolumes()
+	{
+		float parameterVolume;
+		AudioMixerExposedParameter parameter;
+		for (int i = 0; i < SettingsMixerVolumes.Length; ++i)
+		{
+			parameter = SettingsMixerVolumes[i].GetParameter();
+
+			parameterVolume = PlayerToMixerVolume(Settings.volumes[(int)parameter]);
+
+			AudioMixer.SetFloat(parameter.ToString(), parameterVolume);
 		}
 	}
 
-	private void UpdateAudioMixer()
+
+	private float MixerToPlayerVolume(float mixerVolume)
 	{
-		AudioMixerExposedParameter parameter;
-		float f;
-		for (int i = 0; i < SettingsVolumes.Length; ++i)
+		mixerVolume += 80;
+		if (mixerVolume < 20)
 		{
-			parameter = SettingsVolumes[i].GetParameter();
-			f = Settings.volumes[(int)parameter];
-			if (f < 20)
-			{
-				f *= 3f;
-			}
-			else if (f < 80)
-			{
-				f = 60 + (f - 20) / 3;
-			}
-			f -= 80;
-			AudioMixer.SetFloat(parameter.ToString(), f);
+			mixerVolume /= 3f;
 		}
+		else if (mixerVolume < 80)
+		{
+			mixerVolume = (mixerVolume - 60) * 3 + 20;
+		}
+		return mixerVolume;
 	}
+	private float PlayerToMixerVolume(float playerVolume)
+	{
+		if (playerVolume < 20)
+		{
+			playerVolume *= 3f;
+		}
+		else if (playerVolume < 80)
+		{
+			playerVolume = 60 + (playerVolume - 20) / 3;
+		}
+		playerVolume -= 80;
+		return playerVolume;
+	}
+
+
 }

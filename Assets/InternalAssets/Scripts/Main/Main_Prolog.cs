@@ -3,16 +3,14 @@ using UnityEngine;
 
 public class Main_Prolog : MonoBehaviour
 {
-    [SerializeField] private Scenes nextScene;
     [SerializeField] private TextAsset textAsset;
-    [SerializeField] private int nextSlidesID;
-    [SerializeField] private int nextEquationsID;
     [SerializeField] private AudioClip audioClip;
-    [SerializeField] internal StarshipMoveTrigger starshipMoveStart; // Скрипт в начале для движения корабля игрока
-    [SerializeField] internal StarshipMoveTrigger starshipMoveEnd; // Скрипт в конце для движения корабля игрока
+    [SerializeField] internal PlayerStarshipMover MoverStart; // Скрипт в начале для движения корабля игрока
+    [SerializeField] internal PlayerStarshipMover MoverEnd; // Скрипт в конце для движения корабля игрока
+    [SerializeField] internal PlayerStarshipTrigger EndTrigger; // Триггер в конце 
 
-    private Player_Starship_Controller playerController;
-    private Player_Camera_Controller playerCamera;
+    protected Player_Starship_Controller player_Starship_Controller;
+    protected Player_Camera_Controller player_Camera_Controller;
 
     private bool isEnd;
     private bool isRestart;
@@ -20,9 +18,11 @@ public class Main_Prolog : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        playerCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Player_Camera_Controller>();
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponentInParent<Player_Starship_Controller>();
-        playerController.GetComponent<Health>().DeathEvent += Restart;
+        GameScreenDark.SetDarkEvent(true);
+
+        player_Camera_Controller = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Player_Camera_Controller>();
+        player_Starship_Controller = GameObject.FindGameObjectWithTag("Player").GetComponentInParent<Player_Starship_Controller>();
+        player_Starship_Controller.GetComponent<Health>().OnDeath += Restart;
 
         GameText.DeactivateEvent();
         GameText.SetInGameTextNowEvent(textAsset);
@@ -33,31 +33,42 @@ public class Main_Prolog : MonoBehaviour
         }
         else
         {
+            isRestart = true;
             StaticSettings.isRestart = false;
         }
+
+        EndTrigger.OnPlayerStarshipEnter += OnPlayerStarshipEnterEndTrigger;
     }
     private IEnumerator Start()
     {
-        starshipMoveStart.isTrigger = false;
-        starshipMoveEnd.isTrigger = true;
-        starshipMoveEnd.TriggerEvent = EndEvent;
+        MStart();
+        Checkpoint(StaticSettings.checkpointID);
 
-        if (!isRestart)
+        if (!isRestart && StaticSettings.checkpointID == 0)
         {
-            playerController.SetLockControl(true);
-            playerCamera.SetLockMove(true);
-            starshipMoveStart.StartMove(playerController);
-            yield return StartCoroutine(ScreenDark.ITransparentEvent());
+            player_Starship_Controller.SetLockControl(true);
+            player_Camera_Controller.SetLockMove(true);
+            player_Camera_Controller.SetPositionWithOffset(MoverStart.GetEndPosition());
+
+            MoverStart.Move(player_Starship_Controller);
+
             GameDialogs.StartDialogEvent(EndDialogEvent);
+            yield return StartCoroutine(GameScreenDark.ITransparentEvent());
         }
         else
         {
-            StaticSettings.isRestart = false;
+            isRestart = false;
             GameGoals.SetActiveGoalEvent(true);
-            starshipMoveStart.MoveInEndPosition(playerController);
-            yield return StartCoroutine(ScreenDark.ITransparentEvent());
+            if (StaticSettings.checkpointID == 0)
+            {
+                MoverStart.StarshipToEndPosition(player_Starship_Controller);
+            }
+            yield return StartCoroutine(GameScreenDark.ITransparentEvent());
         }
     }
+
+    protected virtual void MStart() { }
+    protected virtual void Checkpoint(int checkpointID) { }
 
     private void Update()
     {
@@ -70,7 +81,15 @@ public class Main_Prolog : MonoBehaviour
         }
     }
 
-    private void EndEvent()
+    private void OnPlayerStarshipEnterEndTrigger()
+    {
+        player_Starship_Controller.SetLockControl(true);
+        player_Camera_Controller.SetLockMove(true);
+        MoverEnd.MoveLine(player_Starship_Controller);
+        EndEvent();
+    }
+
+    protected void EndEvent()
     {
         if (!isRestart && !isEnd)
         {
@@ -80,16 +99,20 @@ public class Main_Prolog : MonoBehaviour
     private IEnumerator IEndEvent()
     {
         isEnd = true;
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
-        if (nextScene == Scenes.Menu)
-        {
-            StaticSettings.isCompanyMenu = true;
-            StaticSettings.isPart1Complete = true;
-        }
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         GameAudio.StopAudioEvent();
-        SceneController.LoadEquationsAndSlides(nextScene, nextEquationsID, nextSlidesID);
+        StaticSettings.checkpointID = 0;
+        SceneController.LoadNextStoryScene();
     }
-    private void Restart()
+
+    protected void SetCheckpoint(int checkpointID)
+    {
+        StaticSettings.checkpointID = checkpointID;
+    }
+    
+    protected void MovePlayerToCheckpoint(Transform CheckpointTr) => player_Starship_Controller.transform.SetPositionAndRotation(CheckpointTr.position, CheckpointTr.rotation);
+
+    protected void Restart()
     {
         if (!isRestart && !isEnd)
         {
@@ -99,12 +122,16 @@ public class Main_Prolog : MonoBehaviour
     private IEnumerator IRestart()
     {
         isRestart = true;
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
+        StaticSettings.isRestart = true;
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         SceneController.RestartScene();
     }
+
     private void EndDialogEvent()
     {
         GameGoals.SetActiveGoalEvent(true);
-        starshipMoveStart.StopMove();
+        player_Starship_Controller.SetLockControl(false);
+        player_Camera_Controller.SetLockMove(false);
+        MoverStart.StopMove();
     }
 }

@@ -18,15 +18,15 @@ public class ModificationPanel : MonoBehaviour
 
     public void Initialize(GameObject StarshipPrefab)
     {
-
-        Player_Starship_Controller PSC = StarshipPrefab.GetComponent<Player_Starship_Controller>();
         Health health = StarshipPrefab.GetComponent<Health>();
+        Starship_Engine starship_Engine = StarshipPrefab.GetComponent<Starship_Engine>();
+        Starship_RotationEngine starship_RotationEngine = StarshipPrefab.GetComponent<Starship_RotationEngine>();
         Guns guns = StarshipPrefab.GetComponent<Guns>();
 
-        StarshipData starshipData = StarshipModificatonsData.GetStarshipData(StarshipPrefab.GetComponent<PlayerStarshipModifications>().Starship);
+        StarshipData starshipData = StarshipsModificatonsData.GetStarshipData(StarshipPrefab.GetComponent<PlayerStarshipModifications>().Starship);
         InitializeModificationMenu(ModificationMenus[0], health.maxHp, starshipData, ModificationName.Health);
-        InitializeModificationMenu(ModificationMenus[1], PSC.MoveForce, starshipData, ModificationName.EnginePower);
-        InitializeModificationMenu(ModificationMenus[2], PSC.RotateForce, starshipData, ModificationName.GyroPower);
+        InitializeModificationMenu(ModificationMenus[1], starship_Engine.force, starshipData, ModificationName.EnginePower);
+        InitializeModificationMenu(ModificationMenus[2], starship_RotationEngine.force, starshipData, ModificationName.GyroPower);
         InitializeModificationMenu(ModificationMenus[3], 1 / guns.ShootTime, starshipData, ModificationName.ShootTime);
 
     }

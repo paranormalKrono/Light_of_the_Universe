@@ -1099,3 +1099,14 @@ Assets/XR.meta
 Assets/Resources.meta
 Assets/InternalAssets.meta
 Assets/ExternalAssets.meta
+Assets/InternalAssets/Materials/
+Assets/InternalAssets/Models/
+Assets/InternalAssets/Prefabs/
+Assets/InternalAssets/Scenes/
+Assets/InternalAssets/Sprites/
+Assets/InternalAssets/Animation/
+Assets/ExternalAssets/Music/
+Assets/ExternalAssets/Music.meta
+Assets/InternalAssets/Audio/
+Packages/
+Assets/ExternalAssets/

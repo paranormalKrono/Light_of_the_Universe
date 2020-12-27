@@ -1,24 +1,20 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(Guns), typeof(Rigidbody))]
 public class Starship_AI_Adv : MonoBehaviour
 {
+    [SerializeField] private Mastery mastery;
     [SerializeField] private float minDistance = 9;
+    [SerializeField] private float attackDistance = 11;
     [SerializeField] private float findDistance = 26;
     [SerializeField] private float lostDistance = 40;
     [SerializeField] private float leavePointDistance = 4;
-    [SerializeField] private float moveForce = 700;
-    [SerializeField] private float moveSpeedMax = 19;
-    [SerializeField] private float moveFriction = 20;
     [SerializeField] private float moveAngle = 15; // Угол, выше которого снижается мощность двигателя
-    [SerializeField] private float rotateForce = 600;
-    [SerializeField] private float rotateSpeedMax = 2.6f;
     [SerializeField] private float shootAngle = 70;
     [SerializeField] private float FearTime = 1.5f;
-    [SerializeField] private float stayTimeMin = 0.2f;
-    [SerializeField] private float stayTimeMax = 1f;
-    [SerializeField] private float trappedTime = 2;
-    [SerializeField] private float trappedDistance = 0.1f;
+    [SerializeField] private float MoveToPointVelocityConsideration = 0.5f;
+    [SerializeField] private float MinDistanceToNavMeshCorner = 0.5f;
 
     [SerializeField] private bool isControlLock = false;
     [SerializeField] private bool isAttack = true;
@@ -26,13 +22,20 @@ public class Starship_AI_Adv : MonoBehaviour
 
     [SerializeField] private Transform RotPointTr;
 
+    [SerializeField] private Starship_Engine Engine;
+    [SerializeField] private Starship_RotationEngine RotationEngine;
+
+    [SerializeField] private NavMeshPath NavMeshPath;
+
     private Guns.ShootEvent Shoot;
 
     private Rigidbody rb; // Основное
-    private Rigidbody starshipRb; // Отвечает за поворот
     private Rigidbody EnemyRb;
 
     private Transform EnemyTarget;
+    private Transform PreviousTarget;
+    private Transform CurrentTarget;
+    private Transform NextTarget;
     private Vector3 EnemyTargetV3; // Не менять на transform, ссылка может пропасть
 
     public delegate void EventTransformHandler(Transform Tr);
@@ -40,53 +43,92 @@ public class Starship_AI_Adv : MonoBehaviour
 
     private bool isFindTarget;
     private bool isFear;
-    private bool isTrapped;
     private bool isMoveToPoint;
     private bool isTargetMissed;
 
-    private float stayTime;
-    private float stayTimeNow;
+    private float MasteryAimingKoef = 0;
+
     private float FearTimeNow;
-    private float trappedTimeNow;
-    private float distanceToTarget;
+    private float distanceToEnemy;
     private float maxShootSpeed;
 
-
-    private Vector3 vector3Zero = Vector3.zero;
+    private Vector3 MoveTargetV3;
     private Vector3 localUp = Vector3.up;
-    private Vector3 forward = Vector3.forward;
 
-
-    private Transform PreviousPoint;
-    private Transform CurrentPoint;
-    private Transform NextPoint;
-    private Vector3 CurrentPointV3;
-    private Vector3 NextPointV3;
-    private Vector3 PreviousPos;
-
-    private Vector3 v3, point;
-    private float f;
-
+    private RaycastHit enemyRaycastHitInfo;
 
     private void Awake()
     {
+        MoveToPointVelocityConsideration *= Random.Range(0.9f, 1.1f);
+        switch (mastery)
+        {
+            case Mastery.Noob:
+                minDistance *= Random.Range(1, 1.5f);
+                attackDistance *= Random.Range(1, 1.5f);
+                findDistance *= Random.Range(0.5f, 1f);
+                lostDistance *= Random.Range(0.5f, 1f);
+                leavePointDistance *= Random.Range(0.5f, 1f);
+                moveAngle *= Random.Range(0.5f, 1f);
+                shootAngle *= Random.Range(1f, 1.6f);
+                FearTime *= Random.Range(1f, 1.6f);
+                MasteryAimingKoef = Random.Range(2f, 3f);
+                break;
+            case Mastery.Normal:
+                minDistance *= Random.Range(1, 1.25f);
+                attackDistance *= Random.Range(1, 1.25f);
+                findDistance *= Random.Range(0.75f, 1f);
+                lostDistance *= Random.Range(0.75f, 1f);
+                leavePointDistance *= Random.Range(0.75f, 1f);
+                moveAngle *= Random.Range(0.75f, 1f);
+                shootAngle *= Random.Range(1f, 1.4f);
+                FearTime *= Random.Range(1f, 1.3f);
+                MasteryAimingKoef = Random.Range(1.5f, 2.5f);
+                break;
+
+            case Mastery.Pro:
+                minDistance *= Random.Range(0.9f, 1.2f);
+                attackDistance *= Random.Range(0.9f, 1.2f);
+                findDistance *= Random.Range(0.8f, 1.1f);
+                lostDistance *= Random.Range(0.8f, 1.1f);
+                leavePointDistance *= Random.Range(0.9f, 1.1f);
+                moveAngle *= Random.Range(0.9f, 1.2f);
+                shootAngle *= Random.Range(0.9f, 1.2f);
+                FearTime *= Random.Range(0.8f, 1.2f);
+                MasteryAimingKoef = Random.Range(0.75f, 1f);
+                break;
+            case Mastery.Elite:
+                minDistance *= Random.Range(0.95f, 1.1f);
+                attackDistance *= Random.Range(0.95f, 1.1f);
+                findDistance *= Random.Range(0.95f, 1.3f);
+                lostDistance *= Random.Range(0.95f, 1.3f);
+                leavePointDistance *= Random.Range(0.9f, 1.2f);
+                moveAngle *= Random.Range(0.95f, 1.3f);
+                shootAngle *= Random.Range(0.9f, 1.1f);
+                FearTime *= Random.Range(0.9f, 1.1f);
+                MasteryAimingKoef = Random.Range(0.5f, 0.7f);
+                break;
+        }
+
+        NavMeshPath = new NavMeshPath();
+
         rb = GetComponent<Rigidbody>();
         Starship starship = GetComponent<Starship>();
         starship.SetEnemyTarget = SetEnemyTarget;
         starship.SetFollowTarget = SetFollowTarget;
         starship.SetLockControl = SetLockControl;
         starship.SetAttack = SetAttack;
-        starshipRb = RotPointTr.GetComponent<Rigidbody>();
 
         localUp = transform.TransformDirection(localUp);
 
         SetLockControl(true);
         isMoveToPoint = true;
+
     }
+
     private void Start()
     {
         Guns guns = GetComponent<Guns>();
-        guns.Initialize(rb, out Shoot);
+        guns.Initialize(out Shoot);
         maxShootSpeed = guns.MaxShootSpeed;
     }
 
@@ -94,101 +136,92 @@ public class Starship_AI_Adv : MonoBehaviour
     {
         if (!isControlLock) // Если управление не отключено
         {
-            if (isTrapped) // Если ИИ застрял
+            if (!isFindTarget) // Если цель не найдена
             {
-                Trap();
-            }
-            else 
-            {
-                if (!isFindTarget) // Если цель не найдена
+                if (isMoveToPoint) // Если можно двигаться к точке
                 {
-                    if (isMoveToPoint) // Если можно двигаться к точке
-                    {
-                        TryTrap(); // Проверяем застрял ли ИИ
-                        MoveToPoint(); // Двигаемся к точке
-                    }
-                    else
-                    {
-                        Stay();
-                    }
-                    if (isFollowTarget && !isTargetMissed) // Если ИИ ищет цель
-                    {
-                        if (EnemyTarget != null)
-                        {
-                            isFindTarget = Vector3.Distance(EnemyTarget.position, transform.position) < findDistance; // Проверяем видит ли ИИ противника
-                        }
-                        else
-                        {
-                            isTargetMissed = true;
-                        }
-                    }
+                    MoveToPoint(); // Двигаемся к точке
                 }
                 else
                 {
+                    SlowDown();
+                }
+                if (isFollowTarget && !isTargetMissed) // Если ИИ ищет цель
+                {
                     if (EnemyTarget != null)
                     {
-                        EnemyTargetV3 = EnemyTarget.position;
-                        // ИИ видит цель
-                        distanceToTarget = Vector3.Distance(EnemyTargetV3, transform.position); // Получаем дистанцию до цели
-
-                        f = Angle(EnemyTargetV3); // Получаем угол до цели
-                        if (isAttack && f < shootAngle) // Если ИИ может атаковать и угол меньше угла прицеливания
-                        {
-                            Shoot(); // Стреляем
-                        }
-                        if (!isFear) // Если не испугался
-                        {
-                            if (distanceToTarget > findDistance)
-                            {
-                                f = Angle(EnemyTargetV3 + EnemyRb.velocity - rb.velocity); // Получаем угол до цели
-                                LookAt(EnemyTargetV3 + EnemyRb.velocity - rb.velocity, f); // Поворачиваем корабль в сторону цели относительно угла
-                            }
-                            else
-                            {
-                                if (f < 90)
-                                {
-                                    f = Angle(EnemyTargetV3 + (EnemyRb.velocity - rb.velocity) * (Vector3.Distance(transform.position, EnemyTargetV3) / maxShootSpeed)); // Получаем угол до цели
-                                    LookAt(EnemyTargetV3 + (EnemyRb.velocity - rb.velocity) * (Vector3.Distance(transform.position, EnemyTargetV3) / maxShootSpeed), f); // Поворачиваем корабль в сторону цели относительно угла
-                                }
-                                else
-                                {
-                                    f = Angle(EnemyTargetV3); // Получаем угол до цели
-                                    LookAt(EnemyTargetV3, f); // Поворачиваем корабль в сторону цели относительно угла
-                                }
-                            }
-                            Move(forward); // Двигаемся вперёд
-
-                            isTrapped = TryTrap(); // Проверяем застрял ли ИИ
-                            if (isTrapped || distanceToTarget < minDistance) // Если застрял или дистанция до цели меньше минимльной дистанции
-                            {
-                                FindClosestPoint(); // Находим ближайшую точку
-                                isFear = true; // Испуг
-                            }
-                        }
-                        else
-                        {
-                            // Отсчёт страха
-                            FearTimeNow += Time.fixedDeltaTime;
-                            if (FearTimeNow >= FearTime)
-                            {
-                                isFear = false;
-                                FearTimeNow = 0;
-                            }
-                            MoveToPoint(); // Двигаемся к точке
-                            isTrapped = TryTrap(); // Проверяем застрял ли ИИ
-                        }
-                        isFindTarget = distanceToTarget < lostDistance; // Проверяем видит ли ИИ противника
-                        if (!isFindTarget) // Если ИИ потерял противника
-                        {
-                            LostTarget();
-                        }
+                        isFindTarget = Vector3.Distance(EnemyTarget.position, transform.position) < findDistance; // Проверяем видит ли ИИ противника
                     }
                     else
                     {
                         isTargetMissed = true;
-                        isFindTarget = false;
+                    }
+                }
+            }
+            else
+            {
+                if (EnemyTarget != null)
+                {
+                    EnemyTargetV3 = EnemyTarget.position;
+
+                    // ИИ видит цель
+                    distanceToEnemy = Vector3.Distance(transform.position, EnemyTargetV3); // Получаем дистанцию до цели
+
+                    if (!isFear) // Если не испугался
+                    {
+                        UpdatePath(EnemyTargetV3);
+                        if (Physics.SphereCast(transform.position, 1, (EnemyTargetV3 - transform.position).normalized, out enemyRaycastHitInfo) && enemyRaycastHitInfo.transform.parent == EnemyTarget)
+                        {
+                            LookAt(EnemyTargetV3 + EnemyRb.velocity * (Vector3.Distance(transform.position, EnemyTargetV3 + EnemyRb.velocity) / maxShootSpeed) * (1 + Random.Range(-MasteryAimingKoef, MasteryAimingKoef))); // Поворачиваем корабль в сторону цели
+                            
+                            if (distanceToEnemy < attackDistance)
+                            {
+                                SlowDown();
+                            }
+                            else
+                            {
+                                Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3)));
+                            }
+
+                            if (isAttack && AngleTo(EnemyTargetV3) < shootAngle) // Если ИИ может атаковать, и угол до цели меньше угла прицеливания
+                            {
+                                Shoot(); // Стреляем
+                            }
+                        }
+                        else
+                        {
+                            LookAt(MoveTargetV3); // Поворачиваем корабль в сторону нужного движения
+                            Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3)));
+                        }
+
+                        if (distanceToEnemy < minDistance) // Если застрял или дистанция до цели меньше минимльной дистанции
+                        {
+                            FindClosestPoint(); // Находим ближайшую точку
+                            isFear = true; // Испуг
+                        }
+                    }
+                    else
+                    {
+                        // Отсчёт страха
+                        FearTimeNow += Time.fixedDeltaTime;
+                        if (FearTimeNow >= FearTime)
+                        {
+                            isFear = false;
+                            FearTimeNow = 0;
+                        }
+                        MoveToPoint(); // Двигаемся к точке
+                    }
+                    isFindTarget = distanceToEnemy < lostDistance; // Проверяем видит ли ИИ противника
+                    if (!isFindTarget) // Если ИИ потерял противника
+                    {
                         LostTarget();
                     }
+                }
+                else
+                {
+                    isTargetMissed = true;
+                    isFindTarget = false;
+                    LostTarget();
                 }
             }
         }
@@ -199,82 +232,15 @@ public class Starship_AI_Adv : MonoBehaviour
 
     private void MoveToPoint() // Движение к точке
     {
-        point = Vector3.Lerp(CurrentPointV3, NextPointV3, leavePointDistance / Vector3.Distance(transform.position, CurrentPointV3));
-        if (Vector3.Distance(point - rb.velocity, NextPointV3) > Vector3.Distance(transform.position, NextPointV3))
-        {
-            f = Angle(point); // Получаем угол
-            LookAt(point, f); // Поворачиваем корабль к точке
-        }
-        else
-        {
-            f = Angle(point - rb.velocity); // Получаем угол
-            LookAt(point - rb.velocity, f); // Поворачиваем корабль к точке
-        }
+        UpdatePath(NextTarget.position);
 
-        v3 = forward; // Определяем направление
-        if (f > moveAngle) // Если угол больше, то уменьшаем мощность двигателя
-        {
-            v3 /= f / moveAngle;
-        }
-        Move(v3); // Двигаемся вперёд относительно угла
-        if (Vector3.Distance(transform.position, CurrentPointV3) < leavePointDistance || Vector3.Distance(transform.position, NextPointV3) < leavePointDistance || Vector3.Distance (transform.position, point) < leavePointDistance * 2) // Если мы приблизились к точке достаточно близко
+        LookAt(MoveTargetV3 - rb.velocity * MoveToPointVelocityConsideration); // Поворачиваем корабль к точке, учитывая скорость
+
+        Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - rb.velocity / 2))); // Двигаемся
+
+        if (Vector3.Distance(transform.position, NextTarget.position) < leavePointDistance) // Если мы приблизились к точке достаточно близко
         {
             GetNextPoint(); // Следующая точка
-            if (Random.Range(0, 5) == 1) // Выюираем то, сколько стоять на месте
-            {
-                stayTime = stayTimeMax;
-            }
-            else
-            {
-                stayTime = stayTimeMin;
-            }
-            isMoveToPoint = false; // Прекратить движение к точке
-        }
-    }
-
-    private void LookAt(Vector3 V3, float ang) // Повернуть корабль в сторону точки, зная угол
-    {
-        Vector3 rotVect = -Vector3.Cross((V3 - transform.position).normalized, RotPointTr.forward).normalized;
-
-        // В плоскости
-        rotVect.y = 0;
-        rotVect.z = 0;
-
-        if (ang < 5) // Если угол меньше 5, то уменьшаем ускорение и максимальную скорость
-        {
-            Rotate(Time.fixedDeltaTime * rotateForce * ang * rotVect / 10, rotateSpeedMax / 12);
-        }
-        else
-        {
-            Rotate(Time.fixedDeltaTime * rotateForce * ang * rotVect, rotateSpeedMax);
-        }
-    }
-
-    private void Stay() // Встать на месте
-    {
-        stayTimeNow += Time.fixedDeltaTime; // Отсчёт времени стояния
-        if (stayTimeNow >= stayTime)
-        {
-            stayTimeNow = 0;
-            isMoveToPoint = true;
-        }
-        MoveFriction(); // Остановка
-    }
-
-    private void Trap() // Застревание 
-    {
-        // Отсчёт
-        trappedTimeNow += Time.fixedDeltaTime;
-        if (trappedTimeNow < trappedTime)
-        {
-            Move(-forward / 4); // Двигаться назад
-        }
-        else
-        {
-            trappedTimeNow = 0;
-            PreviousPos = transform.position;
-            FindClosestPoint();
-            isTrapped = false;
         }
     }
 
@@ -291,37 +257,40 @@ public class Starship_AI_Adv : MonoBehaviour
     // Просто методы
     #region Methods
 
-    private void Move(Vector3 moveDirection) // Движение в какую-то сторону
-    {
-        moveDirection = RotPointTr.TransformDirection(moveDirection);
-        rb.AddForce(moveDirection * moveForce * Time.fixedDeltaTime, ForceMode.Impulse);
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, moveSpeedMax);
-    }
+    private void Move(float direction) => Engine.Move(direction); // Движение
 
-    private void MoveFriction() => rb.velocity = Vector3.Lerp(rb.velocity, vector3Zero, Time.fixedDeltaTime * moveFriction); // Трение при движении
-    
-    private void Rotate(Vector3 torque, float maxSpeed) // Поворот с ограничением по скорости
-    {
-        starshipRb.AddTorque(torque, ForceMode.Acceleration); 
-        starshipRb.angularVelocity = Vector3.ClampMagnitude(starshipRb.angularVelocity, maxSpeed);
-    }
+    private void SlowDown() => Engine.SlowDown(); // Замедление
 
-    private void GetNextPoint() // Следующая точка
+    private void LookAt(Vector3 target) => RotationEngine.RotateToTarget(target); // Повернуть корабль в сторону точки
+
+    private void GetNextPoint() // Получаем следующую контрольную точку для движения
     {
-        // Заменяем прошлую точку на текущую, екущую на следующую и получаем последующую точку для движения
-        PreviousPoint = CurrentPoint;
-        CurrentPoint = NextPoint;
-        NextPoint = System_Waypoints.GetNextPoint(CurrentPoint, PreviousPoint);
-        CurrentPointV3 = CurrentPoint.position;
-        NextPointV3 = NextPoint.position;
+        PreviousTarget = CurrentTarget;
+        CurrentTarget = NextTarget;
+        NextTarget = System_Waypoints.GetNextPoint(CurrentTarget, PreviousTarget);
     }
 
     private void FindClosestPoint()
     {
-        CurrentPoint = System_Waypoints.GetClosePoint(transform); // Получаем ближайшую точку
-        NextPoint = CurrentPoint;
-        CurrentPointV3 = CurrentPoint.position;
-        NextPointV3 = CurrentPointV3;
+        PreviousTarget = CurrentTarget;
+        CurrentTarget = NextTarget;
+        NextTarget = System_Waypoints.GetClosePoint(transform);
+    }
+
+    int v;
+    private void UpdatePath(Vector3 Target)
+    {
+        NavMesh.CalculatePath(transform.position, Target, NavMesh.AllAreas, NavMeshPath);
+
+        if (NavMeshPath.status == NavMeshPathStatus.PathComplete)
+        {
+            v = 1;
+            while (v < NavMeshPath.corners.Length - 1 && Vector3.Distance(NavMeshPath.corners[v], transform.position) < MinDistanceToNavMeshCorner)
+            {
+                v += 1;
+            }
+            MoveTargetV3 = NavMeshPath.corners[v];
+        }
     }
 
     #endregion
@@ -329,28 +298,20 @@ public class Starship_AI_Adv : MonoBehaviour
     // Что-то возвращают
     #region Return
 
-    private bool TryTrap() // Проверка не застрял ли корабль
+    private float MoveDirectionConsideringAngle(float moveDirection, float angle)
     {
-        if (Vector3.Distance(transform.position, PreviousPos) < trappedDistance) // Проверяем пролетел ли корабль хоть какую-либо дистанцию
+        if (angle > moveAngle) // Если угол больше
         {
-            // Если не пролетел, начинаем отсчёт
-            trappedTimeNow += Time.deltaTime;
-            if (trappedTimeNow >= trappedTime) // Если отсчёт закончился, но корабль не вылетел из мёртвой зоны, то он застрял
+            if (angle > 90) // Если угол больше 90, то меняем направление скорости на противоположное
             {
-                trappedTimeNow = 0;
-                PreviousPos = transform.position;
-                return true; // Застрял
+                moveDirection *= -1;
             }
+            moveDirection /= angle / moveAngle; // Уменьшаем вектор направления для снижения скорости
         }
-        else
-        {
-            trappedTimeNow = 0; // Отсчёт обнуляется
-        }
-        PreviousPos = transform.position;
-        return false; // Не застрял
+        return moveDirection;
     }
 
-    private float Angle(Vector3 V3) => Vector3.Angle((V3 - transform.position).normalized, RotPointTr.forward); // Угол между направлением к цели и передом корабля
+    private float AngleTo(Vector3 V3) => Vector3.Angle((V3 - transform.position).normalized, RotPointTr.forward); // Угол между направлением к цели и передом корабля
 
     #endregion
 
@@ -364,11 +325,8 @@ public class Starship_AI_Adv : MonoBehaviour
         {
             FindClosestPoint(); // Если включают управление, то ищем ближнюю точку
         }
-        else
-        {
-            rb.velocity = vector3Zero;
-            rb.angularVelocity = vector3Zero;
-        }
+        Engine.SetLockMove(t);
+        RotationEngine.SetLockRotate(t);
     }
 
     public void SetFollowTarget(bool t) // Вкл/выкл поиск противника
@@ -394,4 +352,11 @@ public class Starship_AI_Adv : MonoBehaviour
 
     #endregion
 
+    private enum Mastery
+    {
+        Noob,
+        Normal,
+        Pro,
+        Elite,
+    }
 }

@@ -10,9 +10,10 @@ public class PlayerStarshipModifications : MonoBehaviour
 
     private void Awake()
     {
-        Player_Starship_Controller PSC = GetComponent<Player_Starship_Controller>();
+        Starship_Engine starship_Engine = GetComponent<Starship_Engine>();
+        Starship_RotationEngine starship_RotationEngine = GetComponent<Starship_RotationEngine>();
 
-        StarshipData data = StarshipModificatonsData.GetStarshipData(starship);
+        StarshipData data = StarshipsModificatonsData.GetStarshipData(starship);
         float value = data.GetModificationData(ModificationName.Health).CurGradeModifier;
         if (value != 0)
         {
@@ -21,12 +22,12 @@ public class PlayerStarshipModifications : MonoBehaviour
         value = data.GetModificationData(ModificationName.EnginePower).CurGradeModifier;
         if (value != 0)
         {
-            PSC.MoveForce += value;
+            starship_Engine.force += value;
         }
         value = data.GetModificationData(ModificationName.GyroPower).CurGradeModifier;
         if (value != 0)
         {
-            PSC.RotateForce += value;
+            starship_RotationEngine.force += value;
         }
         value = data.GetModificationData(ModificationName.ShootTime).CurGradeModifier;
         if (value != 0)

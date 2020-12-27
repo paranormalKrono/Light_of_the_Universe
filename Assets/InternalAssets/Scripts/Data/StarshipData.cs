@@ -10,14 +10,7 @@ public enum StarshipType
     Starship_Enemy_C
 }
 
-public enum ModificationName
-{
-    Health,
-    EnginePower,
-    GyroPower,
-    ShootTime
-}
-
+/// <summary>Содержит данные какого-либо корабля.</summary>
 public class StarshipData
 {
 
@@ -45,6 +38,24 @@ public class StarshipData
         for (int i = 0; i < ModificationDatas.Length; ++i)
         {
             ModificationDatas[i].ResetData();
+        }
+    }
+
+    public int[] GetStarshipDataForSave()
+    {
+        int[] vs = new int[ModificationDatas.Length];
+        for (int i = 0; i < ModificationDatas.Length; ++i)
+        {
+            vs[i] = ModificationDatas[i].curGrade;
+        }
+        return vs;
+    }
+
+    internal void SetStarshipData(int[] vs)
+    {
+        for (int i = 0; i < ModificationDatas.Length && i < vs.Length; ++i)
+        {
+            ModificationDatas[i].UpgradeToGrade(vs[i]);
         }
     }
 }

@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 public class PlanetCoordinates : MonoBehaviour
 {
+
+    [SerializeField] private string planetKey = "Wasp";
+
     [SerializeField] private string GalacticLongitude;
     [SerializeField] private string GalacticLatitude;
     [SerializeField] private string Distance;
@@ -16,14 +19,26 @@ public class PlanetCoordinates : MonoBehaviour
     [SerializeField] private Text Nothing;
     [SerializeField] private Text Agree;
 
-    private bool isAnswered;
-
     internal delegate void PlanetFindedD();
     internal PlanetFindedD PlanetFinded;
 
+    private void Start()
+    {
+        if (PlayerPrefs.HasKey(planetKey))
+        {
+            inputFieldGLong.interactable = false;
+            inputFieldGLong.text = GalacticLongitude;
+            inputFieldGLati.interactable = false;
+            inputFieldGLati.text = GalacticLatitude;
+            inputFieldDistance.interactable = false;
+            inputFieldDistance.text = Distance;
+            CorrectAnswer();
+        }
+    }
+
     public void CheckCoordinates()
     {
-        isAnswered = true;
+        bool isAnswered = true;
         if (GalacticLongitude == inputFieldGLong.text)
         {
             inputFieldGLong.interactable = false;
@@ -50,11 +65,17 @@ public class PlanetCoordinates : MonoBehaviour
         }
         if (isAnswered)
         {
-            Agree.enabled = true;
-            Nothing.enabled = false;
-            CheckButton.gameObject.SetActive(false);
-            PlanetButton.gameObject.SetActive(true);
-            PlanetFinded?.Invoke();
+            CorrectAnswer();
         }
+    }
+
+    private void CorrectAnswer()
+    {
+        PlayerPrefs.SetInt(planetKey, 1);
+        Agree.enabled = true;
+        Nothing.enabled = false;
+        CheckButton.gameObject.SetActive(false);
+        PlanetButton.gameObject.SetActive(true);
+        PlanetFinded?.Invoke();
     }
 }

@@ -9,10 +9,11 @@ public class GameMenu : MonoBehaviour
     private static bool isMenuOpened;
     private static bool isGameCursorLock;
 
-    private bool isExit;
+    private bool isDoSomething;
 
     public delegate void Event();
     public static Event DisactivateGameMenuEvent;
+    public static Event CloseMenuEvent;
     public static event Event OnMenuClose;
     public static event Event OnMenuOpen;
 
@@ -20,11 +21,12 @@ public class GameMenu : MonoBehaviour
     private void Awake()
     {
         DisactivateGameMenuEvent = CloseGameMenu;
+        CloseMenuEvent = CloseMenu;
     }
 
     private void Update()
     {
-        if (!StaticSettings.isMenu && !isExit)
+        if (!SceneController.IsMenu && !isDoSomething)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -44,7 +46,7 @@ public class GameMenu : MonoBehaviour
     public void CloseMenu()
     {
         SetTimeScale(1);
-        GameSettingsMenu.CloseMenuEvent();
+        MenusOpener.ClosesMenusEvent();
         mainGameMenu.SetActive(false);
         if (isGameCursorLock)
         {
@@ -72,25 +74,60 @@ public class GameMenu : MonoBehaviour
         GameText.DeactivateEvent();
     }
 
+    public void GameLevelRestart()
+    {
+        if (!isDoSomething)
+        {
+            isDoSomething = true;
+            StartCoroutine(IGameLevelRestart());
+        }
+    }
+
+    public void GameLevelCheckpointRestart()
+    {
+        if (!isDoSomething)
+        {
+            isDoSomething = true;
+            StartCoroutine(IGameLevelCheckpointRestart());
+        }
+    }
 
     public void GameExit()
     {
-        StartCoroutine(IGameExit());
+        if (!isDoSomething)
+        {
+            isDoSomething = true;
+            StartCoroutine(IGameExit());
+        }
+    }
+
+    private IEnumerator IGameLevelRestart()
+    {
+        CloseMenu();
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
+        GameTimer.DeactivateEvent();
+        isDoSomething = false;
+        StaticSettings.checkpointID = 0;
+        SceneController.RestartScene();
+    }
+
+    private IEnumerator IGameLevelCheckpointRestart()
+    {
+        CloseMenu();
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
+        GameTimer.DeactivateEvent();
+        isDoSomething = false;
+        SceneController.RestartScene();
     }
 
     private IEnumerator IGameExit()
     {
-        if (!isExit)
-        {
-            isExit = true;
-            GameAudio.StopAudioEvent();
-            StaticSettings.isCompanyMenu = true;
-            CloseMenu();
-            yield return StartCoroutine(ScreenDark.IDarkEvent());
-            GameTimer.DeactivateEvent();
-            isExit = false;
-            SceneController.LoadScene(Scenes.Menu);
-        }
+        GameAudio.StopAudioEvent();
+        CloseMenu();
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
+        GameTimer.DeactivateEvent();
+        isDoSomething = false;
+        SceneController.SceneTransitionTo(Scenes.Menu);
     }
 
 
@@ -103,5 +140,6 @@ public class GameMenu : MonoBehaviour
         isGameCursorLock = t;
     }
 
-    public void OpenSettings() => GameSettingsMenu.OpenMenuEvent(mainGameMenu);
+    public void OpenSettings() => MenusOpener.OpenSettingsMenuEvent(mainGameMenu);
+    public void OpenSaves() => MenusOpener.OpenSavesMenuEvent(mainGameMenu);
 }

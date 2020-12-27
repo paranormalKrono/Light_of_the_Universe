@@ -30,9 +30,6 @@
     <dialog nameid ="4">
       <text>Вы здесь?.. </text>
     </dialog>
-    <dialog nameid ="4">
-      <text>Проверь связь.</text>
-    </dialog>
     <dialog nameid ="10">
       <text>Он всё слышит.</text>
     </dialog>

@@ -1,0 +1,160 @@
+<dialogue>
+  <!-- Встреча -->
+  <node id ="0" nameid="5">
+    <text>Здравствуйте!</text>
+    <answers>
+      <answer tonode = "1"><text>Продолжить...</text></answer>
+    </answers>
+  </node>
+  <node id ="1" nameid="12">
+    <text>Здравствуйте.</text>
+    <answers>
+      <answer tonode = "2"><text>Продолжить...</text></answer>
+    </answers>
+  </node>
+  <node id ="2" nameid="5">
+    <text>Я получил билет.</text>
+    <answers>
+      <answer tonode = "3">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="3" nameid="12">
+    <text>Какой билет?</text>
+    <answers>
+      <answer tonode = "4">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="4" nameid="12">
+    <text>Ааа... Даа... Откуда он у вас?</text>
+    <answers>
+      <answer tonode = "5">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="5" nameid="5">
+    <text>Не могу сказать.</text>
+    <answers>
+      <answer tonode = "6">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="6" nameid="12">
+    <text>Хм... Почему?</text>
+    <answers>
+      <answer tonode = "7">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="7" nameid="5">
+    <text>...</text>
+    <answers>
+      <answer tonode = "8">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="8" nameid="12">
+    <text>Ладно. Этот билет позволяет вам пройти обучение в нашей академии и стать пилотом космического корабля. Как вас зовут?</text>
+    <answers>
+      <answer tonode = "9">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="9" nameid="5">
+    <text>Каин.</text>
+    <answers>
+      <answer tonode = "10">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="10" nameid="4">
+    <text>Хорошо! Меня можете называть Диктором. Вы хотите стать учеником нашей академии?</text>
+    <answers>
+      <answer tonode = "11">
+        <text>Да.</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="11" nameid="5">
+    <text>Да.</text>
+    <answers>
+      <answer tonode = "12">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="12" nameid="4">
+    <text>Тогда поздравляю вас! Теперь вы - начинающий пилот космического корабля!</text>
+    <answers>
+      <answer tonode = "13">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="13" nameid="5">
+    <text>Здесь тихо.</text>
+    <answers>
+      <answer tonode = "14">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="14" nameid="4">
+    <text>Сюда очень давно никто не приходил. Поэтому... тут тихо... и темно. Я один из учителей этой академии. Теперь последний оставшийся.</text>
+    <answers>
+      <answer tonode = "15">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="15" nameid="5">
+    <text>Почему?</text>
+    <answers>
+      <answer tonode = "16">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="16" nameid="4">
+    <text>Совет запретил людям твоего класса становиться пилотами. Поэтому мы не могли никого обучать. Но ваш билет, если я не ошибаюсь... никто не запрещал.</text>
+    <answers>
+      <answer tonode = "17">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="17" nameid="5">
+    <text>А что это за совет?</text>
+    <answers>
+      <answer tonode = "18">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="18" nameid="4">
+    <text>Совет Z. Точнее - Zero. Состоит из нескольких тайных личностей, которые контролируют цивилизацию Земли.</text>
+    <answers>
+      <answer tonode = "19">
+        <text>Продолжить...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id ="19" nameid="4">
+    <text>Приходите завтра.</text>
+    <answers>
+      <answer>
+        <text>Продолжить...</text>
+        <end>true</end>
+      </answer>
+    </answers>
+  </node>
+</dialogue>

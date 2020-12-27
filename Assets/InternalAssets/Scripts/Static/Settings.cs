@@ -39,7 +39,7 @@ public static class Settings
 
         if (isLoaded)
         {
-            Debug.Log($"Saved");
+            //Debug.Log($"Saved");
             Pack();
             PlayerPrefs.SetString(OPTIONS_KEY_NAME, Packed);
             PlayerPrefs.Save();
@@ -53,12 +53,12 @@ public static class Settings
         bool isNormallyLoaded = PlayerPrefs.HasKey(OPTIONS_KEY_NAME);
         if (isNormallyLoaded)
         {
-            Debug.Log("Loading");
+            //Debug.Log("Loading");
             isNormallyLoaded = TryUnpack(PlayerPrefs.GetString(OPTIONS_KEY_NAME));
         }
         else
         {
-            Debug.Log("Creating");
+            //Debug.Log("Creating");
             Pack();
         }
         isLoaded = true;
@@ -74,13 +74,13 @@ public static class Settings
         {
             Packed += $"_{volumes[i]}";
         }
-        Debug.Log($"Packed: \"{Packed}\"");
+        //Debug.Log($"Packed: \"{Packed}\"");
 
     }
 
     private static bool TryUnpack(string options)
     {
-        Debug.Log($"Unpacked: \"{options}\"");
+        //Debug.Log($"Unpacked: \"{options}\"");
         string[] parsed = options.Split('_');
         try
         {

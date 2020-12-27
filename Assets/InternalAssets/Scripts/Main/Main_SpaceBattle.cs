@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class Main_SpaceBattle : MonoBehaviour
 {
     [SerializeField] private TextAsset textAsset;
-    [SerializeField] private StarshipMoveTrigger starshipMoveTrigger;
+    [SerializeField] private PlayerStarshipMover MoverEnd;
+    [SerializeField] private PlayerStarshipTrigger EndTrigger;
     [SerializeField] private Text DisqualificationText;
     [SerializeField] private Transform BattleTr;
     [SerializeField] private Starship C07Starship;
     [SerializeField] private Health C07Health;
     [SerializeField] private ScenesLocations sceneLocationName;
-    [SerializeField] private int nextSlidesID;
     [SerializeField] private float distanceDisqualification = 300;
     [SerializeField] private float distanceBattle = 250;
     [SerializeField] private float timeDisqualification = 8;
@@ -40,30 +40,31 @@ public class Main_SpaceBattle : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
+        GameScreenDark.SetDarkEvent(true);
+
         SceneController.LoadAdditiveScene(sceneLocationName);
         GameText.DeactivateEvent();
         GameText.SetInGameTextNowEvent(textAsset);
-        ScreenDark.SetDarkEvent(true);
-        StartCoroutine(ScreenDark.ITransparentEvent());
 
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Starship_Controller>();
         playerCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Player_Camera_Controller>();
-        playerController.GetComponent<Health>().DeathEvent += OnPlayerDeath;
+        playerController.GetComponent<Health>().OnDeath += OnPlayerDeath;
         systemStarships = GetComponent<System_Starships>();
-    }
-    void Start()
-    {
+
         PlayerStarshipTr = playerController.transform;
         PlayerStarship = PlayerStarshipTr.GetComponent<Starship>();
 
-        systemStarships.InitializeStarshipsTeams(GetComponent<StarshipsSpawnMover>().MoveStarshipsOnSpawns());
+        EndTrigger.OnPlayerStarshipEnter += PlayerStarshipEnterEndTrigger;
+        C07Health.OnDeath += C07Death;
+    }
 
-        starshipMoveTrigger.TriggerEvent += EndGame;
-        C07Health.DeathEvent += C07Death;
+    private void Start()
+    {
+        systemStarships.InitializeStarshipsTeams(GetComponent<StarshipsSpawnMover>().MoveStarshipsOnSpawns()); 
 
         if (!StaticSettings.isRestart)
         {
-            GameAudio.StartAudioEvent(audioClip,true);
+            GameAudio.StartAudioEvent(audioClip, true);
             SetGameStop(true);
             GameDialogs.StartDialogEvent(StartGame);
         }
@@ -73,16 +74,18 @@ public class Main_SpaceBattle : MonoBehaviour
             StaticSettings.isRestart = false;
             systemStarships.SetStarshipsLock(false);
             systemStarships.SetStarshipsLock(1, true);
-            GameDialogs.NextInGameDialogEvent();
+            GameDialogs.ShowInGameDialogEvent(0);
         }
         systemStarships.SetStarshipsActive(2, false);
 
+        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
-    private void Update()
+
+    private void FixedUpdate()
     {
         if (!isEnd)
         {
-            if (Input.GetKeyDown(KeyCode.N))
+            if (Input.GetKey(KeyCode.N))
             {
                 StartCoroutine(IEndEvent());
             }
@@ -92,7 +95,7 @@ public class Main_SpaceBattle : MonoBehaviour
                 {
                     if (Vector3.Distance(PlayerStarshipTr.position, BattleTr.position) > distanceDisqualification && systemStarships.GetMinDistanceTeamToPoint(0, PlayerStarshipTr.position) > distanceDisqualification)
                     {
-                        timeOut += Time.deltaTime;
+                        timeOut += Time.fixedDeltaTime;
                         if (!isShowedText && !isShowText)
                         {
                             isShowedText = true;
@@ -117,13 +120,13 @@ public class Main_SpaceBattle : MonoBehaviour
                 }
                 if (!isBattle)
                 {
-                    if (systemStarships.GetMinDistanceTeamToPoint(0, BattleTr.position) < distanceBattle || Vector3.Distance(BattleTr.position, PlayerStarshipTr.position) < distanceBattle)
+                    if (systemStarships.GetMinDistanceTeamToPoint(0, BattleTr.position) < distanceBattle)
                     {
                         isBattle = true;
                         systemStarships.SetStarshipsLock(1, false);
                         systemStarships.SetStarshipsFollowTarget(0, true);
-                        GameGoals.NextGoalEvent();
-                        GameDialogs.NextInGameDialogEvent();
+                        GameGoals.ShowGoalEvent(1);
+                        GameDialogs.ShowInGameDialogEvent(1);
                         systemStarships.StarshipsTeams[1].OnTeamDevastated += Rush;
                     }
                 }
@@ -142,9 +145,16 @@ public class Main_SpaceBattle : MonoBehaviour
     private void StartGame()
     {
         GameGoals.SetActiveGoalEvent(true);
-        GameDialogs.NextInGameDialogEvent();
+        GameDialogs.ShowInGameDialogEvent(0);
         systemStarships.SetStarshipsLock(1, true);
         SetGameStop(false);
+    }
+    private void PlayerStarshipEnterEndTrigger()
+    {
+        playerCamera.SetLockMove(true);
+        playerController.SetLockControl(true);
+        MoverEnd.MoveLine(playerController);
+        EndGame();
     }
     private void EndGame()
     {
@@ -155,7 +165,7 @@ public class Main_SpaceBattle : MonoBehaviour
     }
     private void Rush(System_Starships.StarshipsTeam starshipsTeam)
     {
-        GameDialogs.NextInGameDialogEEvent(RushE);
+        GameDialogs.ShowInGameDialogEventIE(2, RushE);
     }
     private void RushE()
     {
@@ -172,17 +182,15 @@ public class Main_SpaceBattle : MonoBehaviour
     private IEnumerator IRestart()
     {
         isRestart = true;
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         SceneController.RestartScene();
     }
     private IEnumerator IEndEvent()
     {
         isEnd = true;
         GameAudio.StopAudioEvent();
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
-        StaticSettings.isCompanyMenu = true;
-        StaticSettings.isPart2Complete = true;
-        SceneController.LoadSlides(Scenes.Menu, nextSlidesID);
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
+        SceneController.LoadNextStoryScene();
     }
 
 

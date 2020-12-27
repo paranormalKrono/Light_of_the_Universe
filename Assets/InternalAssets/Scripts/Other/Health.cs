@@ -1,22 +1,21 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
     [SerializeField] public float maxHp = 100;
     [SerializeField] private bool isInvincible;
-    [SerializeField] private Image healthBar;
 
     private bool isDead;
     private float nowHp;
 
-    internal delegate void DeadDelegate();
-    internal event DeadDelegate DeathEvent;
+    internal delegate void Method();
+    internal event Method OnDeath;
+    internal delegate void HealthChange(float nowHp, float maxHp);
+    internal event HealthChange OnHealthChange;
 
     void Awake()
     {
         nowHp = maxHp;
-        healthBar.fillAmount = 1;
     }
 
     public void TakeDamage(float damage)
@@ -38,13 +37,13 @@ public class Health : MonoBehaviour
     private void SetHealth(float value)
     {
         nowHp = value;
-        healthBar.fillAmount = nowHp / maxHp;
+        OnHealthChange?.Invoke(nowHp, maxHp);
     }
 
     private void Dead()
     {
         isDead = true;
-        DeathEvent?.Invoke();
+        OnDeath?.Invoke();
         Destroy(gameObject);
     }
 

@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Music : MonoBehaviour {
-
+public class Music : MonoBehaviour
+{
     //Ссылка на воспроизводитель музыки
-	private AudioSource ASource;
+    [SerializeField] private AudioSource audioSource;
+
+    [SerializeField] private bool isRandom;
+    [SerializeField] private bool isLoop;
 
     //Выбранная музыка
     private AudioClip ChoosedClip;
@@ -19,28 +22,49 @@ public class Music : MonoBehaviour {
 
 	void Start () {
 
-        //Получение ссылки на воспроизводитель музыки
-        ASource = gameObject.GetComponent <AudioSource> ();
         //Отключаем повтор
-        ASource.loop = false;
+        audioSource.loop = false;
 
         //Запускаем воспроизведение
         StartCoroutine(StartMusic ());
+
+        clipChoose = 0;
 	}
 
     public IEnumerator StartMusic()
     {
         //Выбор музыки
-        clipChoose = Random.Range(0, AClips.Length);
+        if (isRandom)
+        {
+            clipChoose = Random.Range(0, AClips.Length);
+        }
 
         //Проверка на повторение музыки
         if (AClips[clipChoose] != ChoosedClip || AClips.Length == 1)
         {
             ChoosedClip = AClips[clipChoose]; //Выбранный клип равен воспроизводящейся музыке
-            ASource.clip = ChoosedClip; 
-            ASource.Play(); //Воспроизводим музыку
+            audioSource.clip = ChoosedClip;
+            audioSource.Play(); //Воспроизводим музыку
             yield return new WaitForSeconds(ChoosedClip.length + TimeOut); //Ждём
         }
+
+        if (clipChoose == AClips.Length - 1)
+        {
+            if (isLoop)
+            {
+                clipChoose = 0;
+            }
+            else
+            {
+                yield break;
+            }
+        }
+        else
+        {
+            clipChoose += 1;
+        }
+
         StartCoroutine(StartMusic());
+
     }
 }

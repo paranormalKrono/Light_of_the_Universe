@@ -20,21 +20,21 @@ public class GameDialogs : MonoBehaviour, IDeactivated
 
     public delegate void Event();
     private static Event OnEndDialogEvent;
-    public static Event NextInGameDialogEvent;
 
     public delegate void EventE(Event @event);
     public static EventE StartDialogEvent;
-    public static EventE NextInGameDialogEEvent;
 
     public delegate void EventI(int integer);
     public static EventI ShowInGameDialogEvent;
 
+    public delegate void EventIE(int integer, Event @event);
+    public static EventIE ShowInGameDialogEventIE;
+
     private void Awake()
     {
         StartDialogEvent = StartDialog;
-        NextInGameDialogEvent = NextInGameDialog;
-        NextInGameDialogEEvent = NextInGameDialog;
         ShowInGameDialogEvent = ShowInGameDialog;
+        ShowInGameDialogEventIE = ShowInGameDialogIE;
     }
 
     private void Update()
@@ -77,7 +77,6 @@ public class GameDialogs : MonoBehaviour, IDeactivated
         }
         else
         {
-            //SetActiveGoal(true);
             SetActiveDialog(false);
             DialogNext.enabled = false;
             isDialog = false;
@@ -90,27 +89,8 @@ public class GameDialogs : MonoBehaviour, IDeactivated
     }
 
     #region InGame
-    private void NextInGameDialog()
-    {
-        ShowInGameDialog(inGameDialogNow);
-        inGameDialogNow += 1;
-    }
-    private void ShowInGameDialog(int index)
-    {
-        StartCoroutine(IInGameDialog(index));
-    }
 
-    private void NextInGameDialog(Event e)
-    {
-        StartCoroutine(IInGameDialogE(inGameDialogNow, e));
-        inGameDialogNow += 1;
-    }
-    private IEnumerator IInGameDialogE(int index, Event e)
-    {
-        yield return IInGameDialog(index);
-        e();
-    }
-
+    private void ShowInGameDialog(int index) => StartCoroutine(IInGameDialog(index));
     private IEnumerator IInGameDialog(int index)
     {
         SetActiveDialog(true);
@@ -122,6 +102,15 @@ public class GameDialogs : MonoBehaviour, IDeactivated
         }
         SetActiveDialog(false);
     }
+
+
+    private void ShowInGameDialogIE(int index, Event e) => StartCoroutine(IInGameDialogE(index, e));
+    private IEnumerator IInGameDialogE(int index, Event e)
+    {
+        yield return IInGameDialog(index);
+        e();
+    }
+
     #endregion
 
     private void SetActiveDialog(bool t)

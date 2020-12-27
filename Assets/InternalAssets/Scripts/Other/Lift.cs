@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Lift : MonoBehaviour
 {
@@ -6,59 +7,31 @@ public class Lift : MonoBehaviour
     [SerializeField] private float starshipMoveSpeed = 10;
     [SerializeField] private float starshipRotateSpeed = 80;
     [SerializeField] private Transform liftTr;
-    [SerializeField] private Transform endTr;
-    [SerializeField] private Transform liftStarshipTr;
-    private Transform playerPositionTr;
-    private Transform playerRotationTr;
-    private Player_Starship_Controller player_Controller;
-    private bool isActivated;
-    private bool isStarshipMove;
-    private bool isLiftMove;
+    [SerializeField] private Transform liftEndTr;
+    [SerializeField] private Transform starshipTargetTr;
 
-    private void Update()
+    internal delegate void Method();
+
+    internal void StartLift(Player_Starship_Controller player_Starship_Controller, Method OnLiftArrived) => StartCoroutine(IStartLift(player_Starship_Controller, OnLiftArrived));
+
+    private IEnumerator IStartLift(Player_Starship_Controller player_Starship_Controller, Method OnLiftArrived)
     {
-        if (isActivated)
+        Transform pos, rot;
+        player_Starship_Controller.GetPositionAndRotationTransforms(out pos, out rot);
+        while (Quaternion.Angle(starshipTargetTr.rotation, rot.rotation) > 0.2f || Vector3.Distance(starshipTargetTr.position, pos.position) > 0.01f)
         {
-            if (isStarshipMove)
-            {
-                if (Quaternion.Angle(liftStarshipTr.rotation, playerRotationTr.rotation) < 1 && Vector3.Distance(liftStarshipTr.position, playerPositionTr.position) < 0.01f)
-                {
-                    isStarshipMove = false;
-                    isLiftMove = true;
-                }
-                else
-                {
-                    playerPositionTr.position = Vector3.MoveTowards(playerPositionTr.position, liftStarshipTr.position, Time.deltaTime * starshipMoveSpeed);
-                    playerRotationTr.rotation = Quaternion.RotateTowards(playerRotationTr.rotation, liftStarshipTr.rotation, Time.deltaTime * starshipRotateSpeed);
-                }
-            }
-            if (isLiftMove)
-            {
-                if (Vector3.Distance(liftTr.position, endTr.position) < 0.01f)
-                {
-                    isLiftMove = false;
-                    player_Controller.SetLockControl(false);
-                }
-                else
-                {
-                    liftTr.position = Vector3.MoveTowards(liftTr.position, endTr.position, Time.deltaTime * LiftMoveSpeed);
-                    playerPositionTr.position = liftStarshipTr.position;
-                }
-            }
+            pos.position = Vector3.MoveTowards(pos.position, starshipTargetTr.position, Time.deltaTime * starshipMoveSpeed);
+            rot.rotation = Quaternion.RotateTowards(rot.rotation, starshipTargetTr.rotation, Time.deltaTime * starshipRotateSpeed);
+            yield return null;
         }
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!isActivated)
+
+        while (Vector3.Distance(liftTr.position, liftEndTr.position) > 0.01f)
         {
-            player_Controller = other.gameObject.GetComponentInParent<Player_Starship_Controller>();
-            if (player_Controller != null)
-            {
-                player_Controller.GetPositionAndRotationTransforms(out playerPositionTr, out playerRotationTr);
-                player_Controller.SetLockControl(true);
-                isStarshipMove = true;
-                isActivated = true;
-            }
+            liftTr.position = Vector3.MoveTowards(liftTr.position, liftEndTr.position, Time.deltaTime * LiftMoveSpeed);
+            pos.position = starshipTargetTr.position;
+            yield return null;
         }
+        liftTr.position = liftEndTr.position;
+        OnLiftArrived?.Invoke();
     }
 }

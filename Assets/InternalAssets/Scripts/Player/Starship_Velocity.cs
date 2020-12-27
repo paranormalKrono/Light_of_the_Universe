@@ -12,9 +12,8 @@ public class Starship_Velocity : MonoBehaviour
 
     private void Awake()
     {
-        localUp = transform.TransformDirection(localUp);
         starshipTr = GameObject.FindGameObjectWithTag("Player").transform;
-        starshipTr.GetComponent<Health>().DeathEvent += PlayerDead;
+        starshipTr.GetComponent<Health>().OnDeath += PlayerDead;
         transform.position = starshipTr.position;
         starshipRb = starshipTr.GetComponent<Rigidbody>();
         StartQuaternion = Quaternion.FromToRotation(localUp, starshipTr.TransformDirection(Vector3.forward));

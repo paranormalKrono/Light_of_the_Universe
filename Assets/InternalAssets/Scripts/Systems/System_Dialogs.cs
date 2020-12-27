@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,8 @@ public class System_Dialogs : MonoBehaviour
 
     [SerializeField] private int playerNameID;
 
+    private List<Button> answerButtons;
+
     private TextDialog dialog;
     private TextNames names;
 
@@ -23,20 +26,21 @@ public class System_Dialogs : MonoBehaviour
     private TextNames.Name currentName;
     private int currentNodeID;
 
-    internal delegate void EndDelegate();
-    internal EndDelegate EndEvent;
+    internal delegate void Event();
+    internal event Event OnNextPage;
+    internal Event EndEvent;
 
     private void Awake()
     {
         CanvasTr = GetComponentInParent<Canvas>().transform;
     }
 
-    private void Start()
+    public void Initialise(TextDialog dialog, TextNames names)
     {
-        GameText.GetBarDialogEvent(out dialog, out names);
+        this.dialog = dialog;
+        this.names = names;
         NextPage();
     }
-
 
     private void NextPage()
     {
@@ -44,6 +48,7 @@ public class System_Dialogs : MonoBehaviour
         currentName = names.names[currentNode.nameid];
         UpdateDialog();
         UpdateAnswers();
+        OnNextPage?.Invoke();
     }
 
     private void UpdateDialog()
@@ -56,10 +61,10 @@ public class System_Dialogs : MonoBehaviour
         {
             AddArtistDialog(artistPrefab, dialogContent, currentName.name, currentNode.text, currentName.namecolor, currentName.textcolor);
         }
-        StartCoroutine(enumerator());
+        StartCoroutine(MoveDialogDown());
     }
 
-    private IEnumerator enumerator()
+    private IEnumerator MoveDialogDown()
     {
         UIX.UpdateLayout(CanvasTr);
         yield return null;
@@ -69,17 +74,19 @@ public class System_Dialogs : MonoBehaviour
     private void UpdateAnswers()
     {
         ClearContent(answersContent);
+        answerButtons = new List<Button>();
         for (int i = 0; i < currentNode.answers.Length; ++i)
         {
             GameObject prefab = AddContent(answerPrefab, answersContent);
             prefab.GetComponentInChildren<Text>().text = currentNode.answers[i].text;
             int b = new int();
             b = i;
-            prefab.GetComponentInChildren<Button>().onClick.AddListener(() => OnClickAnswer(b));
+            answerButtons.Add(prefab.GetComponentInChildren<Button>());
+            answerButtons[i].onClick.AddListener(() => Answer(b));
         }
     }
 
-    private void OnClickAnswer(int answerID)
+    public void Answer(int answerID)
     {
         if (!currentNode.answers[answerID].isend)
         {
@@ -114,7 +121,7 @@ public class System_Dialogs : MonoBehaviour
 
     private GameObject AddContent(RectTransform prefab, RectTransform content)
     {
-        GameObject instance = Instantiate(prefab.gameObject) as GameObject;
+        GameObject instance = Instantiate(prefab.gameObject);
         instance.transform.SetParent(content, false);
         return instance;
     }
@@ -123,6 +130,17 @@ public class System_Dialogs : MonoBehaviour
         foreach (Transform child in content)
         {
             Destroy(child.gameObject);
+        }
+    }
+
+    public void SetAnswerButtonsInteractable(bool t)
+    {
+        if (answerButtons != null)
+        {
+            for (int i = 0; i < answerButtons.Count; ++i)
+            {
+                answerButtons[i].interactable = t;
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ public class StarshipDead : MonoBehaviour
     [SerializeField] private RigidbodyConstraints rigidbodyConstraints;
     void Start()
     {
-        GetComponent<Health>().DeathEvent += Dead;
+        GetComponent<Health>().OnDeath += Dead;
     }
     private void Dead()
     {

@@ -4,161 +4,52 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Guns), typeof(Rigidbody))]
 public class Player_Starship_Controller : MonoBehaviour
 {
-    [SerializeField] private float moveForce = 700;
-    [SerializeField] private float moveSpeedMax = 19;
-    [SerializeField] private float moveFriction = 20;
-    [SerializeField] private float rotateForce = 600;
-    [SerializeField] private float rotateSpeedMax = 2.6f;
-    [SerializeField] private float rotateSpeedFriction = 3.5f;
-
-    [SerializeField] private bool isLockShoot = false;
+    [SerializeField] private bool isAbsoluteLockShoot = false;
 
     [SerializeField] private Image StarshipActivatedImage;
     [SerializeField] private Image FeatherActivatedImage;
     [SerializeField] private Image ChainActivatedImage;
 
-    [SerializeField] private Transform RotPointTr;
+    [SerializeField] private Transform rotationTransform;
 
-    public float MoveForce
-    {
-        get
-        {
-            if (isFreeFly)
-            {
-                return moveForce / 1.1f;
-            }
-            else if (isLockFly)
-            {
-                return moveForce * 1.25f;
-            }
-            else
-            {
-                return moveForce;
-            }
-        }
-        set
-        {
-            moveForce = value;
-        }
-    }
+    [SerializeField] private Starship_Engine engine;
+    [SerializeField] private Starship_RotationEngine rotationEngine;
 
-    public float MoveSpeedMax
-    {
-        get
-        {
-            if (isFreeFly)
-            {
-                return moveSpeedMax * 1.4f;
-            }
-            else if (isLockFly)
-            {
-                return moveSpeedMax / 1.25f;
-            }
-            else
-            {
-                return moveSpeedMax;
-            }
-        }
-        set
-        {
-            moveSpeedMax = value;
-        }
-    }
-
-    public float MoveFriction
-    {
-        get
-        {
-            if (isLockFly)
-            {
-                return moveFriction * 2;
-            }
-            else
-            {
-                return moveFriction;
-            }
-        }
-        set
-        {
-            moveFriction = value;
-        }
-    }
-
-    public float RotateForce
-    {
-        get
-        {
-            if (isLockFly)
-            {
-                return rotateForce * 1.25f;
-            }
-            else
-            {
-                return rotateForce;
-            }
-        }
-        set
-        {
-            rotateForce = value;
-        }
-    }
-
-    public float RotateSpeedMax
-    {
-        get
-        {
-            if (isLockFly)
-            {
-                return rotateSpeedMax * 1.25f;
-            }
-            else
-            {
-                return rotateSpeedMax;
-            }
-        }
-        set
-        {
-            rotateSpeedMax = value;
-        }
-    }
-
-    private Rigidbody rb;
-    private Rigidbody starshipRb;
     private Camera camera;
 
     private Guns Guns;
     private Guns.ShootEvent Shoot;
 
-    private bool isLockControl;
     private bool isLockMove;
     private bool isLockRotate;
+    private bool isLockShoot;
     private bool isGameMenu;
 
     private bool isLockFly = false;
     private bool isFreeFly = false;
-
-    private Vector3 vector3Zero = Vector3.zero;
     private Vector3 localUp = Vector3.up;
+    private Vector3 localDown = Vector3.down;
     private Vector3 forward = Vector3.forward;
 
-    private Vector3 moveDirection;
-    private Vector3 rotateDirection;
-
-
     private Vector3 v3;
-    private float f;
+
+    private float verticalInput;
+    private float horizontalInput;
+
+    private float hitDist;
+    private Ray ray;
+    private Plane plane = new Plane();
 
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        starshipRb = RotPointTr.GetComponent<Rigidbody>();
         Guns = GetComponent<Guns>();
-        Guns.Initialize(rb, out Shoot);
+        Guns.Initialize(out Shoot);
 
         StarshipActivatedImage.enabled = true;
 
         localUp = transform.TransformDirection(localUp);
+        localDown = transform.TransformDirection(localDown);
 
         GameMenu.OnMenuOpen += OnMenuOpen;
         GameMenu.OnMenuClose += OnMenuClose;
@@ -166,53 +57,50 @@ public class Player_Starship_Controller : MonoBehaviour
 
     private void Start()
     {
-        camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponentInChildren<Camera>();
     }
 
     private void Update()
     {
-        if (!isLockControl && !isGameMenu)
+        if (!isGameMenu)
         {
-            if (!isLockShoot)
+            if (!isLockShoot && !isAbsoluteLockShoot)
             {
                 if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space))
                 {
                     Shoot();
                 }
             }
-            if (!isLockMove)
+            if (Input.GetKeyDown(KeyCode.C))
             {
-                if (Input.GetKeyDown(KeyCode.C))
+                isLockFly = false;
+                ChainActivatedImage.enabled = false;
+                isFreeFly = !isFreeFly;
+                if (isFreeFly)
                 {
-                    isLockFly = false;
-                    ChainActivatedImage.enabled = false;
-                    isFreeFly = !isFreeFly;
-                    if (isFreeFly)
-                    {
-                        StarshipActivatedImage.enabled = false;
-                        FeatherActivatedImage.enabled = true;
-                    }
-                    else
-                    {
-                        StarshipActivatedImage.enabled = true;
-                        FeatherActivatedImage.enabled = false;
-                    }
+                    ActivateFeatherFly();
+                    StarshipActivatedImage.enabled = false;
                 }
-                if (Input.GetKeyDown(KeyCode.V))
+                else
                 {
-                    isFreeFly = false;
+                    ActivateNormalFly();
                     FeatherActivatedImage.enabled = false;
-                    isLockFly = !isLockFly;
-                    if (isLockFly)
-                    {
-                        StarshipActivatedImage.enabled = false;
-                        ChainActivatedImage.enabled = true;
-                    }
-                    else
-                    {
-                        StarshipActivatedImage.enabled = true;
-                        ChainActivatedImage.enabled = false;
-                    }
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                isFreeFly = false;
+                FeatherActivatedImage.enabled = false;
+                isLockFly = !isLockFly;
+                if (isLockFly)
+                {
+                    ActivateChainFly();
+                    StarshipActivatedImage.enabled = false;
+                }
+                else
+                {
+                    ActivateNormalFly();
+                    ChainActivatedImage.enabled = false;
                 }
             }
         }
@@ -220,114 +108,91 @@ public class Player_Starship_Controller : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isLockControl && !isGameMenu)
+        if (!isGameMenu)
         {
             if (!isLockRotate)
             {
+                horizontalInput = Input.GetAxis(AxisOptions.Horizontal.ToString());
                 if (Input.GetMouseButton(1))
                 {
-                    RotateMouse();
+                    plane.SetNormalAndPosition(localDown, transform.position);
+                    ray = camera.ScreenPointToRay(Input.mousePosition);
+
+                    if (plane.Raycast(ray, out hitDist))
+                    {
+                        v3 = ray.GetPoint(hitDist);
+                    }
+                    else
+                    {
+                        v3 = transform.position + transform.TransformPoint(forward);
+                    }
+                    rotationEngine.RotateToTarget(v3);
+                }
+                else if (Mathf.Abs(horizontalInput) > 0)
+                {
+                    rotationEngine.Rotate(horizontalInput);
                 }
                 else
                 {
-                    Rotate();
+                    rotationEngine.SlowDown();
                 }
-            }
-            else
-            {
-                starshipRb.angularVelocity = vector3Zero;
             }
             if (!isLockMove)
             {
-                Move();
+                verticalInput = Input.GetAxis(AxisOptions.Vertical.ToString());
+                if (verticalInput > 0)
+                {
+                    engine.Move(verticalInput);
+                }
+                else if (verticalInput < 0)
+                {
+                    engine.Move(verticalInput / 2);
+                }
+                else
+                {
+                    engine.SlowDown();
+                }
             }
-            else
-            {
-                rb.velocity = vector3Zero;
-            }
-        }
-        else
-        {
-            rb.velocity = vector3Zero;
-            starshipRb.angularVelocity = vector3Zero;
-        }
-    }
-
-
-    private void Rotate()
-    {
-        rotateDirection.Set(0, Input.GetAxis("Horizontal"), 0);
-        if (!rotateDirection.Equals(vector3Zero))
-        {
-            rotateDirection = transform.TransformDirection(rotateDirection);
-            starshipRb.AddTorque(Time.fixedDeltaTime * rotateDirection * 20 * RotateForce, ForceMode.Acceleration);
-            starshipRb.angularVelocity = Vector3.ClampMagnitude(starshipRb.angularVelocity, RotateSpeedMax);
-        }
-        else
-        {
-            RotateFriction();
-        }
-    }
-
-    private void RotateFriction() => starshipRb.angularVelocity = Vector3.MoveTowards(starshipRb.angularVelocity, vector3Zero, Time.fixedDeltaTime * 30 * rotateSpeedFriction);
-
-    private void RotateMouse()
-    {
-        v3 = camera.ScreenPointToRay(Input.mousePosition).direction.normalized;
-        v3.x = 0;
-
-        float ang = Vector3.Angle(RotPointTr.forward, v3);
-        Vector3 rotVect = -Vector3.Cross(v3, RotPointTr.forward).normalized;
-        if (ang < 5)
-        {
-            starshipRb.angularVelocity = Vector3.ClampMagnitude(starshipRb.angularVelocity, ang / 10);
-        }
-
-        starshipRb.AddTorque(Time.fixedDeltaTime * RotateForce * ang * rotVect, ForceMode.Acceleration);
-        starshipRb.angularVelocity = Vector3.ClampMagnitude(starshipRb.angularVelocity, RotateSpeedMax);
-    }
-
-
-    private void Move()
-    {
-        f = Input.GetAxis("Vertical");
-        if (f < 0)
-        {
-            f /= 2;
-        }
-        if (f != 0)
-        {
-            moveDirection = forward * f;
-            moveDirection = RotPointTr.TransformDirection(moveDirection);
-            rb.AddForce(moveDirection * MoveForce * Time.fixedDeltaTime, ForceMode.Impulse);
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, MoveSpeedMax);
-        }
-        else if (!isFreeFly)
-        {
-            rb.velocity = Vector3.Lerp(rb.velocity, vector3Zero, Time.fixedDeltaTime * MoveFriction);
         }
     }
 
     internal void SetLockControl(bool t)
     {
-        isLockControl = t;
-        rb.velocity = vector3Zero;
-        starshipRb.angularVelocity = vector3Zero;
-        Guns.SetLockMove(t);
+        SetLockControl(t, t, t);
     }
-    internal void SetLockControl(bool isLockMovet, bool isLockTorquet, bool isLockShoott)
+    internal void SetLockControl(bool isLockMove, bool isLockRotate, bool isLockShoot)
     {
-        rb.velocity = vector3Zero;
-        starshipRb.angularVelocity = vector3Zero;
-        isLockMove = isLockMovet;
+        this.isLockMove = isLockMove;
+        this.isLockRotate = isLockRotate;
+        this.isLockShoot = isLockShoot;
         Guns.SetLockMove(isLockMove);
-        isLockRotate = isLockTorquet;
-        isLockShoot = isLockShoott;
+        engine.SetLockMove(isLockMove);
+        rotationEngine.SetLockRotate(isLockRotate);
     }
-    internal void GetPositionAndRotationTransforms(out Transform PositionTr, out Transform RotationTr)
+
+    internal void GetPositionAndRotationTransforms(out Transform pos, out Transform rot)
     {
-        PositionTr = transform;
-        RotationTr = RotPointTr;
+        pos = transform;
+        rot = rotationTransform;
+    }
+
+    private void ActivateNormalFly()
+    {
+        StarshipActivatedImage.enabled = true;
+        engine.SetCoefficients(1, 1, 1);
+        rotationEngine.SetCoefficients(1, 1, 1);
+    }
+    private void ActivateFeatherFly()
+    {
+        FeatherActivatedImage.enabled = true;
+        engine.SetCoefficients(0.65f, 1.6f, 0);
+        rotationEngine.SetCoefficients(0.6f, 0.7f, 1.4f);
+    }
+    private void ActivateChainFly()
+    {
+        ChainActivatedImage.enabled = true;
+        engine.SetCoefficients(1.5f, 0.75f, 1.3f);
+        rotationEngine.SetCoefficients(1.4f, 1.05f, 1.3f);
     }
 
 

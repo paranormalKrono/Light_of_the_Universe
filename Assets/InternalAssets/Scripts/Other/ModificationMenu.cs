@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>Интерфейс для улучшения корабля.</summary>
 internal class ModificationMenu : MonoBehaviour
 {
     [SerializeField] internal string FormatValue;

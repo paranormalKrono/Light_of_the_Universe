@@ -3,7 +3,6 @@
 [RequireComponent(typeof(Health))]
 public class Starship : MonoBehaviour
 {
-
     public delegate void EventBoolHandler(bool b);
     public EventBoolHandler SetFollowTarget;
     public EventBoolHandler SetLockControl;
@@ -14,7 +13,7 @@ public class Starship : MonoBehaviour
     public EventTransformHandler SetEnemyTarget;
 
 
-    private void Start() => GetComponent<Health>().DeathEvent += Death;
+    private void Start() => GetComponent<Health>().OnDeath += Death;
 
 
     private void Death() => DeathEvent?.Invoke(transform); // Смерть

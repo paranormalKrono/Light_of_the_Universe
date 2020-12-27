@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Main_Base : MonoBehaviour
 {
-    [SerializeField] private Scenes nextRankMission;
-    [SerializeField] private Scenes nextBarMission;
+
+    [SerializeField] private int nextRankNextMissionStage;
     [SerializeField] private Player_Character_Controller Player;
     [SerializeField] private Character_Camera_Controller PlayerCamera;
     [SerializeField] private Camera MainCamera;
@@ -25,36 +24,41 @@ public class Main_Base : MonoBehaviour
     [SerializeField] private GameObject News;
     [SerializeField] private GameObject NextRankButton;
     [SerializeField] private GameObject NextBarButton;
-    [SerializeField] private Text nextRankText;
-    [SerializeField] private Text nextBarText;
+    [SerializeField] private GameObject nextRankText;
+    [SerializeField] private GameObject nextBarText;
 
     [SerializeField] private Color Base1Color;
     [SerializeField] private Color Base2Color;
 
-    [SerializeField] private int nextRankSlidesID;
-
     private bool isMissionStarted;
 
-    private Scenes GameProgressNow;
+    private int nextRankStatus;
+
 
     void Awake()
     {
         GameManager.Initialize();
-
+        GameScreenDark.SetDarkEvent(true);
         PlayerCamera.SetSensitivity((float)Settings.Sensitivity / 100);
         Settings.OnSensitivityChanged += OnSensitivityChanged;
 
-        if (StaticSettings.GameProgress != 0)
+        Base1.SetActive(false);
+        Base2.SetActive(false);
+
+        if (SceneController.GetNextMissionStage() < nextRankNextMissionStage)
         {
-            GameProgressNow = (Scenes)StaticSettings.GameProgress;
+            nextRankStatus = -1;
+        }
+        else if (SceneController.GetNextMissionStage() == nextRankNextMissionStage)
+        {
+            nextRankStatus = 0;
         }
         else
         {
-            GameProgressNow = SpaceMissions.FirstSpaceMission;
+            nextRankStatus = 1;
         }
-        Base1.SetActive(false);
-        Base2.SetActive(false);
-        if (GameProgressNow <= nextRankMission && !StaticSettings.isCompleteSomething)
+
+        if (nextRankStatus == -1 || nextRankStatus == 0 && !StaticSettings.isCompleteSomething)
         {
             Base1.SetActive(true);
             PlayerStarship1.SetActive(true);
@@ -64,60 +68,40 @@ public class Main_Base : MonoBehaviour
             Base2.SetActive(true);
             PlayerStarship2.SetActive(true);
         }
-        if (GameProgressNow == nextRankMission && !StaticSettings.isCompleteSomething)
+        if (nextRankStatus == 0 && !StaticSettings.isCompleteSomething)
         {
-            nextRankText.enabled = true;
+            nextRankText.SetActive(true);
             NextRankButton.SetActive(true);
         }
-        else if (GameProgressNow == nextBarMission && !StaticSettings.isCompleteSomething)
+        else if (SceneController.GetNextStoryScene() == Scenes.Space_Base_Bar && !StaticSettings.isCompleteSomething)
         {
-            nextBarText.enabled = true;
+            nextBarText.SetActive(true);
             NextBarButton.SetActive(true);
         }
         else
         {
-            if (GameProgressNow >= nextRankMission)
+            int MissionStagesProgress = SceneController.GetNextMissionStage();
+            if (nextRankStatus == 1 || nextRankStatus == 0 && StaticSettings.isCompleteSomething)
             {
-                NewsTextLoader.Initialize(StaticSettings.MissionStagesProgress, Base2Color);
+                NewsTextLoader.Initialize(MissionStagesProgress, Base2Color);
             }
             else
             {
-                NewsTextLoader.Initialize(StaticSettings.MissionStagesProgress, Base1Color);
+                NewsTextLoader.Initialize(MissionStagesProgress, Base1Color);
             }
-            Scenes[] scenes = SceneController.MissionStages[StaticSettings.MissionStagesProgress];
-            systemGoals.Initialize(StaticSettings.MissionStagesProgress, (int)scenes[0] - (int)SpaceMissions.FirstSpaceMission, scenes.Length);
+            Scenes[] scenes = SceneController.MissionStages[MissionStagesProgress];
+            systemGoals.Initialize(MissionStagesProgress, (int)scenes[0] - (int)SpaceMissions.FirstSpaceMission, scenes.Length);
         }
-        if (GameProgressNow != nextRankMission || !StaticSettings.isCompleteSomething)
+        if (nextRankStatus != 0 || !StaticSettings.isCompleteSomething)
         {
             GameAudio.StartAudioEvent(audioClip, true);
         }
         GameMenu.DisactivateGameMenuEvent();
-        ScreenDark.SetDarkEvent(true);
-        StartCoroutine(ScreenDark.ITransparentEvent());
-    }
-
-    public void StartMission()
-    {
-        if (!isMissionStarted)
-        {
-            isMissionStarted = true;
-            StartCoroutine(IStartGoal());
-        }
-    }
-
-    public void NextRank()
-    {
-        StartCoroutine(INextRank());
-    }
-
-    public void NextBar()
-    {
-        StartCoroutine(INextBar());
     }
 
     private void Start()
     {
-        if (GameProgressNow <= nextRankMission && !StaticSettings.isCompleteSomething)
+        if (nextRankStatus == -1 && !StaticSettings.isCompleteSomething)
         {
             UpgradeMenu1.gameObject.SetActive(true);
             UpgradeMenu1.Initialize(PlayerStarshipPrefab1);
@@ -127,46 +111,63 @@ public class Main_Base : MonoBehaviour
             UpgradeMenu2.gameObject.SetActive(true);
             UpgradeMenu2.Initialize(PlayerStarshipPrefab2);
         }
+        StaticSettings.isCompleteSomething = false;
+        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
-    private IEnumerator INextRank()
+
+
+    public void StartMission()
     {
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
-        StaticSettings.isCompleteSomething = true;
-        Settings.OnSensitivityChanged -= OnSensitivityChanged;
-        SceneController.LoadSlides(Scenes.Space_Base,nextRankSlidesID);
+        if (!isMissionStarted)
+        {
+            isMissionStarted = true;
+            StartCoroutine(IStartGoal());
+        }
     }
-
-    private IEnumerator INextBar()
-    {
-        GameAudio.StopAudioEvent();
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
-        Settings.OnSensitivityChanged -= OnSensitivityChanged;
-        SceneController.LoadScene(Scenes.Space_Base_Bar);
-    }
-
     private IEnumerator IStartGoal()
     {
         GameAudio.StopAudioEvent();
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         GameMenu.SetGameCursorLock(false);
-        StaticSettings.isCompleteSomething = false;
         Settings.OnSensitivityChanged -= OnSensitivityChanged;
-        SceneController.LoadScene(GameProgressNow);
+        SceneController.LoadNextStoryScene();
     }
 
-    public void GoInHangar() => StartCoroutine(IGoInHangar());
 
+    public void NextRank() => StartCoroutine(INextRank());
+    private IEnumerator INextRank()
+    {
+        GameAudio.StopAudioEvent();
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
+        StaticSettings.isCompleteSomething = true;
+        Settings.OnSensitivityChanged -= OnSensitivityChanged;
+        SceneController.LoadNextStoryScene();
+    }
+
+
+    public void NextBar() => StartCoroutine(IBar());
+    private IEnumerator IBar()
+    {
+        GameAudio.StopAudioEvent();
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
+        StaticSettings.isCompleteSomething = true;
+        Settings.OnSensitivityChanged -= OnSensitivityChanged;
+        SceneController.LoadNextStoryScene();
+    }
+
+    
+    public void GoInHangar() => StartCoroutine(IGoInHangar());
     private IEnumerator IGoInHangar()
     {
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         Base1.SetActive(false);
         Base2.SetActive(false);
         News.SetActive(false);
         MainCamera.enabled = false;
         Player.gameObject.SetActive(true);
         GameMenu.SetGameCursorLock(true);
-        StartCoroutine(ScreenDark.ITransparentEvent());
+        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void OnSensitivityChanged(int value) => PlayerCamera.SetSensitivity((float)value / 100);

@@ -3,30 +3,34 @@ using UnityEngine;
 
 public class Main_Slides : MonoBehaviour
 {
+
     private System_Slides[] systemSlides;
+
     private void Awake()
     {
         GameManager.Initialize();
+        GameScreenDark.SetDarkEvent(true);
         systemSlides = GetComponentsInChildren<System_Slides>();
         foreach (System_Slides SS in systemSlides)
         {
             SS.gameObject.SetActive(false);
         }
-        systemSlides[StaticSettings.SlidesID].gameObject.SetActive(true);
-        systemSlides[StaticSettings.SlidesID].EndEvent = EndEvent;
+        int id = SceneController.SlidesID;
+        systemSlides[id].gameObject.SetActive(true);
+        systemSlides[id].EndEvent = EndEvent;
 
         GameMenu.DisactivateGameMenuEvent();
-        ScreenDark.SetDarkEvent(true);
-        StartCoroutine(ScreenDark.ITransparentEvent());
+        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void EndEvent()
     {
         StartCoroutine(IEnd());
     }
+
     private IEnumerator IEnd()
     {
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
-        SceneController.LoadScene(StaticSettings.nextSceneToLoad);
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
+        SceneController.LoadNextStoryScene();
     }
 }

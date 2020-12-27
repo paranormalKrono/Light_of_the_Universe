@@ -8,6 +8,7 @@ public class GameText : MonoBehaviour
     [SerializeField] private GameDialogs GameDialogs;
 
     [SerializeField] private TextAsset[] InGameTextAssets;
+    [SerializeField] private TextAsset[] DialogsTextAssets;
     [SerializeField] private TextAsset NamesTextAsset;
     [SerializeField] private TextAsset BarDialogTextAsset;
     [SerializeField] private TextAsset BaseNewsTextAsset;
@@ -17,11 +18,13 @@ public class GameText : MonoBehaviour
     private TextInGame[] InGameTexts;
     private TextNames Names;
     private TextDialog BarDialog;
+    private TextDialog[] Dialogs;
 
     private string[] News;
     private string[] Goals;
     private string goalName;
     private string goalcollectionName;
+
 
     public delegate void Event();
     public static Event DeactivateEvent;
@@ -29,13 +32,19 @@ public class GameText : MonoBehaviour
     public delegate void EventT(TextAsset textAsset);
     public static EventT SetInGameTextNowEvent;
 
-    public delegate void EventBar(out TextDialog textDialog, out TextNames textNames);
-    public static EventBar GetBarDialogEvent;
+    public delegate TextDialog EventBarDialog();
+    public static EventBarDialog GetBarDialogEvent;
+
+    public delegate TextNames EventGetNames();
+    public static EventGetNames GetNamesEvent;
 
     public delegate string[] EventGetNews();
     public static EventGetNews GetBaseNewsEvent;
     public delegate string[] EventGetGoals(out string goalName, out string collectionName);
     public static EventGetGoals GetBaseGoalsEvent;
+
+    public delegate TextDialog GetDialogDelegate(TextAsset textAsset);
+    public static GetDialogDelegate GetDialogEvent;
 
     public static event Event OnDeactivate;
 
@@ -52,22 +61,34 @@ public class GameText : MonoBehaviour
         GetBarDialogEvent = GetBarDialog;
         GetBaseNewsEvent = GetBaseNews;
         GetBaseGoalsEvent = GetBaseGoals;
+        GetNamesEvent = GetNames;
 
         InGameTexts = new TextInGame[InGameTextAssets.Length];
         for (int i = 0; i < InGameTextAssets.Length; ++i)
         {
-            Load(InGameTextAssets[i], out InGameTexts[i]);
+            LoadXML(InGameTextAssets[i], out InGameTexts[i]);
         }
-        Load(NamesTextAsset, out Names);
-        Load(BarDialogTextAsset, out BarDialog);
+        Dialogs = new TextDialog[DialogsTextAssets.Length];
+        for (int i = 0; i < DialogsTextAssets.Length; ++i)
+        {
+            LoadXML(DialogsTextAssets[i], out Dialogs[i]);
+        }
+        LoadXML(NamesTextAsset, out Names);
+        LoadXML(BarDialogTextAsset, out BarDialog);
+
         TextBaseNews BaseNews;
-        Load(BaseNewsTextAsset, out BaseNews);
-        TextBaseGoals BaseGoals;
-        Load(BaseGoalsTextAsset, out BaseGoals);
+        LoadXML(BaseNewsTextAsset, out BaseNews);
         News = UnboxNews(BaseNews);
+
+        TextBaseGoals BaseGoals;
+        LoadXML(BaseGoalsTextAsset, out BaseGoals);
         Goals = UnboxGoals(BaseGoals);
+
+        GetDialogEvent = GetDialog;
+
         goalName = BaseGoals.goalname;
         goalcollectionName = BaseGoals.collectionname;
+
         GameDialogs.Names = Names;
     }
 
@@ -86,25 +107,28 @@ public class GameText : MonoBehaviour
         }
     }
 
-    private void GetBarDialog(out TextDialog textDialog, out TextNames textNames)
-    {
-        textDialog = BarDialog;
-        textNames = Names;
-    }
+    private TextDialog GetBarDialog() => BarDialog;
+
+    private TextNames GetNames() => Names;
 
     private string[] GetBaseNews() => News;
     private string[] GetBaseGoals(out string goalName, out string collectionName)
     {
         goalName = this.goalName;
-        collectionName = this.goalcollectionName;
+        collectionName = goalcollectionName;
         return Goals;
     }
 
-    public static void Load<T>(TextAsset _xml, out T textClass) where T : class
+    private TextDialog GetDialog(TextAsset textAsset)
     {
-        XmlSerializer serializer = new XmlSerializer(typeof(T));
-        StringReader reader = new StringReader(_xml.text);
-        textClass = serializer.Deserialize(reader) as T;
+        for (int i = 0; i < DialogsTextAssets.Length; ++i)
+        {
+            if (textAsset == DialogsTextAssets[i])
+            {
+                return Dialogs[i];
+            }
+        }
+        return Dialogs[0];
     }
 
     private string[] UnboxNews(TextBaseNews textBaseNews)
@@ -163,5 +187,12 @@ public class GameText : MonoBehaviour
             Goals[w] = s;
         }
         return Goals;
+    }
+
+    private static void LoadXML<T>(TextAsset _xml, out T textClass) where T : class
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
+        StringReader reader = new StringReader(_xml.text);
+        textClass = serializer.Deserialize(reader) as T;
     }
 }

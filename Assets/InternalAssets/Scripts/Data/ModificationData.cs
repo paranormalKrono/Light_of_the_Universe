@@ -1,5 +1,5 @@
 ﻿
-
+/// <summary>Содержит данные какой-либо модификации.</summary>
 public class ModificationData
 {
     public UpgradeData[] UpgradeDatas { get; }
@@ -43,6 +43,7 @@ public class ModificationData
 
     public UpgradeData GetCurrentUpgradeData() => UpgradeDatas[curGrade];
 
+    /// <summary>Записывает данные для улучшений.</summary>
     public ModificationData(UpgradeData[] upgradeDatas)
     {
         UpgradeDatas = upgradeDatas;
@@ -51,13 +52,15 @@ public class ModificationData
             maxGradeModifier += UpgradeDatas[i].UpgradeValue;
         }
     }
-
+    
+    /// <summary>Содержит данные о стоимости и силе улучшения.</summary>
     public struct UpgradeData
     {
 
         public float UpgradeValue { get; }
         public int Cost { get; }
 
+        /// <summary>Вставляет данные улучшения.</summary>
         public UpgradeData(float upgradeValue, int cost)
         {
             UpgradeValue = upgradeValue;

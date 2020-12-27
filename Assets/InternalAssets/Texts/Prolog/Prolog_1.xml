@@ -6,10 +6,24 @@
 
 
   <ingamedialogs>
-    <ingamedialog time="3">
+    <ingamedialog time="8">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Постарайтесь не врезаться. На высокой скорости можно разбиться.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    <ingamedialog time="5">
       <dialogs>
         <dialog nameid ="4">
           <text>Неплохо, по сравнению с другими...</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    <ingamedialog time="8">
+      <dialogs>
+        <dialog nameid ="4">
+          <text>Там был контейнер с Help!? Вы же не выстрелили в него, да?</text>
         </dialog>
       </dialogs>
     </ingamedialog>
@@ -18,13 +32,13 @@
 
   <startdialogs>
     <dialog nameid ="4">
-      <text>Что?! Ещё один новобранец!? Ладно, что у нас тут...</text>
+      <text>Ну что, поехали! Где там эта бумажка... А, вот.</text>
     </dialog>
     <dialog nameid ="4">
-      <text>Каин, сегодня вам предстоит пройти проверку самых базовых знаний управления космическим кораблём на нашей тренировочной базе, созданной специально для новичков, и... мне уже надоело это читать, давайте это пропустим.</text>
+      <text>Каин, сегодня вам предстоит пройти проверку самых базовых знаний управления космическим кораблём на нашей тренировочной базе, созданной специально для новичков, и... мне надоело это читать.</text>
     </dialog>
     <dialog nameid ="4">
-      <text>Вы готовы?</text>
+      <text>Готов?</text>
     </dialog>
     <dialog nameid ="5">
       <text>Готов.</text>

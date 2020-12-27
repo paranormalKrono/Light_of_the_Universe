@@ -9,11 +9,26 @@ EditorBuildSettings:
     path: Assets/InternalAssets/Scenes/Menu.unity
     guid: e18f43321d0fb2c48b5c826a63a2be24
   - enabled: 1
+    path: Assets/InternalAssets/Scenes/PART_1/Origin.unity
+    guid: f4420f7d62a642149b519d8d5814486a
+  - enabled: 1
     path: Assets/InternalAssets/Scenes/Equations.unity
     guid: 6e46365c74669e140b71744bac8bb836
   - enabled: 1
     path: Assets/InternalAssets/Scenes/Slides.unity
     guid: 36bc98c2d9229c948a8e1838ee357df3
+  - enabled: 1
+    path: Assets/InternalAssets/Scenes/PART_1/Dialog_1.unity
+    guid: 4ee951038d5da6242b1374fb1edf84f8
+  - enabled: 1
+    path: Assets/InternalAssets/Scenes/PART_1/Dialog_2.unity
+    guid: 673f07cca7e695a4c940f55963094710
+  - enabled: 1
+    path: Assets/InternalAssets/Scenes/PART_1/Dialog_3.unity
+    guid: 269be49b4f1447540ba37b835e6d110a
+  - enabled: 1
+    path: Assets/InternalAssets/Scenes/PART_1/Cutscene.unity
+    guid: c560ebbd97b550441a97822133ceec1c
   - enabled: 1
     path: Assets/InternalAssets/Scenes/PART_1/Prologue_1.unity
     guid: 0dc351f7d68c6594282ee39caf9ea7ba
@@ -22,7 +37,7 @@ EditorBuildSettings:
     guid: eb676d0c547f92645b7fbed690099329
   - enabled: 1
     path: Assets/InternalAssets/Scenes/PART_1/Prologue_3.unity
-    guid: bd422c53584ac31478894813d7ff3a4d
+    guid: dcbfe21fdf906f24f845412fd86f7150
   - enabled: 1
     path: Assets/InternalAssets/Scenes/PART_2/Space_Base.unity
     guid: 6e09c9b0e3513e4418ce2c59c0f29261

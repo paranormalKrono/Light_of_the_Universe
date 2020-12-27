@@ -5,7 +5,7 @@ public class AnswersCheck : MonoBehaviour
 {
     [SerializeField] private Button button;
     [SerializeField] private int PlanetsCount;
-    private void Start()
+    private void Awake()
     {
         foreach (PlanetCoordinates PC in GetComponentsInChildren<PlanetCoordinates>())
         {

@@ -13,21 +13,14 @@ public class ScreenDark : MonoBehaviour
     private Color colorClear = Color.clear;
     private Color tempColor;
 
-    public delegate void EventHandlerB(bool b);
-    public static EventHandlerB SetDarkEvent;
     public delegate IEnumerator IEnumeratorHandler();
-    public static IEnumeratorHandler IDarkEvent;
-    public static IEnumeratorHandler ITransparentEvent;
 
     private void Awake()
     {
-        SetDarkEvent = SetDark;
-        IDarkEvent = IDark;
-        ITransparentEvent = ITransparent;
         ImageDark.gameObject.SetActive(true);
     }
 
-    private void SetDark(bool t)
+    internal void SetDark(bool t)
     {
         ImageDark.color = t ? colorBlack : colorClear;
     }
@@ -37,7 +30,7 @@ public class ScreenDark : MonoBehaviour
     private IEnumerator IChangeColorNow;
 
 
-    private IEnumerator IDark() // Если нужно сделать переход на тёмное изображение, то делаем изображение непрозрачным 
+    internal IEnumerator IDark() // Если нужно сделать переход на тёмное изображение, то делаем изображение непрозрачным 
     {
         if (isWorking)
         {
@@ -49,7 +42,7 @@ public class ScreenDark : MonoBehaviour
         isWorking = false;
     }
 
-    private IEnumerator ITransparent() // Если нужно сделать переход на прозрачное изображение, то делаем изображение прозрачным 
+    internal IEnumerator ITransparent() // Если нужно сделать переход на прозрачное изображение, то делаем изображение прозрачным 
     {
         if (isWorking)
         {
@@ -87,6 +80,5 @@ public class ScreenDark : MonoBehaviour
         ImageDark.color = colorClear;
         yield return new WaitForSeconds(timeToDark);
     }
-
 
 }

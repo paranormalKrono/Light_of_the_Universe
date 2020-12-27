@@ -1,23 +1,21 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(MeshRenderer))]
 public class Target : MonoBehaviour
 {
-    private Light li;
+    [SerializeField] private Color newEmissionColor;
+    [SerializeField] private int materialID = 0;
     private bool isActived;
     internal delegate void TargetDelegate();
     internal TargetDelegate TargetEvent;
 
-    private void Awake()
-    {
-        li = GetComponentInChildren<Light>();
-        li.color = Color.red;
-    }
     private void OnCollisionEnter(Collision collision)
     {
         if (!isActived && collision.gameObject.CompareTag("Bullet"))
         {
             isActived = true;
-            li.color = Color.green;
+
+            GetComponent<MeshRenderer>().materials[materialID].SetColor("_EmissionColor", newEmissionColor);
             TargetEvent();
         }
     }

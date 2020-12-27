@@ -4,13 +4,16 @@ using UnityEngine;
 public class Main_Bar : MonoBehaviour
 {
     [SerializeField] private System_Dialogs system_dialogs;
-    [SerializeField] private int nextBar;
+
     void Awake()
     {
         GameManager.Initialize();
+        GameScreenDark.SetDarkEvent(true);
+
+        system_dialogs.Initialise(GameText.GetBarDialogEvent(), GameText.GetNamesEvent());
         system_dialogs.EndEvent = End;
-        ScreenDark.SetDarkEvent(true);
-        StartCoroutine(ScreenDark.ITransparentEvent());
+
+        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void End()
@@ -19,9 +22,8 @@ public class Main_Bar : MonoBehaviour
     }
     private IEnumerator IEnd()
     {
-        yield return StartCoroutine(ScreenDark.IDarkEvent());
+        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         StaticSettings.isCompleteSomething = true;
-        StaticSettings.GameProgress = nextBar;
-        SceneController.LoadScene(Scenes.Space_Base);
+        SceneController.LoadNextStoryScene();
     }
 }
