@@ -1,9 +1,9 @@
 # Light_of_the_Universe
-Game
+Game.
 
-Project settings - Настройки проекта в Unity
-Assets
-  В папке Editor - Скрипты-инструменты для создания игры
-  В папке InternalAssets - Внутренние файлы проекта
-    Scripts - Скрипты игры
+Project settings - Настройки проекта в Unity	
+Assets:
+  В папке Editor - Скрипты-инструменты для создания игры	
+  В папке InternalAssets - Внутренние файлы проекта	
+    Scripts - Скрипты игры.	
     Texts - Тексты игры в формате .XML
