@@ -10,7 +10,7 @@ public class System_Slides : MonoBehaviour
     internal delegate void EventDelegate();
     internal EventDelegate EndEvent;
 
-    private void Start()
+    public void Initialise()
     {
         Slides[0].SetActive(true);
         isSlides = true;

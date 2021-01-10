@@ -1,0 +1,191 @@
+<gametext>
+  
+  <goals>
+    <goal>Лететь вперёд</goal>
+  </goals>
+
+  <ingamedialogs>
+    
+    <ingamedialog id ="0" time="7">
+      <dialogs>
+        <dialog nameid ="18">
+          <text>Вроде бы всё.</text>
+        </dialog>
+        <dialog nameid ="5">
+          <text>Так кто ты?</text>
+        </dialog>
+        <dialog nameid ="18">
+          <text>Не сейчас. Они могут выслать подкрепление.</text>
+        </dialog>
+        <dialog nameid ="18">
+          <text>Лети за мной.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog id ="1" time="7">
+      <dialogs>
+        <dialog nameid ="5">
+          <text>Что это за место?</text>
+        </dialog>
+        <dialog nameid ="18">
+          <text>Это оборонительный рубеж.</text>
+        </dialog>
+        <dialog nameid ="5">
+          <text>От кого?</text>
+        </dialog>
+        <dialog nameid ="18">
+          <text>В космосе есть не только пираты.</text>
+        </dialog>
+        <dialog nameid ="18">
+          <text>Чтобы улететь с орбиты Луны, нужно пройти через оборонительное кольцо.</text>
+        </dialog>
+        <dialog nameid ="5">
+          <text>Оборонительное кольцо?</text>
+        </dialog>
+        <dialog nameid ="18">
+          <text>Да. Мы направляемся к нему.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog id ="2" time="7">
+      <dialogs>
+        <dialog nameid ="18">
+          <text>Думаешь, мне нравится тебя ждать?</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+
+    <ingamedialog id ="3" time="5">
+      <dialogs>
+        <dialog nameid ="18">
+          <text>Не мешай мне!</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog id ="4" time="5">
+      <dialogs>
+        <dialog nameid ="18">
+          <text>Ты слишком медленный. Догоняй!</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog id ="5" time="6">
+      <dialogs>
+        <dialog nameid ="18">
+          <text>Разве могу я оставить тебя здесь?</text>
+        </dialog>
+        <dialog nameid ="18">
+          <text>Лети за мной, пожалуйста.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog id ="6" time="5">
+      <dialogs>
+        <dialog nameid ="18">
+          <text>Не стреляй в меня!</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog id ="7" time="5">
+      <dialogs>
+        <dialog nameid ="18">
+          <text>Прекрати!</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+  </ingamedialogs>
+  
+  <startdialogs>
+    <dialog nameid ="18">
+      <text>Вот мы и встретились вновь.</text>
+    </dialog>
+    <dialog id="1" nameid ="5">
+      <text>Кто ты?</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Ты не помнишь меня?</text>
+    </dialog>
+    <dialog nameid ="19">
+      <prevtext>Новое подключение...</prevtext>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Похоже, ты не один.</text>
+    </dialog>
+    <dialog id ="5" nameid ="16">
+      <text>Назови себя.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Помнишь меня?</text>
+    </dialog>
+    <dialog id ="7" nameid ="16">
+      <text>Не может быть. Тебя нет.</text>
+    </dialog>
+    <dialog id ="8" nameid ="18">
+      <text>Хочешь проверить?</text>
+    </dialog>
+    <dialog nameid ="16">
+      <text>Невозможно.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Ты помнишь тот день?</text>
+    </dialog>
+    <dialog nameid ="16">
+      <text>Да.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Тогда ты знаешь, почему я здесь.</text>
+    </dialog>
+    <dialog nameid ="16">
+      <text>Иначе я не мог.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Ты уверен?</text>
+    </dialog>
+    <dialog nameid ="16">
+      <text>...</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Настолько уверен, что был готов убить родную сестру?</text>
+    </dialog>
+    <dialog nameid ="16">
+      <text>...</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Зачем он тебе?</text>
+    </dialog>
+    <dialog nameid ="16">
+      <text>Не могу сказать.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Ты не доверяешь мне?</text>
+    </dialog>
+    <dialog nameid ="16">
+      <text>... Нет.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Отпусти его, и тогда я смогу простить тебя.</text>
+    </dialog>
+    <dialog nameid ="16">
+      <text>Нет.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Мне жаль это слышать... Значит на том и закончим, братец.</text>
+    </dialog>
+    <dialog id ="25" nameid ="18">
+      <text>(закрытый канал) Каин, я помогу тебе. Нам придётся их всех уничтожить. Иначе нам не уйти. Ты готов?</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>(закрытый канал) Да.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>(закрытый канал) Я буду рядом.</text>
+    </dialog>
+  </startdialogs>
+</gametext>

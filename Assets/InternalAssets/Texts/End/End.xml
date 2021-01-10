@@ -1,0 +1,80 @@
+<gametext>
+  
+  <goals>
+    <goal>Лететь вперёд</goal>
+  </goals>
+
+  <ingamedialogs>
+    
+    <ingamedialog id ="0" time="7">
+      <dialogs>
+        <dialog nameid ="16">
+          <text>(Непечатные слова)!!!</text>
+        </dialog>
+        <dialog nameid ="18">
+          <text>Лети за мной.</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+
+    <ingamedialog id ="1" time="5">
+      <dialogs>
+        <dialog nameid ="18">
+          <text>Хватит мешать мне!</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+  </ingamedialogs>
+  
+  <startdialogs>
+    <dialog nameid ="16">
+      <text>Вы не сможете сбежать!</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Зачем ты это делаешь?</text>
+    </dialog>
+    <dialog nameid ="16">
+      <text>Мне нужна информация.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Если мы отдадим её, ты отпустишь нас?</text>
+    </dialog>
+    <dialog nameid ="16">
+      <text>Нет.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Тогда нам не о чём говорить! Пропусти нас!</text>
+    </dialog>
+    <dialog nameid ="16">
+      <text>Нет. Я не могу.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Будь по твоему.</text>
+    </dialog>
+    <dialog id ="8" nameid ="18">
+      <text>(закрытый канал) Договоримся так: я прикрою тебя, а ты уничтожишь крейсер.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>(закрытый канал) Крейсер!? Как?</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>(закрытый канал) Он силён только на вид. Атакуй те места сбоку крейсера, где находятся электронные схемы. Тогда он будет выведен его из строя.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>(закрытый канал) Легко сказать...</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>(закрытый канал) И сложно сделать.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>(закрытый канал) Других вариантов нет.</text>
+    </dialog>
+    <dialog id="14" nameid ="18">
+      <text>(закрытый канал) Я подсветила их.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>(закрытый канал) И ещё... остерегайся орудий.</text>
+    </dialog>
+  </startdialogs>
+</gametext>

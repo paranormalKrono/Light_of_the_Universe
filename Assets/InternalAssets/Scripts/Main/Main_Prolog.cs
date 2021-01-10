@@ -5,12 +5,13 @@ public class Main_Prolog : MonoBehaviour
 {
     [SerializeField] private TextAsset textAsset;
     [SerializeField] private AudioClip audioClip;
-    [SerializeField] internal PlayerStarshipMover MoverStart; // Скрипт в начале для движения корабля игрока
-    [SerializeField] internal PlayerStarshipMover MoverEnd; // Скрипт в конце для движения корабля игрока
+    [SerializeField] internal StarshipMover MoverStart; // Скрипт в начале для движения корабля игрока
+    [SerializeField] internal StarshipMover MoverEnd; // Скрипт в конце для движения корабля игрока
     [SerializeField] internal PlayerStarshipTrigger EndTrigger; // Триггер в конце 
 
     protected Player_Starship_Controller player_Starship_Controller;
     protected Player_Camera_Controller player_Camera_Controller;
+    private Starship playerStarship;
 
     private bool isEnd;
     private bool isRestart;
@@ -22,6 +23,7 @@ public class Main_Prolog : MonoBehaviour
 
         player_Camera_Controller = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Player_Camera_Controller>();
         player_Starship_Controller = GameObject.FindGameObjectWithTag("Player").GetComponentInParent<Player_Starship_Controller>();
+        playerStarship = player_Starship_Controller.GetComponent<Starship>();
         player_Starship_Controller.GetComponent<Health>().OnDeath += Restart;
 
         GameText.DeactivateEvent();
@@ -29,7 +31,7 @@ public class Main_Prolog : MonoBehaviour
 
         if (!StaticSettings.isRestart)
         {
-            GameAudio.StartAudioEvent(audioClip, true);
+            GameAudio.StartAudioEvent(audioClip, 0.7f, true);
         }
         else
         {
@@ -47,10 +49,10 @@ public class Main_Prolog : MonoBehaviour
         if (!isRestart && StaticSettings.checkpointID == 0)
         {
             player_Starship_Controller.SetLockControl(true);
-            player_Camera_Controller.SetLockMove(true);
+            player_Starship_Controller.SetActiveCanvas(false);
             player_Camera_Controller.SetPositionWithOffset(MoverStart.GetEndPosition());
 
-            MoverStart.Move(player_Starship_Controller);
+            MoverStart.Move(playerStarship);
 
             GameDialogs.StartDialogEvent(EndDialogEvent);
             yield return StartCoroutine(GameScreenDark.ITransparentEvent());
@@ -61,7 +63,7 @@ public class Main_Prolog : MonoBehaviour
             GameGoals.SetActiveGoalEvent(true);
             if (StaticSettings.checkpointID == 0)
             {
-                MoverStart.StarshipToEndPosition(player_Starship_Controller);
+                MoverStart.ToEndPosition(playerStarship);
             }
             yield return StartCoroutine(GameScreenDark.ITransparentEvent());
         }
@@ -85,7 +87,7 @@ public class Main_Prolog : MonoBehaviour
     {
         player_Starship_Controller.SetLockControl(true);
         player_Camera_Controller.SetLockMove(true);
-        MoverEnd.MoveLine(player_Starship_Controller);
+        MoverEnd.MoveLine(playerStarship);
         EndEvent();
     }
 
@@ -131,6 +133,7 @@ public class Main_Prolog : MonoBehaviour
     {
         GameGoals.SetActiveGoalEvent(true);
         player_Starship_Controller.SetLockControl(false);
+        player_Starship_Controller.SetActiveCanvas(true);
         player_Camera_Controller.SetLockMove(false);
         MoverStart.StopMove();
     }

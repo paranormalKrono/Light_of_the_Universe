@@ -7,9 +7,11 @@ public class Guns : MonoBehaviour
     [SerializeField] private float shootTime = 0.55f;
     [SerializeField] private bool isTearShooting = false;
     [SerializeField] private Rigidbody rigidbody;
+    [SerializeField] private bool isReverseForce = true;
 
     public float ShootTime { get => shootTime; set { shootTime = value; } }
-    public float MaxShootSpeed { get; private set; }
+
+    public int gunsCount { get; private set; }
 
     private bool isShoot;
     private bool isLockMove;
@@ -23,49 +25,64 @@ public class Guns : MonoBehaviour
     private Vector3 v3_2;
 
 
-    public delegate void ShootEvent();
-    public delegate void ShootDelegate(RigidbodyConstraints rigidbodyConstraints, Vector3 velocity, out Vector3 shootReverseForce);
+    public delegate void ShootDelegate(Vector3 velocity, Transform target, out Vector3 shootReverseForce);
 
     private List<ShootDelegate> shootDelegates = new List<ShootDelegate>();
 
 
+    private void Awake()
+    {
+        IGun[] guns = GetComponentsInChildren<IGun>();
+        Collider[] ChildrenColliders = GetComponentsInChildren<Collider>();
+        for (int i = 0; i < guns.Length; ++i)
+        {
+            ShootDelegate shootDelegate;
+            guns[i].Initialise(ChildrenColliders, rigidbody.constraints, out shootDelegate);
+            shootDelegates.Add(shootDelegate);
+        }
+        gunsCount = shootDelegates.Count;
+    }
 
-    internal void Initialize(out ShootEvent shoot) => shoot = Shoot;
 
-    private void Shoot()
+    public delegate void ShootEvent(Transform Target);
+    public delegate IEnumerator IShootEvent(Transform Target);
+
+    internal ShootEvent GetShootEvent() => Shoot;
+    internal IShootEvent GetIShootEvent() => IShoot;
+
+    private void Shoot(Transform Target)
     {
         if (!isShoot)
         {
-            StartCoroutine(IShoot());
+            StartCoroutine(IShoot(Target));
         }
     }
-
-    private IEnumerator IShoot()
+    private IEnumerator IShoot(Transform Target)
     {
         isShoot = true;
         if (isTearShooting)
         {
-            shootDelegates[tearShootGunNum](rigidbody.constraints, rigidbody.velocity, out shootReverseForce);
-            if (!isLockMove)
+            shootDelegates[tearShootGunNum](rigidbody.velocity, Target, out shootReverseForce);
+            if (!isLockMove && isReverseForce)
             {
                 rigidbody.AddForce(shootReverseForce, ForceMode.Impulse);
             }
             tearShootGunNum += 1;
-            if (tearShootGunNum == shootDelegates.Count)
+            if (tearShootGunNum == gunsCount)
             {
                 tearShootGunNum = 0;
             }
-            yield return new WaitForSeconds(ShootTime / shootDelegates.Count);
+            yield return new WaitForSeconds(ShootTime / gunsCount);
         }
         else
         {
             shootReverseForce = vector3Zero;
-            foreach (ShootDelegate shootD in shootDelegates)
+            for (int i = 0; i < gunsCount; ++i)
             {
-                shootD(rigidbody.constraints, rigidbody.velocity, out v3_2);
+                shootDelegates[i](rigidbody.velocity, Target, out v3_2);
                 shootReverseForce += v3_2;
             }
-            if (!isLockMove)
+            if (!isLockMove && isReverseForce)
             {
                 rigidbody.AddForce(shootReverseForce, ForceMode.Impulse);
             }
@@ -75,15 +92,6 @@ public class Guns : MonoBehaviour
     }
 
 
-    internal void InitializeGun(ShootDelegate shoot, float maxShootSpeed, out Collider[] ChildrenColliders)
-    {
-        if (MaxShootSpeed < maxShootSpeed)
-        {
-            MaxShootSpeed = maxShootSpeed;
-        }
-        shootDelegates.Add(shoot);
-        ChildrenColliders = GetComponentsInChildren<Collider>();
-    }
 
     internal void SetLockMove(bool t)
     {

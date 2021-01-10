@@ -3,7 +3,9 @@
 public class CameraTriggerController : MonoBehaviour
 {
     [SerializeField] private Transform TargetCameraTransform;
+
     private Player_Camera_Controller player_Camera_Controller;
+
     private void Start()
     {
         player_Camera_Controller = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Player_Camera_Controller>();

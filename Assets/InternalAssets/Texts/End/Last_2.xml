@@ -1,0 +1,105 @@
+<gametext>
+  
+  <goals>
+    <goal>Ничего</goal>
+  </goals>
+
+  <ingamedialogs>
+  </ingamedialogs>
+  
+  <startdialogs>
+    <dialog nameid ="5">
+      <text>Не может быть.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Древняя магия, если выражаться привычными вам словами.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Так ты...</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Да.</text>
+    </dialog>
+    <dialog nameid ="20">
+      <text>Я член Совета Z.</text>
+    </dialog>
+    <dialog nameid ="20">
+      <text>Вторая.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Мы старались изменить мир к лучшему. Это было нашей великой целью.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Мой брат тоже член Совета. Пятый.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>(Кашель)</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Всё в порядке?</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Да.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Из-за моей беспечности он допустил, что сможет в одиночку управиться с миром. И тогда убил всех членов Совета, чтобы забрать себе всю власть.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Как мне кажется, ему не нравилось, что его мнение в Совете ценили меньше, чем моё, и эта ревность копилась в нём в течении многих лет. Поэтому я в ответе за то, что случилось.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Но ты жива.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Да, мы с тобой не должны были встретиться в тот вечер. Но случилось что-то необычное, что-то, что смогло дать мне вторую жизнь.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>(Кашель)</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Пусть даже и временную...</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Не знаю, что было бы со мной в тот холодный вечер, не окажись тебя на той станции. Возможно, это и было моим предназначением: найти тебя и помочь найти новый дом. Хехе.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Но для меня это имело больший смысл. Признаюсь, для меня ты стал первым человеком, которого я могла бы... полюбить. Хотя мне никогда не приходилось...</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>(Слабо слышимое рыдание)</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>испытывать чувств, я знаю это, и хочу сказать, что знала об этом с момента нашей первой встречи.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>(Кашель)</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Я могу тебе помочь?</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Нет.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Я хотела, чтобы ты это знал. Как бы там ни было, твой путь продолжается. Тебе многое ещё предстоит увидеть, многое узнать. Твоей следующей целью будет станция на орбите Юпитера. Здесь наши пути расходятся.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>(Громкий кашель)</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Я...</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Не вздумай!.. пытаться мне помочь. Или что ты там хотел сказать.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Прощай.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Подожди, стой!</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>(Громкий кашель и предсмертные хрипы)</text>
+    </dialog>
+  </startdialogs>
+</gametext>

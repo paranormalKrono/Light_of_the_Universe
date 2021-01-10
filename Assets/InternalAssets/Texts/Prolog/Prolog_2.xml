@@ -20,7 +20,7 @@
         </dialog>
       </dialogs>
     </ingamedialog>
-    <ingamedialog time="7">
+    <ingamedialog time="5">
       <dialogs>
         <dialog nameid ="5">
           <text>Что это за статуя?</text>

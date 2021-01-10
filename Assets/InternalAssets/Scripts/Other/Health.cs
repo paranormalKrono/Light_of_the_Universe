@@ -40,12 +40,23 @@ public class Health : MonoBehaviour
         OnHealthChange?.Invoke(nowHp, maxHp);
     }
 
+    public void Kill()
+    {
+        if (!isDead)
+        {
+            SetHealth(0);
+            Dead();
+        }
+    }
+
     private void Dead()
     {
         isDead = true;
         OnDeath?.Invoke();
         Destroy(gameObject);
     }
+
+    public float GetHealthNow() => nowHp;
 
     public void SetInvincible(bool t)
     {

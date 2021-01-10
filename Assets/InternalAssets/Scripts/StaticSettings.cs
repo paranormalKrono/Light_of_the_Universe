@@ -4,7 +4,7 @@ public static class StaticSettings
 {
 
     public static bool isGameComplete;
-    public static bool isEquations = true;
+    public static bool isEquations = false;
 
     // Игровые параметры
     public static int credits = 50;

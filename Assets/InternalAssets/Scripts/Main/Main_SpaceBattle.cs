@@ -1,22 +1,19 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(System_Starships), typeof(StarshipsSpawnMover))]
 public class Main_SpaceBattle : MonoBehaviour
 {
     [SerializeField] private TextAsset textAsset;
-    [SerializeField] private PlayerStarshipMover MoverEnd;
+    [SerializeField] private StarshipMover MoverEnd;
     [SerializeField] private PlayerStarshipTrigger EndTrigger;
-    [SerializeField] private Text DisqualificationText;
     [SerializeField] private Transform BattleTr;
     [SerializeField] private Starship C07Starship;
     [SerializeField] private Health C07Health;
     [SerializeField] private ScenesLocations sceneLocationName;
-    [SerializeField] private float distanceDisqualification = 300;
+    [SerializeField] private float distanceDisqualification = 500;
     [SerializeField] private float distanceBattle = 250;
     [SerializeField] private float timeDisqualification = 8;
-    [SerializeField] private float showTextTime = 3;
     [SerializeField] private AudioClip audioClip;
 
     private System_Starships systemStarships;
@@ -30,11 +27,10 @@ public class Main_SpaceBattle : MonoBehaviour
     private bool isBattle;
     private bool isDisqualified;
     private bool isShowedText;
-    private bool isShowText;
     private bool isRestart;
     private bool isEnd;
     private bool isPlayerDead;
-    private bool isC07Dead;
+    private bool isShowedDialog2;
 
 
     private void Awake()
@@ -55,16 +51,17 @@ public class Main_SpaceBattle : MonoBehaviour
         PlayerStarship = PlayerStarshipTr.GetComponent<Starship>();
 
         EndTrigger.OnPlayerStarshipEnter += PlayerStarshipEnterEndTrigger;
-        C07Health.OnDeath += C07Death;
+
+        C07Health.OnDeath += C07Health_OnDeath;
     }
 
     private void Start()
     {
-        systemStarships.InitializeStarshipsTeams(GetComponent<StarshipsSpawnMover>().MoveStarshipsOnSpawns()); 
+        systemStarships.InitializeStarshipsTeams(GetComponent<StarshipsSpawnMover>().MoveStarshipsOnSpawns());
 
         if (!StaticSettings.isRestart)
         {
-            GameAudio.StartAudioEvent(audioClip, true);
+            GameAudio.StartAudioEvent(audioClip, 0.4f, true);
             SetGameStop(true);
             GameDialogs.StartDialogEvent(StartGame);
         }
@@ -77,6 +74,11 @@ public class Main_SpaceBattle : MonoBehaviour
             GameDialogs.ShowInGameDialogEvent(0);
         }
         systemStarships.SetStarshipsActive(2, false);
+        systemStarships.SetStarshipsLock(2, true);
+        systemStarships.SetStarshipsActive(3, false);
+        systemStarships.SetStarshipsLock(3, true);
+        systemStarships.StarshipsTeams[1].OnTeamDevastated += FirstWaveDead;
+        systemStarships.StarshipsTeams[2].OnTeamDevastated += SecondWaveDead;
 
         StartCoroutine(GameScreenDark.ITransparentEvent());
     }
@@ -91,25 +93,30 @@ public class Main_SpaceBattle : MonoBehaviour
             }
             if (!isPlayerDead)
             {
-                if (!isDisqualified)
+                if (!isBattle)
                 {
-                    if (Vector3.Distance(PlayerStarshipTr.position, BattleTr.position) > distanceDisqualification && systemStarships.GetMinDistanceTeamToPoint(0, PlayerStarshipTr.position) > distanceDisqualification)
+                    if (systemStarships.GetMinDistanceTeamToPoint(0, BattleTr.position) < distanceBattle)
+                    {
+                        isBattle = true;
+                        systemStarships.SetStarshipsLock(1, false);
+                        systemStarships.SetStarshipsFollowEnemy(0, true);
+                        GameGoals.ShowGoalEvent(1);
+                        GameDialogs.ShowInGameDialogEvent(1);
+                    }
+                }
+                else if (!isDisqualified)
+                {
+                    if (Vector3.Distance(PlayerStarshipTr.position, BattleTr.position) > distanceDisqualification)
                     {
                         timeOut += Time.fixedDeltaTime;
-                        if (!isShowedText && !isShowText)
+                        if (!isShowedText)
                         {
                             isShowedText = true;
-                            StartCoroutine(IShowText(DisqualificationText));
+                            GameDialogs.ShowInGameDialogEvent(4);
                         }
                         if (timeOut > timeDisqualification)
                         {
-                            isDisqualified = true;
-                            int team = systemStarships.StarshipChangeTeamToNew(C07Starship, 0);
-                            systemStarships.StarshipChangeTeam(PlayerStarship, 0, team);
-                            if (!isC07Dead)
-                            {
-                                GameDialogs.ShowInGameDialogEvent(4);
-                            }
+                            StartCoroutine(IDisqualificate());
                         }
                     }
                     else
@@ -118,20 +125,73 @@ public class Main_SpaceBattle : MonoBehaviour
                         timeOut = 0;
                     }
                 }
-                if (!isBattle)
-                {
-                    if (systemStarships.GetMinDistanceTeamToPoint(0, BattleTr.position) < distanceBattle)
-                    {
-                        isBattle = true;
-                        systemStarships.SetStarshipsLock(1, false);
-                        systemStarships.SetStarshipsFollowTarget(0, true);
-                        GameGoals.ShowGoalEvent(1);
-                        GameDialogs.ShowInGameDialogEvent(1);
-                        systemStarships.StarshipsTeams[1].OnTeamDevastated += Rush;
-                    }
-                }
             }
         }
+    }
+
+    private void StartGame()
+    {
+        GameGoals.SetActiveGoalEvent(true);
+        GameDialogs.ShowInGameDialogEvent(0);
+        systemStarships.SetStarshipsLock(1, true);
+        SetGameStop(false);
+    }
+
+
+    private void PlayerStarshipEnterEndTrigger()
+    {
+        playerCamera.SetLockMove(true);
+        playerController.SetLockControl(true);
+        MoverEnd.MoveLine(playerController.GetComponent<Starship>());
+        EndGame();
+    }
+
+
+    private void FirstWaveDead(System_Starships.StarshipsTeam starshipsTeam) => StartCoroutine(IRush());
+    private IEnumerator IRush()
+    {
+        if (!isDisqualified)
+        {
+            yield return GameDialogs.IShowInGameDialogEvent(2);
+            isShowedDialog2 = true;
+        }
+        systemStarships.SetStarshipsActive(2, true);
+        systemStarships.SetStarshipsActive(3, true);
+        systemStarships.CombineTeams(3, 0);
+    }
+
+    private void SecondWaveDead(System_Starships.StarshipsTeam starshipsTeam) 
+    {
+        if (!isDisqualified) 
+        { 
+            StartCoroutine(IDisqualificate()); 
+        }
+    }
+
+    private IEnumerator IDisqualificate()
+    {
+        isDisqualified = true;
+        yield return GameDialogs.IShowInGameDialogEvent(5);
+        int team = systemStarships.StarshipChangeTeamToNew(C07Starship, 0);
+        systemStarships.StarshipChangeTeam(PlayerStarship, 0, team);
+        C07Health.SetInvincible(false);
+        C07Starship.SetFollowTarget(PlayerStarshipTr);
+        systemStarships.StarshipsTeams[0].SetFollowTarget(PlayerStarshipTr);
+        if (isShowedDialog2)
+        {
+            GameDialogs.ShowInGameDialogEvent(3);
+        }
+        else
+        {
+            GameDialogs.ShowInGameDialogEvent(7);
+        }
+    }
+
+
+
+    private void C07Health_OnDeath()
+    {
+        GameDialogs.ShowInGameDialogEvent(6);
     }
 
     private void OnPlayerDeath()
@@ -142,42 +202,6 @@ public class Main_SpaceBattle : MonoBehaviour
             StartCoroutine(IRestart());
         }
     }
-    private void StartGame()
-    {
-        GameGoals.SetActiveGoalEvent(true);
-        GameDialogs.ShowInGameDialogEvent(0);
-        systemStarships.SetStarshipsLock(1, true);
-        SetGameStop(false);
-    }
-    private void PlayerStarshipEnterEndTrigger()
-    {
-        playerCamera.SetLockMove(true);
-        playerController.SetLockControl(true);
-        MoverEnd.MoveLine(playerController);
-        EndGame();
-    }
-    private void EndGame()
-    {
-        if (!isRestart && !isEnd)
-        {
-            StartCoroutine(IEndEvent());
-        }
-    }
-    private void Rush(System_Starships.StarshipsTeam starshipsTeam)
-    {
-        GameDialogs.ShowInGameDialogEventIE(2, RushE);
-    }
-    private void RushE()
-    {
-        C07Health.SetInvincible(false);
-        systemStarships.SetStarshipsActive(1, true);
-        systemStarships.SetStarshipsLock(1, false);
-    }
-    private void C07Death()
-    {
-        isC07Dead = true;
-        GameDialogs.ShowInGameDialogEvent(3);
-    }
 
     private IEnumerator IRestart()
     {
@@ -185,22 +209,20 @@ public class Main_SpaceBattle : MonoBehaviour
         yield return StartCoroutine(GameScreenDark.IDarkEvent());
         SceneController.RestartScene();
     }
+
+    private void EndGame()
+    {
+        if (!isRestart && !isEnd)
+        {
+            StartCoroutine(IEndEvent());
+        }
+    }
     private IEnumerator IEndEvent()
     {
         isEnd = true;
         GameAudio.StopAudioEvent();
         yield return StartCoroutine(GameScreenDark.IDarkEvent());
         SceneController.LoadNextStoryScene();
-    }
-
-
-    private IEnumerator IShowText(Text text)
-    {
-        isShowText = true;
-        text.enabled = true;
-        yield return new WaitForSeconds(showTextTime);
-        text.enabled = false;
-        isShowText = false;
     }
 
     private void SetGameStop(bool t)

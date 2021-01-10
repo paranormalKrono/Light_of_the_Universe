@@ -4,6 +4,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Guns), typeof(Rigidbody))]
 public class Player_Starship_Controller : MonoBehaviour
 {
+
     [SerializeField] private bool isAbsoluteLockShoot = false;
 
     [SerializeField] private Image StarshipActivatedImage;
@@ -15,18 +16,20 @@ public class Player_Starship_Controller : MonoBehaviour
     [SerializeField] private Starship_Engine engine;
     [SerializeField] private Starship_RotationEngine rotationEngine;
 
+    [SerializeField] private GameObject canvas;
+
     private Camera camera;
 
     private Guns Guns;
     private Guns.ShootEvent Shoot;
+
+    private FlightMode currentFlightMode = FlightMode.Normal;
 
     private bool isLockMove;
     private bool isLockRotate;
     private bool isLockShoot;
     private bool isGameMenu;
 
-    private bool isLockFly = false;
-    private bool isFreeFly = false;
     private Vector3 localUp = Vector3.up;
     private Vector3 localDown = Vector3.down;
     private Vector3 forward = Vector3.forward;
@@ -40,11 +43,18 @@ public class Player_Starship_Controller : MonoBehaviour
     private Ray ray;
     private Plane plane = new Plane();
 
+    private float engineForce;
+    private float engineSpeedMax;
+    private float engineFriction;
+    private float rotationEngineForce;
+    private float rotationEngineSpeedMax;
+    private float rotationEngineFriction;
+
 
     private void Awake()
     {
         Guns = GetComponent<Guns>();
-        Guns.Initialize(out Shoot);
+        Shoot = Guns.GetShootEvent();
 
         StarshipActivatedImage.enabled = true;
 
@@ -53,11 +63,19 @@ public class Player_Starship_Controller : MonoBehaviour
 
         GameMenu.OnMenuOpen += OnMenuOpen;
         GameMenu.OnMenuClose += OnMenuClose;
+
     }
 
     private void Start()
     {
         camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponentInChildren<Camera>();
+
+        engineForce = engine.force;
+        engineSpeedMax = engine.speedMax;
+        engineFriction = engine.friction;
+        rotationEngineForce = rotationEngine.force;
+        rotationEngineSpeedMax = rotationEngine.speedMax;
+        rotationEngineFriction = rotationEngine.friction;
     }
 
     private void Update()
@@ -68,39 +86,32 @@ public class Player_Starship_Controller : MonoBehaviour
             {
                 if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space))
                 {
-                    Shoot();
+                    Shoot(null);
                 }
             }
-            if (Input.GetKeyDown(KeyCode.C))
+            if (!isLockMove)
             {
-                isLockFly = false;
-                ChainActivatedImage.enabled = false;
-                isFreeFly = !isFreeFly;
-                if (isFreeFly)
+                if (Input.GetKeyDown(KeyCode.C))
                 {
-                    ActivateFeatherFly();
-                    StarshipActivatedImage.enabled = false;
+                    if (currentFlightMode != FlightMode.Feather)
+                    {
+                        SwitchFlightMode(currentFlightMode, FlightMode.Feather);
+                    }
+                    else
+                    {
+                        SwitchFlightMode(currentFlightMode, FlightMode.Normal);
+                    }
                 }
-                else
+                if (Input.GetKeyDown(KeyCode.V))
                 {
-                    ActivateNormalFly();
-                    FeatherActivatedImage.enabled = false;
-                }
-            }
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                isFreeFly = false;
-                FeatherActivatedImage.enabled = false;
-                isLockFly = !isLockFly;
-                if (isLockFly)
-                {
-                    ActivateChainFly();
-                    StarshipActivatedImage.enabled = false;
-                }
-                else
-                {
-                    ActivateNormalFly();
-                    ChainActivatedImage.enabled = false;
+                    if (currentFlightMode != FlightMode.Chain)
+                    {
+                        SwitchFlightMode(currentFlightMode, FlightMode.Chain);
+                    }
+                    else
+                    {
+                        SwitchFlightMode(currentFlightMode, FlightMode.Normal);
+                    }
                 }
             }
         }
@@ -126,7 +137,7 @@ public class Player_Starship_Controller : MonoBehaviour
                     {
                         v3 = transform.position + transform.TransformPoint(forward);
                     }
-                    rotationEngine.RotateToTarget(v3);
+                    rotationEngine.RotateToTargetWithPlaneLimiter(v3);
                 }
                 else if (Mathf.Abs(horizontalInput) > 0)
                 {
@@ -168,6 +179,11 @@ public class Player_Starship_Controller : MonoBehaviour
         Guns.SetLockMove(isLockMove);
         engine.SetLockMove(isLockMove);
         rotationEngine.SetLockRotate(isLockRotate);
+
+        if (isLockMove)
+        {
+            SwitchFlightMode(currentFlightMode, FlightMode.Normal);
+        }
     }
 
     internal void GetPositionAndRotationTransforms(out Transform pos, out Transform rot)
@@ -176,27 +192,65 @@ public class Player_Starship_Controller : MonoBehaviour
         rot = rotationTransform;
     }
 
-    private void ActivateNormalFly()
+    public void SetActiveCanvas(bool t)
     {
-        StarshipActivatedImage.enabled = true;
-        engine.SetCoefficients(1, 1, 1);
-        rotationEngine.SetCoefficients(1, 1, 1);
+        canvas.SetActive(t);
     }
-    private void ActivateFeatherFly()
+
+
+    private void SwitchFlightMode(FlightMode currentFlightMode, FlightMode newFlightMode)
     {
-        FeatherActivatedImage.enabled = true;
-        engine.SetCoefficients(0.65f, 1.6f, 0);
-        rotationEngine.SetCoefficients(0.6f, 0.7f, 1.4f);
+        if (currentFlightMode != newFlightMode)
+        {
+            switch (currentFlightMode)
+            {
+                case FlightMode.Feather:
+                    FeatherActivatedImage.enabled = false;
+                    break;
+                case FlightMode.Normal:
+                    StarshipActivatedImage.enabled = false;
+                    break;
+                case FlightMode.Chain:
+                    ChainActivatedImage.enabled = false;
+                    break;
+            }
+
+            switch (newFlightMode)
+            {
+                case FlightMode.Feather:
+                    FeatherActivatedImage.enabled = true;
+                    SetEngineCoefficients(0.65f, 1.6f, 0);
+                    SetRotationEngineCoefficients(0.6f, 0.7f, 1.4f);
+                    break;
+                case FlightMode.Normal:
+                    StarshipActivatedImage.enabled = true;
+                    SetEngineCoefficients(1, 1, 1);
+                    SetRotationEngineCoefficients(1, 1, 1);
+                    break;
+                case FlightMode.Chain:
+                    ChainActivatedImage.enabled = true;
+                    SetEngineCoefficients(1.5f, 0.75f, 1.3f);
+                    SetRotationEngineCoefficients(1.4f, 1.05f, 1.3f);
+                    break;
+            }
+            this.currentFlightMode = newFlightMode;
+        }
     }
-    private void ActivateChainFly()
+
+    private void SetEngineCoefficients(float forceC, float speedMaxC, float frictionC) => engine.SetParameters(engineForce * forceC, engineSpeedMax * speedMaxC, engineFriction * frictionC);
+    private void SetRotationEngineCoefficients(float forceC, float speedMaxC, float frictionC) => rotationEngine.SetParameters(rotationEngineForce * forceC, rotationEngineSpeedMax * speedMaxC, rotationEngineFriction * frictionC);
+
+
+    private enum FlightMode
     {
-        ChainActivatedImage.enabled = true;
-        engine.SetCoefficients(1.5f, 0.75f, 1.3f);
-        rotationEngine.SetCoefficients(1.4f, 1.05f, 1.3f);
+        Feather,
+        Normal,
+        Chain
     }
 
 
     private void OnMenuOpen() => isGameMenu = true;
 
     private void OnMenuClose() => isGameMenu = false;
+
 }

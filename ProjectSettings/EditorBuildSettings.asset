@@ -60,44 +60,62 @@ EditorBuildSettings:
     path: Assets/InternalAssets/Scenes/Locations/SL_5_Mission.unity
     guid: 56c752caacf7eb34c87069fe23ee1d22
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_0_TimeRace1.unity
+    path: Assets/InternalAssets/Scenes/Locations/SL_6_Meeting.unity
+    guid: 4db67cd2c6c9fb24ca8bf8cdf871205d
+  - enabled: 1
+    path: Assets/InternalAssets/Scenes/Locations/SL_7_End.unity
+    guid: b4c66a391f5cdbf4b8a62524db26c6f3
+  - enabled: 1
+    path: Assets/InternalAssets/Scenes/PART_2/SM_0_TimeRace1.unity
     guid: 39d9f42e48a532d42bf04b8f5c9cda68
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_1_1vs1.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_1_1vs1.unity
     guid: 25f03033cc1bffa46892e069d282e638
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_2_3vs3.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_2_3vs3.unity
     guid: b02fef7fa4b644f458a2ae5fe56c26eb
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_3_5vs5.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_3_5vs5.unity
     guid: 595c555a3fef2eb47a0181b7270d8ac7
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_4_Race6.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_4_Race6.unity
     guid: 29961a024dcb2d14e8eeb02004eb3131
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_5_Tactic_4vs4.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_5_Tactic_4vs4.unity
     guid: df794b47756dcda418b74b06179c043a
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_6_3vs3vs1.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_6_3vs3vs1.unity
     guid: 4b00c517b12937e4c9943293cbc88a11
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_7_TimeRace2.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_7_TimeRace2.unity
     guid: 5fb4c5a1333fe9a4ea08f79a70a400ba
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_8_3vs8.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_8_3vs8.unity
     guid: 6c2b5a2694c25cb4e97da62755f4839e
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_9_6vs4vs4vs4.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_9_6vs4vs4vs4.unity
     guid: 9792fb3c58f15e249bf7002521012aa4
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_10_Race8.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_10_Race8.unity
     guid: f764c14fd1d06964f9a9eb658e18b882
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_11_3vs3vs3.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_11_3vs3vs3.unity
     guid: 16431c6eb205f9a4187f3ef2834a75d1
   - enabled: 1
-    path: Assets/InternalAssets/Scenes/PART_2/Space_Missions/SM_12_End.unity
+    path: Assets/InternalAssets/Scenes/PART_2/SM_12_End.unity
     guid: 19bef82beec5d034083bdb3affbafa31
+  - enabled: 1
+    path: Assets/InternalAssets/Scenes/PART_3/Meeting.unity
+    guid: d022a2521a955f54d82544499d0bfd35
+  - enabled: 1
+    path: Assets/InternalAssets/Scenes/PART_3/End.unity
+    guid: 2f461e4abd78bd843a1e76c484f86a0f
+  - enabled: 1
+    path: Assets/InternalAssets/Scenes/PART_3/Last_1.unity
+    guid: e8b732091eb14d841bf30a96743d3f0e
+  - enabled: 1
+    path: Assets/InternalAssets/Scenes/PART_3/Last_2.unity
+    guid: 11ff508d30bbb5944beb0fec8be00b52
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: dbef36bbc522f274c8965a03c950fb9d,
       type: 2}

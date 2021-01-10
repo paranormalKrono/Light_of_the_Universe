@@ -5,7 +5,12 @@ using UnityEngine.AI;
 public class Starship_AI_Adv : MonoBehaviour
 {
     [SerializeField] private Mastery mastery;
-    [SerializeField] private float minDistance = 9;
+    [SerializeField] private float fearDistance = 9;
+    [SerializeField] private float followMinDistance = 15;
+    [SerializeField] private float followMaxDistance = 40;
+    [SerializeField] private float showPathMinDistance = 14;
+    [SerializeField] private float showPathMaxDistance = 20;
+    [SerializeField] private float betterPointMinDistance = 10;
     [SerializeField] private float attackDistance = 11;
     [SerializeField] private float findDistance = 26;
     [SerializeField] private float lostDistance = 40;
@@ -15,10 +20,11 @@ public class Starship_AI_Adv : MonoBehaviour
     [SerializeField] private float FearTime = 1.5f;
     [SerializeField] private float MoveToPointVelocityConsideration = 0.5f;
     [SerializeField] private float MinDistanceToNavMeshCorner = 0.5f;
+    [SerializeField] private float maxShootSpeed = 200;
 
     [SerializeField] private bool isControlLock = false;
     [SerializeField] private bool isAttack = true;
-    [SerializeField] private bool isFollowTarget = true;
+    [SerializeField] private bool isFollowEnemy = true;
 
     [SerializeField] private Transform RotPointTr;
 
@@ -33,24 +39,26 @@ public class Starship_AI_Adv : MonoBehaviour
     private Rigidbody EnemyRb;
 
     private Transform EnemyTarget;
+    private Transform FollowTarget;
+    private Transform ShowPathTarget;
+    private Transform ShowPathDestination;
     private Transform PreviousTarget;
     private Transform CurrentTarget;
     private Transform NextTarget;
     private Vector3 EnemyTargetV3; // Не менять на transform, ссылка может пропасть
 
-    public delegate void EventTransformHandler(Transform Tr);
-    public event EventTransformHandler DeathEvent;
-
-    private bool isFindTarget;
+    private bool isFindEnemy;
     private bool isFear;
     private bool isMoveToPoint;
+    private bool isFollowTarget;
+    private bool isShowPathTarget;
+    private bool isMaxDistanceFollow;
     private bool isTargetMissed;
 
-    private float MasteryAimingKoef = 0;
+    private float TerrorAimingKoef = 0;
 
     private float FearTimeNow;
     private float distanceToEnemy;
-    private float maxShootSpeed;
 
     private Vector3 MoveTargetV3;
     private Vector3 localUp = Vector3.up;
@@ -63,49 +71,63 @@ public class Starship_AI_Adv : MonoBehaviour
         switch (mastery)
         {
             case Mastery.Noob:
-                minDistance *= Random.Range(1, 1.5f);
-                attackDistance *= Random.Range(1, 1.5f);
-                findDistance *= Random.Range(0.5f, 1f);
-                lostDistance *= Random.Range(0.5f, 1f);
-                leavePointDistance *= Random.Range(0.5f, 1f);
-                moveAngle *= Random.Range(0.5f, 1f);
-                shootAngle *= Random.Range(1f, 1.6f);
-                FearTime *= Random.Range(1f, 1.6f);
-                MasteryAimingKoef = Random.Range(2f, 3f);
+                fearDistance *= Random.Range(1, 1.3f);
+                attackDistance *= Random.Range(0.8f, 1f);
+                findDistance *= Random.Range(0.7f, 1f);
+                lostDistance *= Random.Range(0.7f, 1f);
+                leavePointDistance *= Random.Range(0.7f, 1f);
+                moveAngle *= Random.Range(0.7f, 1f);
+                shootAngle *= Random.Range(1f, 1.3f);
+                FearTime *= Random.Range(1f, 1.3f);
+                TerrorAimingKoef = Random.Range(1.25f, 1.5f);
                 break;
             case Mastery.Normal:
-                minDistance *= Random.Range(1, 1.25f);
-                attackDistance *= Random.Range(1, 1.25f);
-                findDistance *= Random.Range(0.75f, 1f);
-                lostDistance *= Random.Range(0.75f, 1f);
-                leavePointDistance *= Random.Range(0.75f, 1f);
-                moveAngle *= Random.Range(0.75f, 1f);
-                shootAngle *= Random.Range(1f, 1.4f);
-                FearTime *= Random.Range(1f, 1.3f);
-                MasteryAimingKoef = Random.Range(1.5f, 2.5f);
+                fearDistance *= Random.Range(1, 1.2f);
+                attackDistance *= Random.Range(0.9f, 1f);
+                findDistance *= Random.Range(0.9f, 1f);
+                lostDistance *= Random.Range(0.9f, 1f);
+                leavePointDistance *= Random.Range(0.9f, 1f);
+                moveAngle *= Random.Range(0.8f, 1f);
+                shootAngle *= Random.Range(1f, 1.2f);
+                FearTime *= Random.Range(1f, 1.2f);
+                TerrorAimingKoef = Random.Range(1f, 1.2f);
                 break;
 
             case Mastery.Pro:
-                minDistance *= Random.Range(0.9f, 1.2f);
-                attackDistance *= Random.Range(0.9f, 1.2f);
-                findDistance *= Random.Range(0.8f, 1.1f);
-                lostDistance *= Random.Range(0.8f, 1.1f);
-                leavePointDistance *= Random.Range(0.9f, 1.1f);
+                fearDistance *= Random.Range(1f, 1.1f);
+                attackDistance *= Random.Range(1f, 1.1f);
+                findDistance *= Random.Range(1f, 1.1f);
+                lostDistance *= Random.Range(1f, 1.1f);
+                leavePointDistance *= Random.Range(1f, 1.1f);
                 moveAngle *= Random.Range(0.9f, 1.2f);
-                shootAngle *= Random.Range(0.9f, 1.2f);
-                FearTime *= Random.Range(0.8f, 1.2f);
-                MasteryAimingKoef = Random.Range(0.75f, 1f);
-                break;
-            case Mastery.Elite:
-                minDistance *= Random.Range(0.95f, 1.1f);
-                attackDistance *= Random.Range(0.95f, 1.1f);
-                findDistance *= Random.Range(0.95f, 1.3f);
-                lostDistance *= Random.Range(0.95f, 1.3f);
-                leavePointDistance *= Random.Range(0.9f, 1.2f);
-                moveAngle *= Random.Range(0.95f, 1.3f);
                 shootAngle *= Random.Range(0.9f, 1.1f);
                 FearTime *= Random.Range(0.9f, 1.1f);
-                MasteryAimingKoef = Random.Range(0.5f, 0.7f);
+                TerrorAimingKoef = Random.Range(0.4f, 0.6f);
+                break;
+            case Mastery.Elite:
+                fearDistance *= Random.Range(1f, 1.1f);
+                attackDistance *= Random.Range(1f, 1.1f);
+                findDistance *= Random.Range(1f, 1.3f);
+                lostDistance *= Random.Range(1f, 1.3f);
+                leavePointDistance *= Random.Range(1f, 1.2f);
+                moveAngle *= Random.Range(1f, 1.3f);
+                shootAngle *= Random.Range(1f, 1.1f);
+                FearTime *= Random.Range(1f, 1.05f);
+                TerrorAimingKoef = Random.Range(0.25f, 0.35f);
+                break;
+            case Mastery.Beta:
+                fearDistance *= Random.Range(0.99f, 1.01f);
+                attackDistance *= Random.Range(1f, 1.2f);
+                findDistance *= Random.Range(1f, 1.4f);
+                lostDistance *= Random.Range(1f, 1.4f);
+                leavePointDistance *= Random.Range(1f, 1.3f);
+                moveAngle *= Random.Range(1f, 1.35f);
+                shootAngle *= Random.Range(0.7f, 1f);
+                FearTime *= Random.Range(0.95f, 1f);
+                TerrorAimingKoef = Random.Range(0.1f, 0.2f);
+                break;
+            case Mastery.Legend:
+                TerrorAimingKoef = 0;
                 break;
         }
 
@@ -114,9 +136,10 @@ public class Starship_AI_Adv : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         Starship starship = GetComponent<Starship>();
         starship.SetEnemyTarget = SetEnemyTarget;
-        starship.SetFollowTarget = SetFollowTarget;
+        starship.SetFollowEnemy = SetFollowEnemy;
         starship.SetLockControl = SetLockControl;
         starship.SetAttack = SetAttack;
+        starship.SetFollowTarget = SetTargetToFollow;
 
         localUp = transform.TransformDirection(localUp);
 
@@ -128,29 +151,42 @@ public class Starship_AI_Adv : MonoBehaviour
     private void Start()
     {
         Guns guns = GetComponent<Guns>();
-        guns.Initialize(out Shoot);
-        maxShootSpeed = guns.MaxShootSpeed;
+        Shoot = guns.GetShootEvent();
     }
 
     private void FixedUpdate()
     {
         if (!isControlLock) // Если управление не отключено
         {
-            if (!isFindTarget) // Если цель не найдена
+            CheckNulls();
+            if (isShowPathTarget)
             {
-                if (isMoveToPoint) // Если можно двигаться к точке
+                ShowPath();
+            }
+            else
+            if (!isFindEnemy || isMaxDistanceFollow && isFollowTarget && Vector3.Distance(FollowTarget.position, transform.position) > followMaxDistance) // Если цель не найдена или мы должны поддерживать дистанцию до преследуемой цели
+            {
+                if (isFollowTarget)
                 {
-                    MoveToPoint(); // Двигаемся к точке
+                    MoveToFollowTarget();
                 }
                 else
                 {
-                    SlowDown();
+                    if (isMoveToPoint) // Если можно двигаться к точке
+                    {
+                        MoveToPoint(); // Двигаемся к точке
+                    }
+                    else
+                    {
+                        Engine.SlowDown();
+                        RotationEngine.SlowDown();
+                    }
                 }
-                if (isFollowTarget && !isTargetMissed) // Если ИИ ищет цель
+                if (isFollowEnemy && !isTargetMissed) // Если ИИ ищет цель
                 {
                     if (EnemyTarget != null)
                     {
-                        isFindTarget = Vector3.Distance(EnemyTarget.position, transform.position) < findDistance; // Проверяем видит ли ИИ противника
+                        isFindEnemy = Vector3.Distance(EnemyTarget.position, transform.position) < findDistance; // Проверяем видит ли ИИ противника
                     }
                     else
                     {
@@ -172,36 +208,33 @@ public class Starship_AI_Adv : MonoBehaviour
                         UpdatePath(EnemyTargetV3);
                         if (Physics.SphereCast(transform.position, 1, (EnemyTargetV3 - transform.position).normalized, out enemyRaycastHitInfo) && enemyRaycastHitInfo.transform.parent == EnemyTarget)
                         {
-                            LookAt(EnemyTargetV3 + EnemyRb.velocity * (Vector3.Distance(transform.position, EnemyTargetV3 + EnemyRb.velocity) / maxShootSpeed) * (1 + Random.Range(-MasteryAimingKoef, MasteryAimingKoef))); // Поворачиваем корабль в сторону цели
-                            
-                            if (distanceToEnemy < attackDistance)
-                            {
-                                SlowDown();
-                            }
-                            else
-                            {
-                                Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3)));
-                            }
+                            LookAt(EnemyPositionConsidetingEverything()); // Поворачиваем корабль в сторону цели, учитывая всё
 
-                            if (isAttack && AngleTo(EnemyTargetV3) < shootAngle) // Если ИИ может атаковать, и угол до цели меньше угла прицеливания
+                            Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity())));
+
+                            if (isAttack && AngleTo(EnemyPositionConsidetingEverything()) < shootAngle && Vector3.Distance(transform.position, EnemyTargetV3) < attackDistance) // Если ИИ может атаковать, и угол до цели, учитывая всё, меньше угла прицеливания
                             {
-                                Shoot(); // Стреляем
+                                Shoot(EnemyTarget); // Стреляем
                             }
                         }
                         else
                         {
-                            LookAt(MoveTargetV3); // Поворачиваем корабль в сторону нужного движения
-                            Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3)));
+                            LookAt(MoveTargetV3 - MasteryVelocity()); // Поворачиваем корабль в сторону нужного движения
+                            Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity())));
                         }
 
-                        if (distanceToEnemy < minDistance) // Если застрял или дистанция до цели меньше минимльной дистанции
+                        if (distanceToEnemy < fearDistance) // Если дистанция до цели меньше минимальной дистанции
                         {
-                            FindClosestPoint(); // Находим ближайшую точку
+                            FindBetterPoint(); // Находим лучшую точку
                             isFear = true; // Испуг
                         }
                     }
                     else
                     {
+                        if (isAttack && AngleTo(EnemyTargetV3) < shootAngle && Vector3.Distance(transform.position, EnemyTargetV3) < attackDistance) // Если ИИ может атаковать, и угол до цели меньше угла прицеливания
+                        {
+                            Shoot(EnemyTarget); // Стреляем
+                        }
                         // Отсчёт страха
                         FearTimeNow += Time.fixedDeltaTime;
                         if (FearTimeNow >= FearTime)
@@ -209,10 +242,18 @@ public class Starship_AI_Adv : MonoBehaviour
                             isFear = false;
                             FearTimeNow = 0;
                         }
-                        MoveToPoint(); // Двигаемся к точке
+                        if (isMoveToPoint)
+                        {
+                            MoveToPoint(); // Двигаемся к точке
+                        }
+                        else
+                        {
+                            FindClosestPoint();
+                            isMoveToPoint = true;
+                        }
                     }
-                    isFindTarget = distanceToEnemy < lostDistance; // Проверяем видит ли ИИ противника
-                    if (!isFindTarget) // Если ИИ потерял противника
+                    isFindEnemy = distanceToEnemy < lostDistance; // Проверяем видит ли ИИ противника
+                    if (!isFindEnemy) // Если ИИ потерял противника
                     {
                         LostTarget();
                     }
@@ -220,7 +261,7 @@ public class Starship_AI_Adv : MonoBehaviour
                 else
                 {
                     isTargetMissed = true;
-                    isFindTarget = false;
+                    isFindEnemy = false;
                     LostTarget();
                 }
             }
@@ -230,19 +271,79 @@ public class Starship_AI_Adv : MonoBehaviour
     // Комплексные методы
     #region ComplexMethods
 
+    private void CheckNulls()
+    {
+        if (isFollowTarget && FollowTarget == null)
+        {
+            Unfollow();
+        }
+        if (isShowPathTarget && ShowPathTarget == null)
+        {
+            UnshowPath();
+        }
+    }
+
     private void MoveToPoint() // Движение к точке
     {
         UpdatePath(NextTarget.position);
 
-        LookAt(MoveTargetV3 - rb.velocity * MoveToPointVelocityConsideration); // Поворачиваем корабль к точке, учитывая скорость
+        LookAt(MoveTargetV3 - MasteryVelocity()); // Поворачиваем корабль к точке, учитывая скорость
 
-        Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - rb.velocity / 2))); // Двигаемся
+        Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity()))); // Двигаемся
 
         if (Vector3.Distance(transform.position, NextTarget.position) < leavePointDistance) // Если мы приблизились к точке достаточно близко
         {
             GetNextPoint(); // Следующая точка
         }
     }
+
+    private void MoveToFollowTarget()
+    {
+        if (Vector3.Distance(transform.position, FollowTarget.position) > followMinDistance)
+        {
+            UpdatePath(FollowTarget.position);
+
+            LookAt(MoveTargetV3 - MasteryVelocity()); // Поворачиваем корабль к точке, учитывая скорость
+
+            Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity()))); // Двигаемся
+        }
+        else
+        {
+            Engine.SlowDown();
+            RotationEngine.SlowDown();
+        }
+    }
+
+    private void ShowPath()
+    {
+        if (Vector3.Distance(transform.position, ShowPathTarget.position) > showPathMinDistance && Vector3.Distance(ShowPathDestination.position, transform.position) < Vector3.Distance(ShowPathDestination.position, ShowPathTarget.position))
+        {
+            if (Vector3.Distance(transform.position, ShowPathTarget.position) < showPathMaxDistance)
+            {
+                Engine.SlowDown();
+                RotationEngine.SlowDown();
+            }
+            else
+            {
+                UpdatePath(ShowPathTarget.position);
+
+                LookAt(MoveTargetV3 - MasteryVelocity()); // Поворачиваем корабль к точке, учитывая скорость
+
+                Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity()))); // Двигаемся
+            }
+
+        }
+        else
+        {
+            UpdatePath(ShowPathDestination.position);
+
+            LookAt(MoveTargetV3 - MasteryVelocity()); // Поворачиваем корабль к точке, учитывая скорость
+
+            Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity()))); // Двигаемся
+        }
+    }
+
+    private Vector3 MasteryVelocity() => rb.velocity * MoveToPointVelocityConsideration + rb.velocity * MoveToPointVelocityConsideration * Random.Range(-TerrorAimingKoef, TerrorAimingKoef);
 
     private void LostTarget()
     {
@@ -259,27 +360,36 @@ public class Starship_AI_Adv : MonoBehaviour
 
     private void Move(float direction) => Engine.Move(direction); // Движение
 
-    private void SlowDown() => Engine.SlowDown(); // Замедление
-
-    private void LookAt(Vector3 target) => RotationEngine.RotateToTarget(target); // Повернуть корабль в сторону точки
+    private void LookAt(Vector3 target) => RotationEngine.RotateToTargetWithPlaneLimiter(target); // Повернуть корабль в сторону точки
 
     private void GetNextPoint() // Получаем следующую контрольную точку для движения
     {
         PreviousTarget = CurrentTarget;
         CurrentTarget = NextTarget;
         NextTarget = System_Waypoints.GetNextPoint(CurrentTarget, PreviousTarget);
+        if (NextTarget == null)
+        {
+            isMoveToPoint = false;
+        }
     }
 
     private void FindClosestPoint()
     {
         PreviousTarget = CurrentTarget;
         CurrentTarget = NextTarget;
-        NextTarget = System_Waypoints.GetClosePoint(transform);
+        NextTarget = System_Waypoints.GetClosestPoint(transform);
+    }
+    private void FindBetterPoint()
+    {
+        PreviousTarget = CurrentTarget;
+        CurrentTarget = NextTarget;
+        NextTarget = System_Waypoints.GetBetterPointInDistance(transform, betterPointMinDistance); 
     }
 
     int v;
     private void UpdatePath(Vector3 Target)
     {
+        v = 0;
         NavMesh.CalculatePath(transform.position, Target, NavMesh.AllAreas, NavMeshPath);
 
         if (NavMeshPath.status == NavMeshPathStatus.PathComplete)
@@ -289,7 +399,10 @@ public class Starship_AI_Adv : MonoBehaviour
             {
                 v += 1;
             }
-            MoveTargetV3 = NavMeshPath.corners[v];
+            if (NavMeshPath.corners.Length > 0)
+            {
+                MoveTargetV3 = NavMeshPath.corners[v];
+            }
         }
     }
 
@@ -304,14 +417,23 @@ public class Starship_AI_Adv : MonoBehaviour
         {
             if (angle > 90) // Если угол больше 90, то меняем направление скорости на противоположное
             {
+                if (180 - angle > moveAngle)
+                {
+                    moveDirection /= (180 - angle) / moveAngle; // Уменьшаем вектор направления для снижения скорости
+                }
                 moveDirection *= -1;
             }
-            moveDirection /= angle / moveAngle; // Уменьшаем вектор направления для снижения скорости
+            else
+            {
+                moveDirection /= angle / moveAngle; // Уменьшаем вектор направления для снижения скорости
+            }
         }
         return moveDirection;
     }
 
     private float AngleTo(Vector3 V3) => Vector3.Angle((V3 - transform.position).normalized, RotPointTr.forward); // Угол между направлением к цели и передом корабля
+
+    private Vector3 EnemyPositionConsidetingEverything() => EnemyTargetV3 - MasteryVelocity() + EnemyRb.velocity * (Vector3.Distance(transform.position, EnemyTargetV3 + EnemyRb.velocity) / maxShootSpeed) + EnemyRb.velocity * (Vector3.Distance(transform.position, EnemyTargetV3 + EnemyRb.velocity) / maxShootSpeed) * (1 + Random.Range(-TerrorAimingKoef, TerrorAimingKoef));
 
     #endregion
 
@@ -329,10 +451,10 @@ public class Starship_AI_Adv : MonoBehaviour
         RotationEngine.SetLockRotate(t);
     }
 
-    public void SetFollowTarget(bool t) // Вкл/выкл поиск противника
+    public void SetFollowEnemy(bool t) // Вкл/выкл поиск противника
     {
-        isFollowTarget = t;
-        isFindTarget = false;
+        isFollowEnemy = t;
+        isFindEnemy = false;
     }
 
     public void SetAttack(bool t) // Вкл/выкл поиск противника
@@ -340,14 +462,43 @@ public class Starship_AI_Adv : MonoBehaviour
         isAttack = t;
     }
 
-    public void SetEnemyTarget(Transform Tr)
+    public void SetEnemyTarget(Transform Enemy)
     {
         isTargetMissed = false;
-        if (Tr != EnemyTarget)
+        if (Enemy != EnemyTarget)
         {
-            EnemyTarget = Tr; // Установка противника, цели
-            EnemyRb = Tr.GetComponent<Rigidbody>();
+            EnemyTarget = Enemy; // Установка противника, цели
+            EnemyRb = Enemy.GetComponent<Rigidbody>();
         }
+    }
+
+    public void SetTargetToFollowWithMaxDistance(Transform Target)
+    {
+        FollowTarget = Target; // Установка цели для преследования
+        isMaxDistanceFollow = true;
+        isFollowTarget = true;
+    }
+    public void SetTargetToFollow(Transform Target)
+    {
+        FollowTarget = Target; // Установка цели для преследования
+        isMaxDistanceFollow = false;
+        isFollowTarget = true;
+    }
+    public void Unfollow()
+    {
+        isMaxDistanceFollow = false;
+        isFollowTarget = false;
+    }
+
+    public void SetTargetAndDestinationToShowPath(Transform target, Transform destination)
+    {
+        ShowPathDestination = destination;
+        ShowPathTarget = target;
+        isShowPathTarget = true;
+    }
+    public void UnshowPath()
+    {
+        isShowPathTarget = false;
     }
 
     #endregion
@@ -358,5 +509,7 @@ public class Starship_AI_Adv : MonoBehaviour
         Normal,
         Pro,
         Elite,
+        Beta,
+        Legend,
     }
 }

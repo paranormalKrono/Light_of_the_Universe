@@ -41,7 +41,7 @@ public class Starship_AI : MonoBehaviour
         playerTr = GameObject.FindGameObjectWithTag("Player").transform;
         playerTr.GetComponent<Health>().OnDeath += PlayerDead;
 
-        GetComponent<Guns>().Initialize(out Shoot);
+        Shoot = GetComponent<Guns>().GetShootEvent();
 
         minDistance += Random.Range(-minDistanceThr, minDistanceThr);
         attackDistance += Random.Range(-attackDistanceThr, attackDistanceThr);
@@ -79,7 +79,7 @@ public class Starship_AI : MonoBehaviour
                 {
                     if (isAttackPlayer)
                     {
-                        Shoot();
+                        Shoot(playerTr);
                     }
                     if (DistanceToPlayer() > minDistance)
                     {
@@ -122,7 +122,7 @@ public class Starship_AI : MonoBehaviour
 
     private float DistanceToPlayer() => Vector3.Distance(playerTr.position, transform.position);
 
-    private void LookAt(Vector3 Target) => RotationEngine.RotateToTarget(Target);
+    private void LookAt(Vector3 Target) => RotationEngine.RotateToTargetWithPlaneLimiter(Target);
 
     private void Move(Vector3 moveDirection) => Engine.Move(moveDirection);
 

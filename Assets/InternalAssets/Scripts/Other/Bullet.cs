@@ -1,19 +1,26 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof (Rigidbody))]
+[RequireComponent(typeof(Rigidbody))]
 public class Bullet : MonoBehaviour
 {
+    public enum BulletType
+    {
+        Enemy,
+        Player
+    }
+
     [SerializeField] private float DestroyTime = 4;
     [SerializeField] private GameObject Boom;
     [SerializeField] private Rigidbody rb;
-    private float newDamage;
+    [SerializeField] private BulletType bulletType;
+    private float damage;
 
     private float time;
 
     internal void Initialize(float Damage, Vector3 velocity, Vector3 force, RigidbodyConstraints rigidbodyConstraints)
     {
-        newDamage = Damage;
+        damage = Damage;
         rb.constraints = rigidbodyConstraints;
         rb.velocity = velocity;
         rb.AddForce(force, ForceMode.Impulse);
@@ -33,9 +40,11 @@ public class Bullet : MonoBehaviour
         Health health = collision.gameObject.GetComponentInParent<Health>();
         if (health != null)
         {
-            health.TakeDamage(newDamage);
+            health.TakeDamage(damage);
         }
         Instantiate(Boom, transform.position, transform.rotation);
         Destroy(gameObject);
     }
+
+    public BulletType GetBulletType() => bulletType;
 }

@@ -1,34 +1,37 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
-public class GunBullet : MonoBehaviour
+public class GunBullet : MonoBehaviour, IGun
 {
     [SerializeField] private float Damage = 10;
     [SerializeField] private float shootForce = 20;
-    [SerializeField] private GameObject BulletGameobject;
+    [SerializeField] private GameObject prefab;
+    [SerializeField] private AudioSource audioSource;
 
     private Collider[] colliders;
-    private AudioSource gunAudioSource;
+    private RigidbodyConstraints rigidbodyConstraints;
 
     private Vector3 forward = Vector3.forward;
 
-    private void Awake()
+    private void Shoot(Vector3 velocity, Transform Target, out Vector3 shootReverseForce)
     {
-        GetComponentInParent<Guns>().InitializeGun(Shoot, shootForce / BulletGameobject.GetComponent<Rigidbody>().mass, out colliders);
-        gunAudioSource = GetComponent<AudioSource>();
-    }
-
-    private void Shoot(RigidbodyConstraints rigidbodyConstraints, Vector3 velocity, out Vector3 shootReverseForce)
-    {
-        GameObject bulletGameobject = Instantiate(BulletGameobject, transform.position, transform.rotation);
-        Collider bulletCollider = bulletGameobject.GetComponentInChildren<Collider>();
+        GameObject g = Instantiate(prefab, transform.position, transform.rotation);
+        Collider collider = g.GetComponentInChildren<Collider>();
         for (int i = 0; i < colliders.Length; ++i)
         {
-            Physics.IgnoreCollision(colliders[i], bulletCollider);
+            Physics.IgnoreCollision(colliders[i], collider);
         }
-        Bullet Bullet = bulletGameobject.GetComponent<Bullet>();
         shootReverseForce = -transform.TransformDirection(forward) * shootForce;
+
+        Bullet Bullet = g.GetComponent<Bullet>();
         Bullet.Initialize(Damage, velocity, transform.TransformDirection(forward) * shootForce, rigidbodyConstraints);
-        gunAudioSource.Play();
+
+        audioSource.Play();
+    }
+
+    public void Initialise(Collider[] ChildrenColliders, RigidbodyConstraints rigidbodyConstraints, out Guns.ShootDelegate shoot)
+    {
+        colliders = ChildrenColliders;
+        this.rigidbodyConstraints = rigidbodyConstraints;
+        shoot = Shoot;
     }
 }

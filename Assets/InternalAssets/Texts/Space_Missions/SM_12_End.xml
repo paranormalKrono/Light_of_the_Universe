@@ -7,7 +7,7 @@
 
   <ingamedialogs>
     
-    <ingamedialog time="5">
+    <ingamedialog id ="0" time="5">
       <dialogs>
         <dialog nameid ="13">
           <text>Поехали!</text>
@@ -18,7 +18,7 @@
       </dialogs>
     </ingamedialog>
     
-    <ingamedialog time="7">
+    <ingamedialog id ="1" time="7">
       <dialogs>
         <dialog nameid ="13">
           <text>Они среди астероидов, будьте бдительны.</text>
@@ -29,7 +29,7 @@
       </dialogs>
     </ingamedialog>
     
-    <ingamedialog time="5">
+    <ingamedialog id ="2" time="5">
       <dialogs>
         <dialog nameid ="13">
           <text>Вы победили!</text>
@@ -44,23 +44,50 @@
           <text>Мы отправляем к вам дополнительный отряд.</text>
         </dialog>
         <dialog nameid ="3">
-          <text>Можем бежать сейчас. Лети вперёд, дальше от крейсера, а я догоню.</text>
+          <text>Можешь бежать сейчас. Лети вперёд, дальше от крейсера.</text>
         </dialog>
       </dialogs>
     </ingamedialog>
     
-    <ingamedialog time="6">
+    <ingamedialog id="3" time="6">
       <dialogs>
         <dialog nameid ="3">
-          <text>Похоже, мне не суждено улететь. Лети без меня!</text>
+          <text>Наши союзники вырубили связь. Беги. Я задержу их.</text>
         </dialog>
       </dialogs>
     </ingamedialog>
     
-    <ingamedialog time="7">
+    <ingamedialog id="4" time="5">
+      <dialogs>
+        <dialog nameid ="13">
+          <text>Эй, пилот C08, вернись в зону боевых действий!</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog id="5" time="5">
+      <dialogs>
+        <dialog nameid ="13">
+          <text>Пилот C08, поступил прямой приказ от Совета уничтожить тебя. Мне жаль.</text>
+        </dialog>
+        <dialog nameid ="13">
+          <text>Уничтожить его!</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog id="6" time="6">
       <dialogs>
         <dialog nameid ="3">
-          <text>Наши союзники вырубили связь и атакуют. Давай выбираться и побыстрее.</text>
+          <text>Меня подбили. Беги!</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog id="7" time="6">
+      <dialogs>
+        <dialog nameid ="3">
+          <text>Наши союзники вырубили связь. Лети вперёд, дальше от крейсера. Я задержу их.</text>
         </dialog>
       </dialogs>
     </ingamedialog>

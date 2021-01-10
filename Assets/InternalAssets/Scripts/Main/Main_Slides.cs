@@ -16,6 +16,7 @@ public class Main_Slides : MonoBehaviour
             SS.gameObject.SetActive(false);
         }
         int id = SceneController.SlidesID;
+        systemSlides[id].Initialise();
         systemSlides[id].gameObject.SetActive(true);
         systemSlides[id].EndEvent = EndEvent;
 

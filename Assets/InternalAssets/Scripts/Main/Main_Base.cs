@@ -94,7 +94,7 @@ public class Main_Base : MonoBehaviour
         }
         if (nextRankStatus != 0 || !StaticSettings.isCompleteSomething)
         {
-            GameAudio.StartAudioEvent(audioClip, true);
+            GameAudio.StartAudioEvent(audioClip, 0.2f, true);
         }
         GameMenu.DisactivateGameMenuEvent();
     }

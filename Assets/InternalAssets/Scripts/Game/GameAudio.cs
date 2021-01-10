@@ -12,7 +12,7 @@ public class GameAudio : MonoBehaviour
     private int clipChoose; //Номер Выбранной музыки
 
 
-    public delegate void EventA(AudioClip audioClip, bool isRepeat);
+    public delegate void EventA(AudioClip audioClip, float volume, bool isRepeat);
     public static EventA StartAudioEvent;
     public delegate void EventAs(AudioClip[] audioClip, bool isRandomize);
     public static EventAs StartAudiosEvent;
@@ -28,14 +28,14 @@ public class GameAudio : MonoBehaviour
         AudioSource = GetComponent<AudioSource>();
     }
 
-    private void StartAudio(AudioClip audioClip, bool isRepeat)
+    private void StartAudio(AudioClip audioClip, float volume, bool isRepeat)
     {
-        StartCoroutine(IStartAudio(audioClip, isRepeat));
+        StartCoroutine(IStartAudio(audioClip, volume, isRepeat));
     }
-    private IEnumerator IStartAudio(AudioClip audioClip, bool isRepeat)
+    private IEnumerator IStartAudio(AudioClip audioClip, float volume, bool isRepeat)
     {
         yield return StartCoroutine(IStopAudio());
-        AudioSource.volume = 1;
+        AudioSource.volume = volume;
         AudioSource.clip = audioClip;
         AudioSource.loop = isRepeat;
         AudioSource.Play();

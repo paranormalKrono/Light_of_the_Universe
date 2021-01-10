@@ -1,0 +1,27 @@
+<gametext>
+  
+  <goals>
+    <goal>Ничего</goal>
+  </goals>
+
+  <ingamedialogs>
+  </ingamedialogs>
+  
+  <startdialogs>
+    <dialog nameid ="18">
+      <text>Вот мы и на безопасном расстоянии...</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Так кто ты?</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Ты правда меня не помнишь?</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Нет.</text>
+    </dialog>
+    <dialog nameid ="18">
+      <text>Тогда я напомню тебе...</text>
+    </dialog>
+  </startdialogs>
+</gametext>

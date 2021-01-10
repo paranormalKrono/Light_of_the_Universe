@@ -25,6 +25,10 @@ public enum Scenes
     SM_10_Race8,
     SM_11_3vs3vs3,
     SM_12_End,
+    Meeting,
+    End,
+    Last_1,
+    Last_2,
     Menu,
     Slides,
     Equations,
@@ -38,7 +42,9 @@ public enum ScenesLocations
     SL_2_3Teams,
     SL_3_Race1,
     SL_4_Race2,
-    SL_5_Mission
+    SL_5_Mission,
+    SL_6_Meeting,
+    SL_7_End
 }
 
 
@@ -296,7 +302,7 @@ public static class SceneController
    };
 
 
-    static public Scenes[] StoryScenesSequence = new Scenes[56]
+    static public Scenes[] StoryScenesSequence = new Scenes[62]
     {
 
         // Story 1
@@ -359,6 +365,8 @@ public static class SceneController
         Scenes.SM_8_3vs8,
         Scenes.Equations,
 
+        Scenes.Slides,
+
         Scenes.Space_Base,
 
         Scenes.SM_9_6vs4vs4vs4,
@@ -373,6 +381,14 @@ public static class SceneController
         Scenes.Space_Base,
 
         Scenes.SM_12_End,
+
+        // Story 3
+
+        Scenes.Meeting,
+        Scenes.End,
+        Scenes.Last_1,
         Scenes.Slides,
+        Scenes.Last_2,
+        Scenes.Slides
     };
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,9 +15,10 @@ public class GameDialogs : MonoBehaviour, IDeactivated
 
     private int dialogNow;
     private int dialogsCount;
-    private int inGameDialogNow;
+    private int currentInGameDialog = -1;
 
     private bool isDialog; // Показывается ли диалог
+    private bool isInGameDialog; // Показывается ли игровой диалог
 
     public delegate void Event();
     private static Event OnEndDialogEvent;
@@ -26,15 +28,19 @@ public class GameDialogs : MonoBehaviour, IDeactivated
 
     public delegate void EventI(int integer);
     public static EventI ShowInGameDialogEvent;
+    public delegate IEnumerator IEventI(int integer);
+    public static IEventI IShowInGameDialogEvent;
 
-    public delegate void EventIE(int integer, Event @event);
-    public static EventIE ShowInGameDialogEventIE;
+    public static event EventI OnNextDialog;
+
+    private Queue<int> inGameDialogsQueue = new Queue<int>();
 
     private void Awake()
     {
         StartDialogEvent = StartDialog;
         ShowInGameDialogEvent = ShowInGameDialog;
-        ShowInGameDialogEventIE = ShowInGameDialogIE;
+        IShowInGameDialogEvent = IShowInGameDialog;
+        _IInGameDialog = IInGameDialog();
     }
 
     private void Update()
@@ -49,8 +55,21 @@ public class GameDialogs : MonoBehaviour, IDeactivated
             {
                 PrevDialog();
             }
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                OnEndDialogEvent();
+                DisableDialog();
+            }
         }
     }
+
+    public void Deactivate()
+    {
+        ClearInGameDialog();
+        DisableDialog();
+    }
+
+    #region StartDialog
 
     private void StartDialog(Event OnEndDialog)
     {
@@ -60,6 +79,7 @@ public class GameDialogs : MonoBehaviour, IDeactivated
         DialogNext.enabled = true;
         isDialog = true;
     }
+
     private void PrevDialog()
     {
         if (dialogNow > 0)
@@ -74,49 +94,91 @@ public class GameDialogs : MonoBehaviour, IDeactivated
         {
             dialogNow += 1;
             UpdateDialogText();
+            OnNextDialog?.Invoke(dialogNow);
         }
         else
         {
-            SetActiveDialog(false);
-            DialogNext.enabled = false;
-            isDialog = false;
+            DisableDialog();
             OnEndDialogEvent();
         }
     }
+
     private void UpdateDialogText()
     {
         SetDialogText(DialogText, Names.names[Dialogs[dialogNow].nameid].textcolor, Dialogs[dialogNow].textsize, Dialogs[dialogNow].prevtext + Names.names[Dialogs[dialogNow].nameid].name + ": " + Dialogs[dialogNow].text);
     }
 
-    #region InGame
 
-    private void ShowInGameDialog(int index) => StartCoroutine(IInGameDialog(index));
-    private IEnumerator IInGameDialog(int index)
+    private void DisableDialog()
     {
-        SetActiveDialog(true);
-        float t = InGameDialogs[index].time;
-        foreach (TextInGame.Dialog dialog in InGameDialogs[index].dialogs)
-        {
-            SetDialogText(DialogText, Names.names[dialog.nameid].textcolor, dialog.textsize, dialog.prevtext + Names.names[dialog.nameid].name + ": " + dialog.text);
-            yield return new WaitForSeconds(t);
-        }
         SetActiveDialog(false);
-    }
-
-
-    private void ShowInGameDialogIE(int index, Event e) => StartCoroutine(IInGameDialogE(index, e));
-    private IEnumerator IInGameDialogE(int index, Event e)
-    {
-        yield return IInGameDialog(index);
-        e();
+        DialogNext.enabled = false;
+        isDialog = false;
+        dialogNow = 0;
     }
 
     #endregion
 
-    private void SetActiveDialog(bool t)
+    #region InGame
+
+    private void ShowInGameDialog(int index) => StartCoroutine(IShowInGameDialog(index));
+    private IEnumerator IShowInGameDialog(int index)
     {
-        BorderImage.enabled = t;
-        DialogText.enabled = t;
+        if (index != currentInGameDialog && !inGameDialogsQueue.Contains(index))
+        {
+            if (isInGameDialog)
+            {
+                inGameDialogsQueue.Enqueue(index);
+            }
+            else
+            {
+                currentInGameDialog = index;
+                _IInGameDialog = IInGameDialog();
+                yield return StartCoroutine(_IInGameDialog);
+            }
+        }
+    }
+
+    private IEnumerator _IInGameDialog;
+    private IEnumerator IInGameDialog()
+    {
+        isInGameDialog = true;
+        SetActiveDialog(true);
+        float t = InGameDialogs[currentInGameDialog].time;
+        foreach (TextInGame.Dialog dialog in InGameDialogs[currentInGameDialog].dialogs)
+        {
+            SetDialogText(DialogText, Names.names[dialog.nameid].textcolor, dialog.textsize, dialog.prevtext + Names.names[dialog.nameid].name + ": " + dialog.text);
+            yield return new WaitForSeconds(t);
+        }
+        if (inGameDialogsQueue.Count > 0)
+        {
+            currentInGameDialog = inGameDialogsQueue.Dequeue();
+            _IInGameDialog = IInGameDialog();
+            StartCoroutine(_IInGameDialog);
+        }
+        else
+        {
+            ClearInGameDialog();
+        }
+    }
+
+    private void ClearInGameDialog()
+    {
+        StopAllCoroutines();
+        currentInGameDialog = -1;
+        inGameDialogsQueue.Clear();
+        isInGameDialog = false;
+        SetActiveDialog(false);
+    }
+
+    #endregion
+
+
+    internal void SetDialogTextAsset(TextInGame textInGame)
+    {
+        Dialogs = textInGame.dialogs;
+        InGameDialogs = textInGame.ingamedialogs;
+        dialogsCount = Dialogs.Length;
     }
 
     private void SetDialogText(Text text, string color, int textsize, string textdialog)
@@ -127,20 +189,9 @@ public class GameDialogs : MonoBehaviour, IDeactivated
         text.text = textdialog;
     }
 
-    internal void SetDialogTextAsset(TextInGame textInGame)
+    private void SetActiveDialog(bool t)
     {
-        Dialogs = textInGame.dialogs;
-        InGameDialogs = textInGame.ingamedialogs;
-        dialogsCount = Dialogs.Length;
-    }
-
-    public void Deactivate()
-    {
-        StopAllCoroutines();
-        SetActiveDialog(false);
-        DialogNext.enabled = false;
-        isDialog = false;
-        dialogNow = 0;
-        inGameDialogNow = 0;
+        BorderImage.enabled = t;
+        DialogText.enabled = t;
     }
 }

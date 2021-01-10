@@ -15,21 +15,51 @@ public static class System_Waypoints
         Points = points.ToArray();
     }
 
+    private static float pointToTargetDistance;
     private static Transform curPoint;
-    private static float d;
-    private static float minDistance;
+    private static Transform curClosePoint;
+    private static float distance;
+    private static float closeDistance;
 
-    internal static Transform GetClosePoint(Transform V3)
+    internal static Transform GetBetterPointInDistance(Transform V3, float minDis)
     {
         curPoint = V3;
-        minDistance = float.MaxValue;
+        closeDistance = 0;
+        distance = float.MaxValue;
         for (int i = 0; i < Points.Length; ++i)
         {
-            d = Vector3.Distance(V3.position, Points[i].position);
-            if (d < minDistance)
+            pointToTargetDistance = Vector3.Distance(V3.position, Points[i].position);
+            if (pointToTargetDistance < distance && pointToTargetDistance > minDis)
             {
                 curPoint = Points[i];
-                minDistance = d;
+                distance = pointToTargetDistance;
+            }
+            if (pointToTargetDistance > closeDistance)
+            {
+                curClosePoint = Points[i];
+                closeDistance = pointToTargetDistance;
+            }
+        }
+        if (curPoint == null)
+        {
+            return curClosePoint;
+        }
+        else
+        {
+            return curPoint;
+        }
+    }
+    internal static Transform GetClosestPoint(Transform V3)
+    {
+        curPoint = V3;
+        distance = float.MaxValue;
+        for (int i = 0; i < Points.Length; ++i)
+        {
+            pointToTargetDistance = Vector3.Distance(V3.position, Points[i].position);
+            if (pointToTargetDistance < distance)
+            {
+                curPoint = Points[i];
+                distance = pointToTargetDistance;
             }
         }
         return curPoint;
@@ -70,6 +100,14 @@ public static class System_Waypoints
         {
             prePointID += 1;
         }
-        return Points[MovePoints[curPointID].Move[prePointID]]; // Отправляем новую точку по новому пути текущей точки
+
+        if (MovePoints[curPointID].Move.Count - 1 < prePointID)
+        {
+            return null;
+        }
+        else
+        {
+            return Points[MovePoints[curPointID].Move[prePointID]]; // Отправляем новую точку по новому пути текущей точки
+        }
     }
 }
