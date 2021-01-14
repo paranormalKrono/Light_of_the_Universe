@@ -9,9 +9,7 @@ public class Main_Origin : MonoBehaviour
     {
         GameManager.Initialize();
 
-        yield return StartCoroutine(GameScreenDark.ITransparentEvent());
         yield return new WaitForSeconds(timeToNextScene);
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
 
         SceneController.LoadNextStoryScene();
 

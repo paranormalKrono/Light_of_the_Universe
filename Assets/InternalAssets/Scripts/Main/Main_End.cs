@@ -49,7 +49,6 @@ public class Main_End : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        GameScreenDark.SetDarkEvent(true);
 
         SceneController.LoadAdditiveScene(sceneLocationName);
         GameText.DeactivateEvent();
@@ -70,9 +69,9 @@ public class Main_End : MonoBehaviour
     {
         systemStarships.InitializeStarshipsTeams(GetComponent<StarshipsSpawnMover>().MoveStarshipsOnSpawns());
 
+        GameAudio.StartAudioEvent(audioClip, 0.125f, true);
         if (!StaticSettings.isRestart)
         {
-            GameAudio.StartAudioEvent(audioClip, 0.25f, true);
 
             playerController.SetLockControl(true);
             playerCamera.SetLockMove(false);
@@ -85,8 +84,6 @@ public class Main_End : MonoBehaviour
             playerController.SetActiveCanvas(false);
 
             Z5animator.SetFloat("Part(speed)", 1);
-
-            StartCoroutine(GameScreenDark.ITransparentEvent());
 
             MoverStartZ2.Move(Z2Starship);
             yield return MoverStartPlayer.IStarshipMove(playerStarship);
@@ -117,8 +114,6 @@ public class Main_End : MonoBehaviour
 
             systemStarships.SetStarshipsFollowEnemy(true);
 
-            StartCoroutine(GameScreenDark.ITransparentEvent());
-
             cruiserAttack.StartAim();
 
             FrigateHealth.SetActive(true);
@@ -135,7 +130,7 @@ public class Main_End : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.N))
             {
-                StartCoroutine(IEndEvent());
+                EndGame();
             }
             if (!isPlayerDead)
             {
@@ -188,8 +183,8 @@ public class Main_End : MonoBehaviour
         isBattle = false;
         playerTrigger.OnPlayerStarshipEnter += EndDialog;
         ExitDoor.Move();
-        yield return GameDialogs.IShowInGameDialogEvent(0);
         Z2StarshipAI.SetTargetAndDestinationToShowPath(PlayerStarshipTr, Destination);
+        yield return GameDialogs.IShowInGameDialogEvent(0);
     }
 
     private void EndDialog() => GameDialogs.ShowInGameDialogEvent(1);
@@ -209,29 +204,17 @@ public class Main_End : MonoBehaviour
         isPlayerDead = true;
         if (!isRestart && !isEnd)
         {
-            StartCoroutine(IRestart());
+            isRestart = true;
+            SceneController.RestartScene();
         }
-    }
-
-    private IEnumerator IRestart()
-    {
-        isRestart = true;
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        SceneController.RestartScene();
     }
 
     private void EndGame()
     {
         if (!isRestart && !isEnd)
         {
-            StartCoroutine(IEndEvent());
+            isEnd = true;
+            SceneController.LoadNextStoryScene();
         }
-    }
-    private IEnumerator IEndEvent()
-    {
-        isEnd = true;
-        GameAudio.StopAudioEvent();
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        SceneController.LoadNextStoryScene();
     }
 }

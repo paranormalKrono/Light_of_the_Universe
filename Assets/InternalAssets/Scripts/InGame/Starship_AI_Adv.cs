@@ -200,7 +200,6 @@ public class Starship_AI_Adv : MonoBehaviour
                 {
                     EnemyTargetV3 = EnemyTarget.position;
 
-                    // ИИ видит цель
                     distanceToEnemy = Vector3.Distance(transform.position, EnemyTargetV3); // Получаем дистанцию до цели
 
                     if (!isFear) // Если не испугался
@@ -208,11 +207,11 @@ public class Starship_AI_Adv : MonoBehaviour
                         UpdatePath(EnemyTargetV3);
                         if (Physics.SphereCast(transform.position, 1, (EnemyTargetV3 - transform.position).normalized, out enemyRaycastHitInfo) && enemyRaycastHitInfo.transform.parent == EnemyTarget)
                         {
-                            LookAt(EnemyPositionConsidetingEverything()); // Поворачиваем корабль в сторону цели, учитывая всё
+                            LookAt(EnemyPositionConsideringEverything()); // Поворачиваем корабль в сторону цели, учитывая всё
 
-                            Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity())));
+                            MoveToTarget();
 
-                            if (isAttack && AngleTo(EnemyPositionConsidetingEverything()) < shootAngle && Vector3.Distance(transform.position, EnemyTargetV3) < attackDistance) // Если ИИ может атаковать, и угол до цели, учитывая всё, меньше угла прицеливания
+                            if (isAttack && AngleTo(EnemyPositionConsideringEverything()) < shootAngle && Vector3.Distance(transform.position, EnemyTargetV3) < attackDistance) // Если ИИ может атаковать, и угол до цели, учитывая всё, меньше угла прицеливания
                             {
                                 Shoot(EnemyTarget); // Стреляем
                             }
@@ -220,7 +219,7 @@ public class Starship_AI_Adv : MonoBehaviour
                         else
                         {
                             LookAt(MoveTargetV3 - MasteryVelocity()); // Поворачиваем корабль в сторону нужного движения
-                            Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity())));
+                            MoveToTarget();
                         }
 
                         if (distanceToEnemy < fearDistance) // Если дистанция до цели меньше минимальной дистанции
@@ -255,14 +254,14 @@ public class Starship_AI_Adv : MonoBehaviour
                     isFindEnemy = distanceToEnemy < lostDistance; // Проверяем видит ли ИИ противника
                     if (!isFindEnemy) // Если ИИ потерял противника
                     {
-                        LostTarget();
+                        LostEnemy();
                     }
                 }
                 else
                 {
                     isTargetMissed = true;
                     isFindEnemy = false;
-                    LostTarget();
+                    LostEnemy();
                 }
             }
         }
@@ -289,7 +288,7 @@ public class Starship_AI_Adv : MonoBehaviour
 
         LookAt(MoveTargetV3 - MasteryVelocity()); // Поворачиваем корабль к точке, учитывая скорость
 
-        Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity()))); // Двигаемся
+        MoveToTarget();// Двигаемся
 
         if (Vector3.Distance(transform.position, NextTarget.position) < leavePointDistance) // Если мы приблизились к точке достаточно близко
         {
@@ -305,7 +304,7 @@ public class Starship_AI_Adv : MonoBehaviour
 
             LookAt(MoveTargetV3 - MasteryVelocity()); // Поворачиваем корабль к точке, учитывая скорость
 
-            Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity()))); // Двигаемся
+            MoveToTarget(); // Двигаемся
         }
         else
         {
@@ -329,7 +328,7 @@ public class Starship_AI_Adv : MonoBehaviour
 
                 LookAt(MoveTargetV3 - MasteryVelocity()); // Поворачиваем корабль к точке, учитывая скорость
 
-                Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity()))); // Двигаемся
+                MoveToTarget();// Двигаемся
             }
 
         }
@@ -339,13 +338,13 @@ public class Starship_AI_Adv : MonoBehaviour
 
             LookAt(MoveTargetV3 - MasteryVelocity()); // Поворачиваем корабль к точке, учитывая скорость
 
-            Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity()))); // Двигаемся
+            MoveToTarget();// Двигаемся
         }
     }
 
     private Vector3 MasteryVelocity() => rb.velocity * MoveToPointVelocityConsideration + rb.velocity * MoveToPointVelocityConsideration * Random.Range(-TerrorAimingKoef, TerrorAimingKoef);
 
-    private void LostTarget()
+    private void LostEnemy()
     {
         FindClosestPoint(); // Находим ближайшую точку
         isFear = false; // Испуг заканчивается
@@ -357,6 +356,8 @@ public class Starship_AI_Adv : MonoBehaviour
 
     // Просто методы
     #region Methods
+
+    private void MoveToTarget() => Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - MasteryVelocity()))); // Двигаемся 
 
     private void Move(float direction) => Engine.Move(direction); // Движение
 
@@ -433,7 +434,9 @@ public class Starship_AI_Adv : MonoBehaviour
 
     private float AngleTo(Vector3 V3) => Vector3.Angle((V3 - transform.position).normalized, RotPointTr.forward); // Угол между направлением к цели и передом корабля
 
-    private Vector3 EnemyPositionConsidetingEverything() => EnemyTargetV3 - MasteryVelocity() + EnemyRb.velocity * (Vector3.Distance(transform.position, EnemyTargetV3 + EnemyRb.velocity) / maxShootSpeed) + EnemyRb.velocity * (Vector3.Distance(transform.position, EnemyTargetV3 + EnemyRb.velocity) / maxShootSpeed) * (1 + Random.Range(-TerrorAimingKoef, TerrorAimingKoef));
+    private Vector3 EnemyPositionConsideringEverything() => EnemyTargetV3 - MasteryVelocity() +
+        EnemyRb.velocity * (Vector3.Distance(transform.position, EnemyTargetV3 + EnemyRb.velocity) / maxShootSpeed) + 
+        EnemyRb.velocity * (Vector3.Distance(transform.position, EnemyTargetV3 + EnemyRb.velocity) / maxShootSpeed) * (1 + Random.Range(-TerrorAimingKoef, TerrorAimingKoef));
 
     #endregion
 

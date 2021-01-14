@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <gametext>
   
   <goals>
@@ -103,25 +105,25 @@
   </ingamedialogs>
   
   <startdialogs>
-    <dialog nameid ="18">
+    <dialog nameid ="22">
       <text>Вот мы и встретились вновь.</text>
     </dialog>
     <dialog id="1" nameid ="5">
       <text>Кто ты?</text>
     </dialog>
-    <dialog nameid ="18">
+    <dialog nameid ="22">
       <text>Ты не помнишь меня?</text>
     </dialog>
     <dialog nameid ="19">
       <prevtext>Новое подключение...</prevtext>
     </dialog>
-    <dialog nameid ="18">
+    <dialog nameid ="22">
       <text>Похоже, ты не один.</text>
     </dialog>
     <dialog id ="5" nameid ="16">
       <text>Назови себя.</text>
     </dialog>
-    <dialog nameid ="18">
+    <dialog nameid ="22">
       <text>Помнишь меня?</text>
     </dialog>
     <dialog id ="7" nameid ="16">

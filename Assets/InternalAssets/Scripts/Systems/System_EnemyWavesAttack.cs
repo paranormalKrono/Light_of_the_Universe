@@ -4,7 +4,7 @@ using UnityEngine;
 public class System_EnemyWavesAttack : MonoBehaviour
 {
     [SerializeField] private System_Starships systemStarships;
-    [SerializeField] private Transform enemySpawn;
+    [SerializeField] private Transform[] enemySpawns;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private int enemyTeamID = 1;
     [SerializeField] private int[] WavesEnemiesCount;
@@ -19,6 +19,8 @@ public class System_EnemyWavesAttack : MonoBehaviour
     public delegate void EventHandler();
     public EventHandler OnWaveEnd;
 
+    private bool isEnded;
+
     public void Initialize()
     {
         if (systemStarships.StarshipsTeams.Count - 1 < enemyTeamID)
@@ -32,6 +34,11 @@ public class System_EnemyWavesAttack : MonoBehaviour
     {
         StopAllCoroutines();
     }
+    public void End()
+    {
+        isEnded = true;
+        StopAllCoroutines();
+    }
     public IEnumerator IStartWave(int waveID, EventHandler OnWaveEnd)
     {
         this.OnWaveEnd = OnWaveEnd;
@@ -40,19 +47,19 @@ public class System_EnemyWavesAttack : MonoBehaviour
         {
             enemiesToCreate -= 1;
             EnemiesCreated += 1;
-            CreateEnemy(enemiesPrefabs[Random.Range(0, enemiesPrefabs.Length)]);
+            CreateEnemy(enemiesPrefabs[Random.Range(0, enemiesPrefabs.Length)], enemySpawns[Random.Range(0, enemySpawns.Length)]);
             yield return new WaitForSeconds(timeBetweenCreatingEnemies);
         }
     }
 
 
-    private Transform CreateEnemy(GameObject enemyPrefab)
+    private Transform CreateEnemy(GameObject enemyPrefab, Transform spawnTr)
     {
         GameObject g = Instantiate(enemyPrefab);
         Starship starship = g.GetComponent<Starship>();
 
-        g.transform.position = enemySpawn.position;
-        starship.RotationPoint.rotation = enemySpawn.rotation;
+        g.transform.position = spawnTr.position;
+        starship.RotationPoint.rotation = spawnTr.rotation;
 
         systemStarships.StarshipsTeams[enemyTeamID].AddStarship(starship);
         starship.SetFollowTarget(playerTransform);
@@ -66,10 +73,13 @@ public class System_EnemyWavesAttack : MonoBehaviour
 
     private void OnEnemyDeath(Transform Tr)
     {
-        EnemiesCreated -= 1;
-        if (EnemiesCreated == 0)
+        if (!isEnded)
         {
-            OnWaveEnd();
+            EnemiesCreated -= 1;
+            if (EnemiesCreated == 0)
+            {
+                OnWaveEnd();
+            }
         }
     }
 }

@@ -15,20 +15,19 @@ public class Event_CruiserAttack : MonoBehaviour
     [SerializeField] private int waveLimit1 = 3;
     [SerializeField] private int waveLimit2 = 7;
     [SerializeField] private int waveLimit3 = 13;
-    [SerializeField] private float hpToNextWave = 5000;
+    [SerializeField] private float hpTo1Level = 5000;
+    [SerializeField] private float hpTo2Level = 10000;
+    [SerializeField] private float hpTo3Level = 10000;
+    [SerializeField] private float WaitingBeforeAttack = 5;
 
     private int waveNow = 0;
     private int turretsAttackCount = 3;
-
-    private bool isOneDeath;
 
     public delegate void EventHandler();
     private EventHandler OnEndAttack;
 
     private void Awake()
     {
-        health1.OnDeath += OnOneDeath;
-        health2.OnDeath += OnOneDeath;
         health1.OnHealthChange += OnHealthChange;
         health2.OnHealthChange += OnHealthChange;
     }
@@ -46,7 +45,7 @@ public class Event_CruiserAttack : MonoBehaviour
         OnEndAttack = @event;
 
         enemyWavesAttack.Initialize();
-        Attack();
+        AttackWithWait();
         NextWave();
     }
 
@@ -54,49 +53,70 @@ public class Event_CruiserAttack : MonoBehaviour
 
     private void OnHealthChange(float nowHp, float maxHp)
     {
-        if (health1.GetHealthNow() + health2.GetHealthNow() < hpToNextWave)
+        maxHp = 0;
+        if (health1 != null)
         {
-            health1.OnHealthChange -= OnHealthChange;
-            health2.OnHealthChange -= OnHealthChange;
+            maxHp += health1.GetHealthNow();
+        }
+        if (health2 != null)
+        {
+            maxHp += health2.GetHealthNow();
+        }
+
+        if (maxHp < hpTo3Level)
+        {
+            hpTo3Level = 0;
             StopAllCoroutines();
 
             waveNow = waveLimit1 + 1;
             NextWave();
 
             turretsAttackCount = 4;
-            timeToNextShoot /= 1.1f;
-            Attack();
+            timeToNextShoot /= 1.05f;
+            AttackWithWait();
         }
-    }
-
-    private void OnOneDeath()
-    {
-        if (isOneDeath)
+        else if (maxHp < hpTo2Level)
         {
-            StopAllCoroutines();
-            for (int i = 0; i < turrets.Length; ++i)
-            {
-                turrets[i].StopAim();
-            }
-            enemyWavesAttack.ResetWave();
-            EndAttack();
-        }
-        else
-        {
+            hpTo2Level = 0;
             StopAllCoroutines();
 
             waveNow = waveLimit2 + 1;
             NextWave();
 
-            turretsAttackCount = 6;
-            timeToNextShoot /= 1.2f;
-            Attack();
+            turretsAttackCount = 5;
+            timeToNextShoot /= 1.1f;
+            AttackWithWait();
+        }
+        else if (maxHp < hpTo3Level)
+        {
+            hpTo3Level = 0;
+            StopAllCoroutines();
 
-            isOneDeath = true;
+            waveNow = waveLimit3 + 1;
+            NextWave();
+
+            turretsAttackCount = 6;
+            timeToNextShoot /= 1.15f;
+            AttackWithWait();
+        }
+        else if (maxHp == 0)
+        {
+            StopAllCoroutines();
+            enemyWavesAttack.End();
+            for (int i = 0; i < turrets.Length; ++i)
+            {
+                turrets[i].StopAim();
+            }
+            EndAttack();
         }
     }
 
-
+    private void AttackWithWait() => StartCoroutine(IAttackWithWait());
+    private IEnumerator IAttackWithWait()
+    {
+        yield return new WaitForSeconds(WaitingBeforeAttack);
+        Attack();
+    }
     private void Attack() => StartCoroutine(IAttack());
     private IEnumerator IAttack()
     {

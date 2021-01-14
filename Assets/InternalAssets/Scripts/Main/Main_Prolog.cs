@@ -19,7 +19,6 @@ public class Main_Prolog : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        GameScreenDark.SetDarkEvent(true);
 
         player_Camera_Controller = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Player_Camera_Controller>();
         player_Starship_Controller = GameObject.FindGameObjectWithTag("Player").GetComponentInParent<Player_Starship_Controller>();
@@ -29,11 +28,8 @@ public class Main_Prolog : MonoBehaviour
         GameText.DeactivateEvent();
         GameText.SetInGameTextNowEvent(textAsset);
 
-        if (!StaticSettings.isRestart)
-        {
-            GameAudio.StartAudioEvent(audioClip, 0.7f, true);
-        }
-        else
+        GameAudio.StartAudioEvent(audioClip, 0.7f, true);
+        if (StaticSettings.isRestart)
         {
             isRestart = true;
             StaticSettings.isRestart = false;
@@ -41,7 +37,7 @@ public class Main_Prolog : MonoBehaviour
 
         EndTrigger.OnPlayerStarshipEnter += OnPlayerStarshipEnterEndTrigger;
     }
-    private IEnumerator Start()
+    private void Start()
     {
         MStart();
         Checkpoint(StaticSettings.checkpointID);
@@ -55,7 +51,6 @@ public class Main_Prolog : MonoBehaviour
             MoverStart.Move(playerStarship);
 
             GameDialogs.StartDialogEvent(EndDialogEvent);
-            yield return StartCoroutine(GameScreenDark.ITransparentEvent());
         }
         else
         {
@@ -65,7 +60,6 @@ public class Main_Prolog : MonoBehaviour
             {
                 MoverStart.ToEndPosition(playerStarship);
             }
-            yield return StartCoroutine(GameScreenDark.ITransparentEvent());
         }
     }
 
@@ -76,10 +70,7 @@ public class Main_Prolog : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.N))
         {
-            if (!isEnd)
-            {
-                StartCoroutine(IEndEvent());
-            }
+            EndEvent();
         }
     }
 
@@ -95,16 +86,10 @@ public class Main_Prolog : MonoBehaviour
     {
         if (!isRestart && !isEnd)
         {
-            StartCoroutine(IEndEvent());
+            isEnd = true;
+            StaticSettings.checkpointID = 0;
+            SceneController.LoadNextStoryScene();
         }
-    }
-    private IEnumerator IEndEvent()
-    {
-        isEnd = true;
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        GameAudio.StopAudioEvent();
-        StaticSettings.checkpointID = 0;
-        SceneController.LoadNextStoryScene();
     }
 
     protected void SetCheckpoint(int checkpointID)
@@ -118,15 +103,10 @@ public class Main_Prolog : MonoBehaviour
     {
         if (!isRestart && !isEnd)
         {
-            StartCoroutine(IRestart());
+            isRestart = true;
+            StaticSettings.isRestart = true;
+            SceneController.RestartScene();
         }
-    }
-    private IEnumerator IRestart()
-    {
-        isRestart = true;
-        StaticSettings.isRestart = true;
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        SceneController.RestartScene();
     }
 
     private void EndDialogEvent()

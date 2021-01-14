@@ -25,7 +25,6 @@ public class Main_Last_2 : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        GameScreenDark.SetDarkEvent(true);
 
         GameText.DeactivateEvent();
         GameText.SetInGameTextNowEvent(textAsset);
@@ -53,8 +52,6 @@ public class Main_Last_2 : MonoBehaviour
         Z2Image.SetActive(true);
 
         GameDialogs.StartDialogEvent(OnStartDialogEnd);
-
-        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void FixedUpdate()
@@ -85,7 +82,6 @@ public class Main_Last_2 : MonoBehaviour
         Z2Image.SetActive(false);
         Z2Health.Kill();
         yield return new WaitForSeconds(timeToEnd);
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         SceneController.LoadNextStoryScene();
     }
 }

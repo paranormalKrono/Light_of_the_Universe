@@ -49,7 +49,7 @@ public class EntityControl : MonoBehaviour, IEntity
             Camera.enabled = true;
 
             yield return StartCoroutine(IMoveCamera(TargetTr.position, TargetTr.rotation));
-            GameMenu.SetGameCursorLock(false);
+            GameMenu.SetGameCursorLock(false, CursorLockMode.None);
             PlayerHand.SetEntityText(endUseDescription);
             isDoingSomething = false;
         }
@@ -64,7 +64,7 @@ public class EntityControl : MonoBehaviour, IEntity
         {
             isDoingSomething = true;
             PlayerHand.SetEntityText("");
-            GameMenu.SetGameCursorLock(true);
+            GameMenu.SetGameCursorLock(true, CursorLockMode.Locked);
             yield return StartCoroutine(IMoveCamera(PlayerCameraTr.position, PlayerCameraTr.rotation));
 
             Camera.enabled = false;

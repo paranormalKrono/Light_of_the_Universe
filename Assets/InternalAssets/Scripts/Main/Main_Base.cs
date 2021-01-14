@@ -19,6 +19,7 @@ public class Main_Base : MonoBehaviour
     [SerializeField] private System_Goals systemGoals;
     [SerializeField] private System_News NewsTextLoader;
     [SerializeField] private AudioClip audioClip;
+    [SerializeField] private ScreenDark screenDark;
 
 
     [SerializeField] private GameObject News;
@@ -38,7 +39,6 @@ public class Main_Base : MonoBehaviour
     void Awake()
     {
         GameManager.Initialize();
-        GameScreenDark.SetDarkEvent(true);
         PlayerCamera.SetSensitivity((float)Settings.Sensitivity / 100);
         Settings.OnSensitivityChanged += OnSensitivityChanged;
 
@@ -112,7 +112,6 @@ public class Main_Base : MonoBehaviour
             UpgradeMenu2.Initialize(PlayerStarshipPrefab2);
         }
         StaticSettings.isCompleteSomething = false;
-        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
 
@@ -122,52 +121,39 @@ public class Main_Base : MonoBehaviour
         if (!isMissionStarted)
         {
             isMissionStarted = true;
-            StartCoroutine(IStartGoal());
+            Settings.OnSensitivityChanged -= OnSensitivityChanged;
+            SceneController.LoadNextStoryScene();
         }
     }
-    private IEnumerator IStartGoal()
-    {
-        GameAudio.StopAudioEvent();
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        GameMenu.SetGameCursorLock(false);
-        Settings.OnSensitivityChanged -= OnSensitivityChanged;
-        SceneController.LoadNextStoryScene();
-    }
 
 
-    public void NextRank() => StartCoroutine(INextRank());
-    private IEnumerator INextRank()
+    private void NextRank()
     {
-        GameAudio.StopAudioEvent();
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         StaticSettings.isCompleteSomething = true;
         Settings.OnSensitivityChanged -= OnSensitivityChanged;
         SceneController.LoadNextStoryScene();
     }
 
 
-    public void NextBar() => StartCoroutine(IBar());
-    private IEnumerator IBar()
+    public void NextBar()
     {
         GameAudio.StopAudioEvent();
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         StaticSettings.isCompleteSomething = true;
         Settings.OnSensitivityChanged -= OnSensitivityChanged;
         SceneController.LoadNextStoryScene();
     }
 
-    
-    public void GoInHangar() => StartCoroutine(IGoInHangar());
+    private void GoInHangar() => StartCoroutine(IGoInHangar());
     private IEnumerator IGoInHangar()
     {
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
+        GameMenu.SetGameCursorLock(true, CursorLockMode.Locked);
+        yield return StartCoroutine(screenDark.IDark());
         Base1.SetActive(false);
         Base2.SetActive(false);
         News.SetActive(false);
         MainCamera.enabled = false;
         Player.gameObject.SetActive(true);
-        GameMenu.SetGameCursorLock(true);
-        StartCoroutine(GameScreenDark.ITransparentEvent());
+        StartCoroutine(screenDark.ITransparent());
     }
 
     private void OnSensitivityChanged(int value) => PlayerCamera.SetSensitivity((float)value / 100);

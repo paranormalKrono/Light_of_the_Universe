@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <names>
   <names>
     <name id="0" name="Бармен" namecolor ="BE382E" textcolor ="9D4F48"></name>
@@ -18,9 +20,10 @@
     <name id="15" name="Письмо" namecolor ="000000" textcolor ="000000"></name>
     <name id="16" name="Zero-?" namecolor ="ff0000" textcolor ="f80000"></name>
     <name id="17" name="Харн" namecolor ="7d7f7d" textcolor ="808080"></name>
-    <name id="18" name="Кто-то" namecolor ="41AED4" textcolor ="41AED4"></name>
+    <name id="18" name="Существо" namecolor ="41AED4" textcolor ="41AED4"></name>
     <name id="19" name="" namecolor ="464451" textcolor ="464451"></name>
     <name id="20" name="Zero-?" namecolor ="41AED4" textcolor ="41AED4"></name>
     <name id="21" name="Z-2" namecolor ="41AED4" textcolor ="41AED4"></name>
+    <name id="22" name="Кто-то" namecolor ="41AED4" textcolor ="41AED4"></name>
   </names>
 </names>

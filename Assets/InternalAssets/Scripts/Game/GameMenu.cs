@@ -50,7 +50,7 @@ public class GameMenu : MonoBehaviour
         mainGameMenu.SetActive(false);
         if (isGameCursorLock)
         {
-            GameCursor.SetCursorLock(true);
+            GameCursor.SetCursorLock(true, CursorLockMode.Locked);
         }
         isMenuOpened = false;
         OnMenuClose?.Invoke();
@@ -60,7 +60,7 @@ public class GameMenu : MonoBehaviour
         SetTimeScale(0);
         isMenuOpened = true;
         mainGameMenu.SetActive(true);
-        GameCursor.SetCursorLock(false);
+        GameCursor.SetCursorLock(false, CursorLockMode.None);
         OnMenuOpen?.Invoke();
     }
     private void SetTimeScale(float f)
@@ -79,7 +79,11 @@ public class GameMenu : MonoBehaviour
         if (!isDoSomething)
         {
             isDoSomething = true;
-            StartCoroutine(IGameLevelRestart());
+            CloseMenu();
+            GameTimer.DeactivateEvent();
+            isDoSomething = false;
+            StaticSettings.checkpointID = 0;
+            SceneController.RestartScene();
         }
     }
 
@@ -88,7 +92,10 @@ public class GameMenu : MonoBehaviour
         if (!isDoSomething)
         {
             isDoSomething = true;
-            StartCoroutine(IGameLevelCheckpointRestart());
+            CloseMenu();
+            GameTimer.DeactivateEvent();
+            isDoSomething = false;
+            SceneController.RestartScene();
         }
     }
 
@@ -97,45 +104,19 @@ public class GameMenu : MonoBehaviour
         if (!isDoSomething)
         {
             isDoSomething = true;
-            StartCoroutine(IGameExit());
+            CloseMenu();
+            GameTimer.DeactivateEvent();
+            isDoSomething = false;
+            SceneController.SceneTransitionTo(Scenes.Menu);
         }
     }
 
-    private IEnumerator IGameLevelRestart()
-    {
-        CloseMenu();
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        GameTimer.DeactivateEvent();
-        isDoSomething = false;
-        StaticSettings.checkpointID = 0;
-        SceneController.RestartScene();
-    }
 
-    private IEnumerator IGameLevelCheckpointRestart()
-    {
-        CloseMenu();
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        GameTimer.DeactivateEvent();
-        isDoSomething = false;
-        SceneController.RestartScene();
-    }
-
-    private IEnumerator IGameExit()
-    {
-        GameAudio.StopAudioEvent();
-        CloseMenu();
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        GameTimer.DeactivateEvent();
-        isDoSomething = false;
-        SceneController.SceneTransitionTo(Scenes.Menu);
-    }
-
-
-    internal static void SetGameCursorLock(bool t)
+    internal static void SetGameCursorLock(bool t, CursorLockMode cursorLockMode)
     {
         if (!isMenuOpened)
         {
-            GameCursor.SetCursorLock(t);
+            GameCursor.SetCursorLock(t, cursorLockMode);
         }
         isGameCursorLock = t;
     }

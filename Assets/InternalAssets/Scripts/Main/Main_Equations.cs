@@ -10,7 +10,6 @@ public class Main_Equations : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        GameScreenDark.SetDarkEvent(true);
         foreach (System_Equation SS in systemEquations)
         {
             SS.gameObject.SetActive(false);
@@ -20,14 +19,13 @@ public class Main_Equations : MonoBehaviour
         systemEquations[id].RightEvent = EquationsRight;
 
         GameMenu.DisactivateGameMenuEvent();
-        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.N))
         {
-            StartCoroutine(IEnd());
+            UIEnd();
         }
     }
     private void EquationsRight()
@@ -36,14 +34,9 @@ public class Main_Equations : MonoBehaviour
     }
     public void UIEnd()
     {
-        StartCoroutine(IEnd());
-    }
-    private IEnumerator IEnd()
-    {
         if (!isEnd)
         {
             isEnd = true;
-            yield return StartCoroutine(GameScreenDark.IDarkEvent());
             SceneController.LoadNextStoryScene();
         }
     }

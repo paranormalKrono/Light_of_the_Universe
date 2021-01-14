@@ -17,7 +17,6 @@ public abstract class Main_Mission : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        GameScreenDark.SetDarkEvent(true);
         SceneController.LoadAdditiveScene(sceneLocationName);
 
         GameText.DeactivateEvent();
@@ -32,10 +31,10 @@ public abstract class Main_Mission : MonoBehaviour
     {
         MStart();
 
+        GameAudio.StartAudioEvent(audioClip, 0.4f, true);
         if (!StaticSettings.isRestart)
         {
             SetGameStop(true);
-            GameAudio.StartAudioEvent(audioClip, 0.4f, true);
             GameDialogs.StartDialogEvent(StartGame);
         }
         else
@@ -44,8 +43,6 @@ public abstract class Main_Mission : MonoBehaviour
             MRestart();
         }
         playerCamera.UpdatePlayerLookPosition();
-
-        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void Update()

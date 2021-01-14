@@ -36,7 +36,6 @@ public class Main_SpaceBattle : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        GameScreenDark.SetDarkEvent(true);
 
         SceneController.LoadAdditiveScene(sceneLocationName);
         GameText.DeactivateEvent();
@@ -59,9 +58,9 @@ public class Main_SpaceBattle : MonoBehaviour
     {
         systemStarships.InitializeStarshipsTeams(GetComponent<StarshipsSpawnMover>().MoveStarshipsOnSpawns());
 
+        GameAudio.StartAudioEvent(audioClip, 0.4f, true);
         if (!StaticSettings.isRestart)
         {
-            GameAudio.StartAudioEvent(audioClip, 0.4f, true);
             SetGameStop(true);
             GameDialogs.StartDialogEvent(StartGame);
         }
@@ -79,8 +78,6 @@ public class Main_SpaceBattle : MonoBehaviour
         systemStarships.SetStarshipsLock(3, true);
         systemStarships.StarshipsTeams[1].OnTeamDevastated += FirstWaveDead;
         systemStarships.StarshipsTeams[2].OnTeamDevastated += SecondWaveDead;
-
-        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void FixedUpdate()
@@ -89,7 +86,7 @@ public class Main_SpaceBattle : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.N))
             {
-                StartCoroutine(IEndEvent());
+                EndGame();
             }
             if (!isPlayerDead)
             {
@@ -199,30 +196,18 @@ public class Main_SpaceBattle : MonoBehaviour
         isPlayerDead = true;
         if (!isRestart && !isEnd)
         {
-            StartCoroutine(IRestart());
+            isRestart = true;
+            SceneController.RestartScene();
         }
-    }
-
-    private IEnumerator IRestart()
-    {
-        isRestart = true;
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        SceneController.RestartScene();
     }
 
     private void EndGame()
     {
         if (!isRestart && !isEnd)
         {
-            StartCoroutine(IEndEvent());
+            isEnd = true;
+            SceneController.LoadNextStoryScene();
         }
-    }
-    private IEnumerator IEndEvent()
-    {
-        isEnd = true;
-        GameAudio.StopAudioEvent();
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        SceneController.LoadNextStoryScene();
     }
 
     private void SetGameStop(bool t)

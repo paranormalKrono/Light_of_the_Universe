@@ -23,7 +23,6 @@ public class Main_Last_1 : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        GameScreenDark.SetDarkEvent(true);
 
         GameText.DeactivateEvent();
         GameText.SetInGameTextNowEvent(textAsset);
@@ -51,8 +50,6 @@ public class Main_Last_1 : MonoBehaviour
         Z2Image.SetActive(true);
 
         GameDialogs.StartDialogEvent(OnStartDialogEnd);
-
-        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void FixedUpdate()
@@ -61,7 +58,7 @@ public class Main_Last_1 : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.N))
             {
-                StartCoroutine(IEndEvent());
+                EndGame();
             }
         }
     }
@@ -72,14 +69,8 @@ public class Main_Last_1 : MonoBehaviour
     {
         if (!isRestart && !isEnd)
         {
-            StartCoroutine(IEndEvent());
+            isEnd = true;
+            SceneController.LoadNextStoryScene();
         }
-    }
-    private IEnumerator IEndEvent()
-    {
-        isEnd = true;
-        GameAudio.StopAudioEvent();
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        SceneController.LoadNextStoryScene();
     }
 }

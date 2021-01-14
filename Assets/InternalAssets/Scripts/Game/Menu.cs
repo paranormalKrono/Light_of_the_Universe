@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 //Меню
@@ -15,7 +14,6 @@ public class Menu : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        GameScreenDark.SetDarkEvent(true);
         GameAudio.StartAudiosEvent(audioClips, true);
         GameMenu.DisactivateGameMenuEvent();
 
@@ -35,26 +33,14 @@ public class Menu : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        StaticSettings.ReInitialize();
-        StartCoroutine(GameScreenDark.ITransparentEvent());
-    }
-
     
     public void StartCompany() // Начало одиночной игры
     {
         if (!isLoading)
         {
-            StartCoroutine(IStartCompany());
+            isLoading = true;
+            SceneController.LoadStory(); // Компания
         }
-    }
-    private IEnumerator IStartCompany() // Начало компании
-    {
-        isLoading = true;
-        GameAudio.StopAudioEvent();
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
-        SceneController.LoadStory(); // Компания
     }
 
     public void LoadAutosave()

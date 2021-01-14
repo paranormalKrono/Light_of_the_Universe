@@ -60,7 +60,6 @@ public static class SceneController
     static private int spaceBaseID;
     static public int SpaceBaseID { get => spaceBaseID; }
 
-    static private bool isSceneLoading;
     static private bool isMenu;
     static public bool IsMenu { get => isMenu; }
 
@@ -79,36 +78,18 @@ public static class SceneController
 
     static public void RestartScene()
     {
-        if (isSceneLoading)
-        {
-            return;
-        }
-        isSceneLoading = true;
-
         StaticSettings.isRestart = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneTransitionTo((Scenes)Enum.Parse(typeof(Scenes), SceneManager.GetActiveScene().name));
     }
 
     static public void LoadStory()
     {
-        if (isSceneLoading)
-        {
-            return;
-        }
-        isSceneLoading = true;
-
         StaticSettings.GameProgress = 0;
         SceneTransitionTo(StoryScenesSequence[0]);
     }
 
     static public void LoadNextStoryScene()
     {
-        if (isSceneLoading)
-        {
-            return;
-        }
-        isSceneLoading = true;
-
         int progress = StaticSettings.GameProgress;
         Scenes currentScene = (Scenes)Enum.Parse(typeof(Scenes), SceneManager.GetActiveScene().name, true);
 
@@ -185,12 +166,6 @@ public static class SceneController
 
     static public void LoadSave()
     {
-        if (isSceneLoading)
-        {
-            return;
-        }
-        isSceneLoading = true;
-
         int progress = StaticSettings.GameProgress;
         DefineRepeatingSceneID(ref slidesID, progress, Scenes.Slides);
         DefineRepeatingSceneID(ref equationsID, progress, Scenes.Equations);
@@ -199,28 +174,42 @@ public static class SceneController
     }
 
 
+
+    static private Scenes sceneToLoad;
     static public void SceneTransitionTo(Scenes scene)
     {
-        GameMenu.SetGameCursorLock(true);
-        if (scene == Scenes.Menu)
+        sceneToLoad = scene;
+        GameMenu.SetGameCursorLock(true, CursorLockMode.None);
+        GameAudio.StopAudioEvent();
+        GameScreenDark.DarkEvent(OnDarkEnd);
+    }
+    static private void OnDarkEnd()
+    {
+        if (sceneToLoad == Scenes.Menu)
         {
             isMenu = true;
+            StaticSettings.ReInitialize();
         }
         else
         {
             isMenu = false;
         }
-        LoadScene(scene);
+
+        LoadScene(sceneToLoad);
     }
+
     static public void OnSceneChanged(Scene scene1, Scene scene2)
     {
-        isSceneLoading = false;
+        GameMenu.SetGameCursorLock(false, CursorLockMode.None);
+        GameScreenDark.TransparentEvent(OnTransparentEnd);
+    }
+    static private void OnTransparentEnd()
+    {
         if (isStoryTransition)
         {
             isStoryTransition = false;
             Saves.CreateAutosaveFile();
         }
-        GameMenu.SetGameCursorLock(false);
     }
 
 

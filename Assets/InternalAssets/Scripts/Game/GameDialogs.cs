@@ -111,10 +111,11 @@ public class GameDialogs : MonoBehaviour, IDeactivated
 
     private void DisableDialog()
     {
-        SetActiveDialog(false);
         DialogNext.enabled = false;
         isDialog = false;
         dialogNow = 0;
+        OnNextDialog = null;
+        SetActiveDialog(false);
     }
 
     #endregion

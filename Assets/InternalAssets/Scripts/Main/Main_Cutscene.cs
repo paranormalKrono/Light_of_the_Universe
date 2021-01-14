@@ -13,7 +13,6 @@ public class Main_Cutscene : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        GameScreenDark.SetDarkEvent(true);
         GameMenu.DisactivateGameMenuEvent();
 
         AnimationBehaviour[] animationBehaviours = characterZ2Animator.GetBehaviours<AnimationBehaviour>();
@@ -23,7 +22,6 @@ public class Main_Cutscene : MonoBehaviour
         characterKainAnimator.GetBehaviour<AnimationBehaviour>().OnStateExitEvent += OnKainShortToDoor;
 
         screenDark.SetDark(false);
-        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void KainSleep()
@@ -47,12 +45,7 @@ public class Main_Cutscene : MonoBehaviour
     private void End()
     {
         characterZ2Animator.gameObject.SetActive(false);
-        StartCoroutine(IEnd());
-    }
-
-    private IEnumerator IEnd()
-    {
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         SceneController.LoadNextStoryScene();
     }
+
 }

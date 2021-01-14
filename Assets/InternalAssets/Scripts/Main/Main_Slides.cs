@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Main_Slides : MonoBehaviour
 {
@@ -9,7 +8,6 @@ public class Main_Slides : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        GameScreenDark.SetDarkEvent(true);
         systemSlides = GetComponentsInChildren<System_Slides>();
         foreach (System_Slides SS in systemSlides)
         {
@@ -21,17 +19,10 @@ public class Main_Slides : MonoBehaviour
         systemSlides[id].EndEvent = EndEvent;
 
         GameMenu.DisactivateGameMenuEvent();
-        StartCoroutine(GameScreenDark.ITransparentEvent());
     }
 
     private void EndEvent()
     {
-        StartCoroutine(IEnd());
-    }
-
-    private IEnumerator IEnd()
-    {
-        yield return StartCoroutine(GameScreenDark.IDarkEvent());
         SceneController.LoadNextStoryScene();
     }
 }
