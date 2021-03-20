@@ -6,6 +6,7 @@ public class Player_Hand : MonoBehaviour
     [SerializeField] private float rayDistance = 3;
     [SerializeField] private Image ImageHand;
     [SerializeField] private Text entityText;
+    [SerializeField] private LayerMask layerMask;
 
     private bool isUsingEntity;
 
@@ -23,7 +24,7 @@ public class Player_Hand : MonoBehaviour
         {
             ray.origin = transform.position;
             ray.direction = transform.forward;
-            if (Physics.Raycast(ray, out raycastHit, rayDistance) && raycastHit.collider.TryGetComponent(out entity))
+            if (Physics.Raycast(ray, out raycastHit, rayDistance, layerMask) && raycastHit.collider.TryGetComponent(out entity))
             {
                 entityText.text = entity.Description;
                 if (Input.GetKeyDown(KeyCode.E))

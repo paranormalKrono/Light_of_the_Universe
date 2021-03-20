@@ -65,6 +65,21 @@ public static class System_Waypoints
         return curPoint;
     }
 
+    internal static Vector3 GetClosestToTargetPointPosition(Vector3 Target)
+    {
+        distance = float.MaxValue;
+        for (int i = 0; i < Points.Length; ++i)
+        {
+            pointToTargetDistance = Vector3.Distance(Target, Points[i].position);
+            if (pointToTargetDistance < distance)
+            {
+                curPoint = Points[i];
+                distance = pointToTargetDistance;
+            }
+        }
+        return curPoint.position;
+    }
+
     internal static Transform GetNextPoint(Transform currentPoint, Transform previousPoint)
     {
         for (curPointID = 0; curPointID < Points.Length; ++curPointID) // Ищем ID текущей точки

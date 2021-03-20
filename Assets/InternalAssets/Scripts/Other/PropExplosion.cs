@@ -13,63 +13,68 @@ public class PropExplosion : MonoBehaviour
     [SerializeField] private Rigidbody propRigidbody;
     [SerializeField] private LayerMask obstacleLayerMask;
 
-    private void OnCollisionEnter(Collision collision)
+    private bool isBlowedUp;
+
+    private void Awake()
     {
-        Force((collision.impulse / Time.fixedDeltaTime).magnitude, true);
+        GetComponent<Prop>().OnForce += Force;
     }
+
     internal void Force(float Force, bool isHit)
     {
         if (Force > minForceToExplosion)
         {
-            BlowUp(isHit);
+            BlowUp();
         }
         else
         {
             minForceToExplosion -= Force / 2;
         }
     }
-    public void BlowUp(bool isHit)
+    public void BlowUp()
     {
-        GameObject bg = Instantiate(BrokenObject, transform.position, transform.rotation);
-        bg.transform.localScale = transform.lossyScale;
-        Rigidbody[] rigidbodies =  bg.GetComponent<Prop>().Rigidbodies;
-
-        for (int i = 0; i < rigidbodies.Length; ++i)
+        if (!isBlowedUp)
         {
-            rigidbodies[i].velocity = propRigidbody.velocity;
-        }
+            isBlowedUp = true;
+            GameObject bg = Instantiate(BrokenObject, transform.position, transform.rotation);
+            bg.transform.localScale = transform.lossyScale;
+            Rigidbody[] rigidbodies = bg.GetComponent<Prop>().Rigidbodies;
 
-        Collider[] allColliders = Physics.OverlapSphere(transform.position, ExplosionRadius);
-        List<Prop> BlownUpProps = new List<Prop>();
-        Prop curProp;
-        PropExplosion propExplosion;
-        Ray ray = new Ray();
-        for (int i = 0; i < allColliders.Length; ++i)
-        {
-            if (isHit)
+            int i, j, t;
+            for (i = 0; i < rigidbodies.Length; ++i)
             {
-                propExplosion = allColliders[i].GetComponentInParent<PropExplosion>();
-                if (propExplosion != null)
-                {
-                    propExplosion.Force(ExplosionForce * (ExplosionRadius / Vector3.Distance(propExplosion.transform.position, transform.position) - 1) * ForceKoef, false);
-                }
+                rigidbodies[i].velocity = propRigidbody.velocity;
             }
-            curProp = allColliders[i].GetComponentInParent<Prop>();
-            if (curProp != null && !BlownUpProps.Contains(curProp))
+
+            Collider[] allColliders = Physics.OverlapSphere(transform.position, ExplosionRadius);
+            List<Prop> BlownUpProps = new List<Prop>();
+            Prop prop;
+            Ray ray = new Ray();
+            Prop[] ps;
+            for (i = 0; i < allColliders.Length; ++i)
             {
-                BlownUpProps.Add(curProp);
-                ray.origin = transform.position;
-                ray.direction = (curProp.transform.position - transform.position).normalized;
-                if (!Physics.Raycast(ray, Vector3.Distance(curProp.transform.position, transform.position), obstacleLayerMask))
+                ps = allColliders[i].GetComponentsInParent<Prop>();
+                for (j = 0; j < ps.Length; ++j)
                 {
-                    curProp.TakeDamage(ExplosionForce * (ExplosionRadius / Vector3.Distance(curProp.transform.position, transform.position) - 1) * DamageKoef);
-                    for (int t = 0; t < curProp.Rigidbodies.Length; ++t)
+                    prop = ps[j];
+                    if (prop != null && !BlownUpProps.Contains(prop))
                     {
-                        curProp.Rigidbodies[t].AddExplosionForce(ExplosionForce + Random.Range(-ExplosionForceMod, ExplosionForceMod), transform.position, ExplosionRadius);
+                        BlownUpProps.Add(prop);
+                        ray.origin = transform.position;
+                        ray.direction = (prop.transform.position - transform.position).normalized;
+                        if (!Physics.Raycast(ray, Vector3.Distance(prop.transform.position, transform.position), obstacleLayerMask))
+                        {
+                            prop.TakeDamage(ExplosionForce * (ExplosionRadius / Vector3.Distance(prop.transform.position, transform.position) - 1) * DamageKoef);
+                            prop.Force(ExplosionForce * (ExplosionRadius / Vector3.Distance(prop.transform.position, transform.position) - 1) * ForceKoef, false);
+                            for (t = 0; t < prop.Rigidbodies.Length; ++t)
+                            {
+                                prop.Rigidbodies[t].AddExplosionForce(ExplosionForce + Random.Range(-ExplosionForceMod, ExplosionForceMod), transform.position, ExplosionRadius);
+                            }
+                        }
                     }
                 }
             }
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
     }
 }

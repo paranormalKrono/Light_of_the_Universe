@@ -14,18 +14,22 @@ public class Bullet : MonoBehaviour
     [SerializeField] private GameObject Boom;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private BulletType bulletType;
+    private float ImpulseToDestroy;
+    private float damageImpulse;
     private float damage;
-
     private float time;
 
-    internal void Initialize(float Damage, Vector3 velocity, Vector3 force, RigidbodyConstraints rigidbodyConstraints)
+    internal void Initialize(float Damage, Vector3 velocity, float force, Vector3 direction, RigidbodyConstraints rigidbodyConstraints)
     {
         damage = Damage;
         rb.constraints = rigidbodyConstraints;
         rb.velocity = velocity;
-        rb.AddForce(force, ForceMode.Impulse);
+        rb.AddForce(force * direction, ForceMode.Impulse);
+        damageImpulse = force;
+        ImpulseToDestroy = damageImpulse / 1.1f;
         StartCoroutine(IDestroy());
     }
+
     private IEnumerator IDestroy()
     {
         while (time < DestroyTime)
@@ -35,15 +39,20 @@ public class Bullet : MonoBehaviour
         }
         Destroy(gameObject);
     }
+
     private void OnCollisionEnter(Collision collision)
     {
         Health health = collision.gameObject.GetComponentInParent<Health>();
         if (health != null)
         {
-            health.TakeDamage(damage);
+            health.TakeDamage(damage * (collision.impulse.magnitude / damageImpulse));
         }
-        Instantiate(Boom, transform.position, transform.rotation);
-        Destroy(gameObject);
+        ImpulseToDestroy -= collision.impulse.magnitude;
+        if (ImpulseToDestroy <= 0)
+        {
+            Instantiate(Boom, transform.position, transform.rotation);
+            Destroy(gameObject);
+        }
     }
 
     public BulletType GetBulletType() => bulletType;

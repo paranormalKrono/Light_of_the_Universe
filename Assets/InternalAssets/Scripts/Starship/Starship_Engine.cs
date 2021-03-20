@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Starship_Engine : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Starship_Engine : MonoBehaviour
     internal event MethodV3 OnSlowDown;
     internal delegate void Method(Vector3 direction);
     internal event Method OnMove;
+    internal delegate void MethodParams(float force, float speedMax, float friction);
+    internal event MethodParams OnParametersChanged;
 
     private bool isLockMove;
 
@@ -37,8 +40,12 @@ public class Starship_Engine : MonoBehaviour
 
     private void MoveForce(Vector3 direction)
     {
-        OnMove?.Invoke(direction);
+        if (moveRigidbody.velocity.magnitude > speedMax)
+        {
+            direction /= (moveRigidbody.velocity.magnitude / speedMax);
+        }
         moveRigidbody.AddForce(direction * Time.fixedDeltaTime * force, ForceMode.Impulse);
+        OnMove?.Invoke(direction);
         moveRigidbody.velocity = Vector3.ClampMagnitude(moveRigidbody.velocity, speedMax);
     }
 
@@ -50,6 +57,7 @@ public class Starship_Engine : MonoBehaviour
 
     internal void SetParameters(float force, float speedMax, float friction)
     {
+        OnParametersChanged?.Invoke(force, speedMax, friction);
         this.force = force;
         this.speedMax = speedMax;
         this.friction = friction;
@@ -64,4 +72,5 @@ public class Starship_Engine : MonoBehaviour
             moveRigidbody.velocity = vector3Zero;
         }
     }
+
 }

@@ -16,14 +16,47 @@
     <dialog nameid ="5">
       <text>Так кто ты?</text>
     </dialog>
-    <dialog nameid ="18">
-      <text>Ты правда меня не помнишь?</text>
+    <dialog nameid ="21">
+      <text>Я - член Совета Z. Вторая.</text>
     </dialog>
     <dialog nameid ="5">
-      <text>Нет.</text>
+      <text>Так ты...</text>
     </dialog>
-    <dialog nameid ="18">
-      <text>Тогда я напомню тебе...</text>
+    <dialog nameid ="21">
+      <text>Да. Я одна из Советников.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Почему ты помогаешь мне?</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Харн попросил меня помочь тебе.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Мой отец?</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Да. Мы познакомились, когда он был ещё совсем юн...</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Подожди, сколько тебе лет?</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Ах да, вы, люди, не знаете.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>...</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>На этом свете я более двух тысяч лет.</text>
+    </dialog>
+    <dialog nameid ="5">
+      <text>Двух тысяч!?</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Да.</text>
+    </dialog>
+    <dialog nameid ="21">
+      <text>Я покажу тебе всё...</text>
     </dialog>
   </startdialogs>
 </gametext>

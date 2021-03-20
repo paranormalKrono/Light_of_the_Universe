@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 
 public class Main_Dialog_2 : Main_Dialog
@@ -14,18 +15,21 @@ public class Main_Dialog_2 : Main_Dialog
 
     private int dialogPart;
 
-    protected override void bAwake()
+    private IEnumerator Start()
     {
+        yield return null;
         system_dialogs.gameObject.SetActive(false);
     }
 
+
     public void StartDialog()
     {
-        system_dialogs.OnNextPage += OnNextPage;
+        system_dialogs.OnNextNode += OnNextPage;
         system_dialogs.gameObject.SetActive(true);
+        dialogCanvas.Open();
     }
 
-    private void OnNextPage()
+    private void OnNextPage(int curNode)
     {
         if (dialogPart == dialogPart1)
         {

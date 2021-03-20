@@ -17,7 +17,7 @@
     <ingamedialog time="7">
       <dialogs>
         <dialog nameid ="4">
-          <text>Постреляйте все мишени, поворачивая корабль в нужном направлении.</text>
+          <text>Постреляйте все мишени.</text>
         </dialog>
       </dialogs>
     </ingamedialog>
@@ -33,6 +33,15 @@
         <dialog nameid ="4">
           <text>Вы добрались до арены. Уничтожьте всех противников, чтобы пройти дальше.</text>
         </dialog>
+        <dialog nameid ="4">
+          <text>Не забывайте маневрировать и использовать разные режимы полёта.</text>
+        </dialog>
+        <dialog nameid ="4">
+          <text>А также теперь у вас есть режим полёта - "Блокада".</text>
+        </dialog>
+        <dialog nameid ="4">
+          <text>Он закрепит вас и позволит стрелять в противника из одного положения.</text>
+        </dialog>
       </dialogs>
     </ingamedialog>
     <ingamedialog time="6">
@@ -42,13 +51,10 @@
         </dialog>
       </dialogs>
     </ingamedialog>
-    <ingamedialog time="8">
+    <ingamedialog time="7">
       <dialogs>
         <dialog nameid ="4">
           <text>Раньше прямо здесь был большой склад с вооружением.</text>
-        </dialog>
-        <dialog nameid ="4">
-          <text>Устарело и было переработано.</text>
         </dialog>
       </dialogs>
     </ingamedialog>
@@ -59,7 +65,7 @@
         </dialog>
       </dialogs>
     </ingamedialog>
-    <ingamedialog time="5">
+    <ingamedialog time="7">
       <dialogs>
         <dialog nameid ="4">
           <text>Связь пропадает. Ты... шш влет... шшшШ ШШшш куб... шшШШш</text>
@@ -114,7 +120,13 @@
       <text>Ваше обучение будет ускорено и вскоре вы сможете отправиться в космическое путешествие! Поздравляем!</text>
     </dialog>
     <dialog nameid ="4">
-      <text>Совет, перспективный пилот, космическое путешествие. Что за бред? Пора это выбросить. Готов?</text>
+      <text>Совет, перспективный пилот, космическое путешествие. Что за бред? Пора это выбросить.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Теперь у тебя есть четвёртый режим полёта, разберём позднее.</text>
+    </dialog>
+    <dialog nameid ="4">
+      <text>Готов?</text>
     </dialog>
     <dialog nameid ="5">
       <text>Да.</text>

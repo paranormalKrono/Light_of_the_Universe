@@ -13,8 +13,6 @@ public class GameSavesMenu : MonoBehaviour
     [SerializeField] private Button DeleteSaveButton;
     [SerializeField] private Button LoadSaveButton;
 
-    [SerializeField] private float timeToDeselect = 0.2f;
-
     private DateTime selectedSaveDateTime;
     private SaveCell selectedSaveCell;
     private bool isSelected;

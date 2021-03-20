@@ -39,14 +39,13 @@ public class StarshipMover : MonoBehaviour
 
     public IEnumerator IStarshipMoveLine(Starship starship)
     {
-
         Starship_Engine starship_Engine = starship.GetComponent<Starship_Engine>();
         Starship_RotationEngine starship_RotationEngine = starship.GetComponent<Starship_RotationEngine>();
         Rigidbody rigidbody = starship.GetComponent<Rigidbody>();
 
         OnStartMove?.Invoke();
         starship_Engine.SetLockMove(false);
-        while (Vector3.Distance(starship.transform.position, endTr.position) > 1f)
+        while (starship != null && Vector3.Distance(starship.transform.position, endTr.position) > 1f)
         {
             starship_RotationEngine.RotateToTargetWithPlaneLimiter(starship.transform.position + endTr.forward);
 
@@ -54,7 +53,10 @@ public class StarshipMover : MonoBehaviour
 
             yield return new WaitForFixedUpdate();
         }
-        starship_Engine.SetLockMove(true);
+        if (starship != null)
+        {
+            starship_Engine.SetLockMove(true);
+        }
         OnEndMove?.Invoke();
     }
 

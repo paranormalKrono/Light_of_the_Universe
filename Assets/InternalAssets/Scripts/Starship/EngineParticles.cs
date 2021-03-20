@@ -8,6 +8,8 @@ public class EngineParticles : MonoBehaviour
 
     private float startSpeed;
     private float startSize;
+    private float startForce;
+    private float curForce;
 
     private void Awake()
     {
@@ -16,14 +18,24 @@ public class EngineParticles : MonoBehaviour
         ParticleSystemModule = ParticleSystem.main;
         Engine.OnMove += Engine_OnMove;
         Engine.OnSlowDown += Engine_OnSlowDown;
+        Engine.OnParametersChanged += Engine_OnParametersChanged;
         ParticleSystemModule.startSpeed = 0;
         ParticleSystemModule.startSize = 0;
+    }
+    private void Start()
+    {
+        startForce = Engine.force;
+        curForce = startForce;
     }
 
     private void Engine_OnMove(Vector3 direction)
     {
-        ParticleSystemModule.startSpeed = startSpeed * direction.magnitude;
-        ParticleSystemModule.startSize = startSize * direction.magnitude;
+        ParticleSystemModule.startSpeed = startSpeed * ((curForce / startForce - 1) / 2 + 1) * direction.magnitude;
+        ParticleSystemModule.startSize = startSize * ((curForce / startForce - 1) / 2 + 1) * direction.magnitude;
+    }
+    private void Engine_OnParametersChanged(float force, float speedMax, float friction)
+    {
+        curForce = force;
     }
     private void Engine_OnSlowDown()
     {

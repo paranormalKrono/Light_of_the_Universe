@@ -5,11 +5,13 @@ public class GunRocket : MonoBehaviour, IGun
     [SerializeField] private GameObject prefab;
     [SerializeField] private AudioSource audioSource;
 
+    private Transform target;
+
     private Collider[] colliders;
 
     private Vector3 vector3Zero = Vector3.zero;
 
-    private void Shoot(Vector3 velocity, Transform Target, out Vector3 shootReverseForce)
+    private void Shoot(Vector3 velocity, out Vector3 shootReverseForce)
     {
         GameObject g = Instantiate(prefab, transform.position, transform.rotation);
         Collider collider = g.GetComponentInChildren<Collider>();
@@ -20,7 +22,7 @@ public class GunRocket : MonoBehaviour, IGun
 
         shootReverseForce = vector3Zero;
 
-        g.GetComponent<Rocket>().Initialise(Target);
+        g.GetComponent<Rocket>().Initialise(target);
 
         audioSource.Play();
     }
@@ -30,4 +32,6 @@ public class GunRocket : MonoBehaviour, IGun
         colliders = ChildrenColliders;
         shoot = Shoot;
     }
+
+    public void SetTarget(Transform Target) => target = Target;
 }

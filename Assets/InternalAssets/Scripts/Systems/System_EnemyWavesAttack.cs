@@ -53,7 +53,7 @@ public class System_EnemyWavesAttack : MonoBehaviour
     }
 
 
-    private Transform CreateEnemy(GameObject enemyPrefab, Transform spawnTr)
+    private void CreateEnemy(GameObject enemyPrefab, Transform spawnTr)
     {
         GameObject g = Instantiate(enemyPrefab);
         Starship starship = g.GetComponent<Starship>();
@@ -67,8 +67,6 @@ public class System_EnemyWavesAttack : MonoBehaviour
         starship.SetFollowEnemy(true);
         starship.DeathEvent += OnEnemyDeath;
         starship.SetLockControl(false);
-
-        return g.transform;
     }
 
     private void OnEnemyDeath(Transform Tr)

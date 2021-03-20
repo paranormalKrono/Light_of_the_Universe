@@ -16,7 +16,7 @@
     <name id="11" name="Чужой наставник" textcolor ="B90010"></name>
     <name id="12" name="Кто-то" namecolor ="7d7f7d" textcolor ="7d7f7d"></name>
     <name id="13" name="Командующий крейсера &quot;Восток&quot;" textcolor ="F75216"></name>
-    <name id="14" name="Пират" textcolor ="C5D0E6"></name>
+    <name id="14" name="Кто-то" textcolor ="C5D0E6"></name>
     <name id="15" name="Письмо" namecolor ="000000" textcolor ="000000"></name>
     <name id="16" name="Zero-?" namecolor ="ff0000" textcolor ="f80000"></name>
     <name id="17" name="Харн" namecolor ="7d7f7d" textcolor ="808080"></name>
@@ -25,5 +25,10 @@
     <name id="20" name="Zero-?" namecolor ="41AED4" textcolor ="41AED4"></name>
     <name id="21" name="Z-2" namecolor ="41AED4" textcolor ="41AED4"></name>
     <name id="22" name="Кто-то" namecolor ="41AED4" textcolor ="41AED4"></name>
+    <name id="23" name="Z-1" namecolor ="464451" textcolor ="464451"></name>
+    <name id="24" name="Флот Дельта" namecolor ="FF2400" textcolor ="FF2400"></name>
+    <name id="25" name="Флот Дельта" namecolor ="3F888F" textcolor ="3F888F"></name>
+    <name id="26" name="Флот Дельта" namecolor ="A5260A" textcolor ="A5260A"></name>
+    <name id="27" name="Флот Дельта, чужой голос" namecolor ="45161C" textcolor ="45161C"></name>
   </names>
 </names>

@@ -8,21 +8,21 @@
 
 
   <ingamedialogs>
-    <ingamedialog time="8">
+    <ingamedialog time="10">
       <dialogs>
         <dialog nameid ="4">
-          <text>Постарайтесь не врезаться. На высокой скорости можно разбиться.</text>
+          <text>Раньше я бы сказал: не врезаться! Но теперь - корабли неуязвимы к ударам, так что врезайся наздоровье.</text>
         </dialog>
       </dialogs>
     </ingamedialog>
-    <ingamedialog time="5">
+    <ingamedialog time="6">
       <dialogs>
         <dialog nameid ="4">
           <text>Неплохо, по сравнению с другими...</text>
         </dialog>
       </dialogs>
     </ingamedialog>
-    <ingamedialog time="8">
+    <ingamedialog time="9">
       <dialogs>
         <dialog nameid ="4">
           <text>Там был контейнер с Help!? Вы же не выстрелили в него, да?</text>

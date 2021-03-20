@@ -55,8 +55,6 @@ public class Main_Space_TimeRace : Main_Mission
 
         yield return new WaitForSeconds(3);
 
-        GameTimer.DeactivateEvent();
-
         GameWinLose.DisactivateTextEvent();
         GameReward.HideRewardEvent();
 

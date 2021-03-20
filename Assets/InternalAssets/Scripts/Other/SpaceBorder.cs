@@ -28,7 +28,14 @@ public class SpaceBorder : MonoBehaviour
     {
         if (isActive)
         {
-            PlayerStarshipRb.AddForce(transform.forward * dropMoveForce * Time.fixedDeltaTime, ForceMode.Impulse);
+            if (PlayerStarshipRb != null)
+            {
+                PlayerStarshipRb.AddForce(transform.forward * dropMoveForce * Time.fixedDeltaTime, ForceMode.Impulse);
+            }
+            else
+            {
+                isActive = false;
+            }
         }
     }
 }

@@ -7,8 +7,11 @@ public class StarshipDead : MonoBehaviour
     [SerializeField] private Rigidbody starshipPositionRb;
     [SerializeField] private Rigidbody starshipRotationRb;
     [SerializeField] private RigidbodyConstraints rigidbodyConstraints;
-    void Start()
+    [SerializeField] private Prop starshipProp;
+
+    private void Start()
     {
+        starshipProp.isDisabled = true;
         GetComponent<Health>().OnDeath += Dead;
     }
     private void Dead()
@@ -21,5 +24,9 @@ public class StarshipDead : MonoBehaviour
         Rb.mass = starshipRotationRb.mass;
         Rb.angularVelocity = starshipRotationRb.angularVelocity;
         Rb.constraints = rigidbodyConstraints;
+        Rigidbody[] rb = new Rigidbody[1];
+        rb[0] = Rb;
+        starshipProp.SetRigidbodies(rb);
+        starshipProp.isDisabled = false;
     }
 }

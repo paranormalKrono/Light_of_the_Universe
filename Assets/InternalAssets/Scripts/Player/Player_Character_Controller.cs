@@ -5,9 +5,9 @@ public class Player_Character_Controller : MonoBehaviour
 {
 
     //Параметры
-    [SerializeField] private float StepSpeed = 3.0f;      // Скорость ходьбы
-    [SerializeField] private float RunSpeed = 5.0f;       // Скорость бега
-    [SerializeField] private float JumpSpeed = 3;         // Скорость прыжка
+    [SerializeField] public float StepSpeed = 3.0f;      // Скорость ходьбы
+    [SerializeField] public float RunSpeed = 5.0f;       // Скорость бега
+    [SerializeField] public float JumpSpeed = 3;         // Скорость прыжка
     [SerializeField] private float JumpToJumpTime = 1;    // Время от прыжка до прыжка
     [SerializeField] private float gravity = 1;           // Гравитация
 

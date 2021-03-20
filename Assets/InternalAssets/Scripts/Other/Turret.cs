@@ -79,7 +79,8 @@ public class Turret : MonoBehaviour
         for (int i = 0; i < gunsCount; ++i)
         {
             yield return new WaitForSeconds(Random.Range(0, 0.2f));
-            yield return IShoot(target);
+            guns.SetTarget(target);
+            yield return IShoot();
         }
         isAttack = false;
     }

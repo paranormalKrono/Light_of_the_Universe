@@ -9,7 +9,6 @@ public class SpecificGameobjectTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
         if (other.gameObject == SpecificObject)
         {
             OnSpecificObjectEnter?.Invoke();

@@ -82,8 +82,6 @@ public class Main_Space_Race : Main_Mission
         GameWinLose.DisactivateTextEvent();
         GameReward.HideRewardEvent();
 
-        GameTimer.DeactivateEvent();
-
         SceneController.LoadNextStoryScene();
     }
 

@@ -87,9 +87,9 @@ public class Event_CruiserAttack : MonoBehaviour
             timeToNextShoot /= 1.1f;
             AttackWithWait();
         }
-        else if (maxHp < hpTo3Level)
+        else if (maxHp < hpTo1Level)
         {
-            hpTo3Level = 0;
+            hpTo1Level = 0;
             StopAllCoroutines();
 
             waveNow = waveLimit3 + 1;

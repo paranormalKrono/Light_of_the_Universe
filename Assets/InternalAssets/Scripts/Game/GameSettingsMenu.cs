@@ -22,11 +22,9 @@ public class GameSettingsMenu : MonoBehaviour
 	[SerializeField] private Button buttonConfirm;
 	[SerializeField] private Button buttonSave;
 
-	[SerializeField] private AudioMixer AudioMixer;
-
 	private bool isNormallyLoaded;
 
-	private void Awake()
+	public void Initialise()
 	{
 		if (Settings.TryLoad())
 		{
@@ -146,14 +144,17 @@ public class GameSettingsMenu : MonoBehaviour
 
 		for (int i = 0; i < SettingsMixerVolumes.Length; ++i)
 		{
-			SettingsMixerVolumes[i].ResetValues(AudioMixer);
+			SettingsMixerVolumes[i].ResetValues(GameAudio.GetAudioMixerEvent());
 		}
 
 	}
 
 	public void ApplySettings()
 	{
-		Screen.SetResolution(Screen.resolutions[Settings.resolution].width, Screen.resolutions[Settings.resolution].height, (FullScreenMode)Settings.fullScreenMode, Screen.resolutions[Settings.resolution].refreshRate);
+		if (Settings.resolution < Screen.resolutions.Length)
+		{
+			Screen.SetResolution(Screen.resolutions[Settings.resolution].width, Screen.resolutions[Settings.resolution].height, (FullScreenMode)Settings.fullScreenMode, Screen.resolutions[Settings.resolution].refreshRate);
+		}
 		QualitySettings.masterTextureLimit = Settings.textureQuality;
 		QualitySettings.vSyncCount = Settings.vSyncCount;
 		QualitySettings.antiAliasing = Settings.antiAliasing;
@@ -171,7 +172,7 @@ public class GameSettingsMenu : MonoBehaviour
 		{
 			parameter = SettingsMixerVolumes[i].GetParameter();
 
-			AudioMixer.GetFloat(parameter.ToString(), out mixerVolume);
+			mixerVolume = GameAudio.GetMixerVolumeEvent(parameter);
 			
 			Settings.volumes[(int)parameter] = (int)MixerToPlayerVolume(mixerVolume);
 		}
@@ -186,7 +187,7 @@ public class GameSettingsMenu : MonoBehaviour
 
 			parameterVolume = PlayerToMixerVolume(Settings.volumes[(int)parameter]);
 
-			AudioMixer.SetFloat(parameter.ToString(), parameterVolume);
+			GameAudio.SetMixerVolumeEvent(parameter, parameterVolume);
 		}
 	}
 

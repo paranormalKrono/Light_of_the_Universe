@@ -130,6 +130,14 @@ public class GameDialogs : MonoBehaviour, IDeactivated
             if (isInGameDialog)
             {
                 inGameDialogsQueue.Enqueue(index);
+                while (currentInGameDialog != index)
+                {
+                    yield return null;
+                }
+                while (currentInGameDialog == index)
+                {
+                    yield return null;
+                }
             }
             else
             {
@@ -148,7 +156,14 @@ public class GameDialogs : MonoBehaviour, IDeactivated
         float t = InGameDialogs[currentInGameDialog].time;
         foreach (TextInGame.Dialog dialog in InGameDialogs[currentInGameDialog].dialogs)
         {
-            SetDialogText(DialogText, Names.names[dialog.nameid].textcolor, dialog.textsize, dialog.prevtext + Names.names[dialog.nameid].name + ": " + dialog.text);
+            if (Names.names[dialog.nameid].name == "")
+            {
+                SetDialogText(DialogText, Names.names[dialog.nameid].textcolor, dialog.textsize, dialog.prevtext + dialog.text);
+            }
+            else
+            {
+                SetDialogText(DialogText, Names.names[dialog.nameid].textcolor, dialog.textsize, dialog.prevtext + Names.names[dialog.nameid].name + ": " + dialog.text);
+            }
             yield return new WaitForSeconds(t);
         }
         if (inGameDialogsQueue.Count > 0)

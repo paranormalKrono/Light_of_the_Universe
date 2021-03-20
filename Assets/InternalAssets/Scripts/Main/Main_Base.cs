@@ -5,6 +5,7 @@ public class Main_Base : MonoBehaviour
 {
 
     [SerializeField] private int nextRankNextMissionStage;
+    [SerializeField] private int endMissionStage;
     [SerializeField] private Player_Character_Controller Player;
     [SerializeField] private Character_Camera_Controller PlayerCamera;
     [SerializeField] private Camera MainCamera;
@@ -31,12 +32,18 @@ public class Main_Base : MonoBehaviour
     [SerializeField] private Color Base1Color;
     [SerializeField] private Color Base2Color;
 
+    [SerializeField] private float timeToFade;
+    [SerializeField] private GameObject Z2Scene;
+    [SerializeField] private Animator Z2Animator;
+    [SerializeField] private CameraFader cameraFader;
+    [SerializeField] private Player_Character_Trigger playerTrigger;
+
     private bool isMissionStarted;
 
     private int nextRankStatus;
 
 
-    void Awake()
+    private void Awake()
     {
         GameManager.Initialize();
         PlayerCamera.SetSensitivity((float)Settings.Sensitivity / 100);
@@ -56,6 +63,13 @@ public class Main_Base : MonoBehaviour
         else
         {
             nextRankStatus = 1;
+        }
+
+        if (SceneController.GetNextMissionStage() == endMissionStage)
+        {
+            Z2Scene.SetActive(true);
+            cameraFader.gameObject.SetActive(true);
+            playerTrigger.OnPlayerEnter += Z2SceneStart;
         }
 
         if (nextRankStatus == -1 || nextRankStatus == 0 && !StaticSettings.isCompleteSomething)
@@ -114,7 +128,29 @@ public class Main_Base : MonoBehaviour
         StaticSettings.isCompleteSomething = false;
     }
 
+    private void Z2SceneStart()
+    {
+        playerTrigger.OnPlayerEnter -= Z2SceneStart;
+        Z2Animator.SetFloat(Z2Animator.GetParameter(0).name, 1);
+        StartCoroutine(IZ2Scene());
+    }
 
+    private IEnumerator IZ2Scene()
+    {
+        float stepSpeed = Player.StepSpeed;
+        float runSpeed = Player.RunSpeed;
+        float jumpSpeed = Player.JumpSpeed;
+        Player.StepSpeed = 0.2f;
+        Player.RunSpeed = 0.4f;
+        Player.JumpSpeed = 0;
+        yield return new WaitForSeconds(timeToFade);
+        yield return StartCoroutine(cameraFader._IFade());
+        Player.StepSpeed = stepSpeed;
+        Player.RunSpeed = runSpeed;
+        Player.JumpSpeed = jumpSpeed;
+        Z2Scene.SetActive(false);
+        cameraFader.gameObject.SetActive(false);
+    }
 
     public void StartMission()
     {

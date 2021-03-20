@@ -68,12 +68,12 @@ public class Rocket : MonoBehaviour
         {
             yield return new WaitForFixedUpdate();
         }
-        propExplosion.BlowUp(false);
+        propExplosion.BlowUp();
     }
     private IEnumerator IDestroy()
     {
         yield return new WaitForSeconds(timeToDestroy);
-        propExplosion.BlowUp(false);
+        propExplosion.BlowUp();
     }
 
     private float GetAngleToTarget() => Vector3.Angle((target - transform.position).normalized, transform.forward);

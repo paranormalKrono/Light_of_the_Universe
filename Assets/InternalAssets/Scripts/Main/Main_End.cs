@@ -31,6 +31,9 @@ public class Main_End : MonoBehaviour
     [SerializeField] private Door ExitDoor;
     [SerializeField] private GameObject FrigateHealth;
 
+    [SerializeField] private GameObject Z2_Scene;
+    [SerializeField] private GameObject Z5_Scene;
+
 
     private System_Starships systemStarships;
     private Player_Starship_Controller playerController;
@@ -83,10 +86,14 @@ public class Main_End : MonoBehaviour
 
             playerController.SetActiveCanvas(false);
 
+            MoverStartZ2.Move(Z2Starship);
+
+            Z5_Scene.SetActive(true);
+            Z2_Scene.SetActive(true);
             Z5animator.SetFloat("Part(speed)", 1);
 
-            MoverStartZ2.Move(Z2Starship);
             yield return MoverStartPlayer.IStarshipMove(playerStarship);
+
 
             cruiserAttack.StartAim();
 
@@ -152,6 +159,7 @@ public class Main_End : MonoBehaviour
             if (dialogProgress == 8)
             {
                 Z5Image.SetActive(false);
+                Z5_Scene.SetActive(false);
             }
             if (dialogProgress == 14)
             {
@@ -164,6 +172,8 @@ public class Main_End : MonoBehaviour
     {
         Z2Image.SetActive(false);
         Z5Image.SetActive(false);
+        Z2_Scene.SetActive(false);
+        Z5_Scene.SetActive(false);
         FrigateHealth.SetActive(true);
         playerController.SetActiveCanvas(true);
         playerCamera.DisableTargetMove();

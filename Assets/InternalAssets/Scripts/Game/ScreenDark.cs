@@ -9,8 +9,6 @@ public class ScreenDark : MonoBehaviour
 
     private bool isWorking;
 
-    private Color colorBlack = Color.black;
-    private Color colorClear = Color.clear;
     private Color tempColor;
 
     public delegate IEnumerator IEnumeratorHandler();
@@ -22,7 +20,7 @@ public class ScreenDark : MonoBehaviour
 
     internal void SetDark(bool t)
     {
-        ImageDark.color = t ? colorBlack : colorClear;
+        ImageDark.color = t ? Color.black : Color.clear;
     }
 
 
@@ -65,7 +63,7 @@ public class ScreenDark : MonoBehaviour
             ImageDark.color = tempColor;
             yield return null;
         }
-        ImageDark.color = colorBlack;
+        ImageDark.color = Color.black;
         yield return new WaitForSeconds(timeToDark);
     }
     private IEnumerator _ITranparent()
@@ -77,7 +75,7 @@ public class ScreenDark : MonoBehaviour
             ImageDark.color = tempColor;
             yield return null;
         }
-        ImageDark.color = colorClear;
+        ImageDark.color = Color.clear;
         yield return new WaitForSeconds(timeToDark);
     }
 

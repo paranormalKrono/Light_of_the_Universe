@@ -8,6 +8,7 @@ public class Starship : MonoBehaviour
     public delegate void EventBoolHandler(bool b);
     public EventBoolHandler SetFollowEnemy;
     public EventBoolHandler SetLockControl;
+    public EventBoolHandler LostControl;
     public EventBoolHandler SetAttack;
 
     public delegate void EventTransformHandler(Transform Tr);

@@ -21,6 +21,7 @@ public class GameTimer : MonoBehaviour, IDeactivated
     public delegate void EventFE(float time, Event OnTimerEndEvent);
     public static EventFE StartDecreasingTimerEvent;
 
+    private bool isActive;
 
     private void Awake()
     {
@@ -39,13 +40,27 @@ public class GameTimer : MonoBehaviour, IDeactivated
 
     private void StartDecreasingTimer(float time, Event OnTimerEndEvent)
     {
-        StopTimer();
+        if (!isActive)
+        {
+            SetTimerEnabled(true);
+        }
+        else
+        {
+            StopTimer();
+        }
         OnTimerEnd = OnTimerEndEvent;
         StartCoroutine(TimerDecreasing(time));
     }
     private void StartIncreasingTimer()
     {
-        StopTimer();
+        if (!isActive)
+        {
+            SetTimerEnabled(true);
+        }
+        else
+        {
+            StopTimer();
+        }
         StartCoroutine(TimerIncreasing());
     }
 
@@ -93,23 +108,22 @@ public class GameTimer : MonoBehaviour, IDeactivated
         }
     }
 
+    private void StopTimer() => StopAllCoroutines();
+    public void Deactivate()
+    {
+        StopTimer();
+        SetTimerEnabled(false);
+        isActive = false;
+    }
+    private void SetTimerEnabled(bool t)
+    {
+        isActive = t;
+        Timer.SetActive(t);
+    }
 
     private void SetTimer(float time)
     {
         timeText = ((time - time % 60) / 60).ToString("00") + ":" + (time % 60 - time % 1).ToString("00");
         TimerText.text = timeText;
     }
-
-
-
-    private void StopTimer()
-    {
-        StopAllCoroutines();
-    }
-    public void Deactivate()
-    {
-        StopAllCoroutines();
-        SetTimerEnabled(false);
-    }
-    private void SetTimerEnabled(bool t) => Timer.SetActive(t);
 }

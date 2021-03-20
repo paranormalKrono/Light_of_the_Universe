@@ -8,6 +8,7 @@ public class Main_Last_2 : MonoBehaviour
 
     [SerializeField] private Starship_AI_Adv Z2StarshipAI;
     [SerializeField] private Health Z2Health;
+    [SerializeField] private Animator Z2Animator;
 
     [SerializeField] private GameObject Z2Image;
     [SerializeField] private Transform Target;
@@ -51,6 +52,7 @@ public class Main_Last_2 : MonoBehaviour
 
         Z2Image.SetActive(true);
 
+        GameDialogs.OnNextDialog += OnNextDialog;
         GameDialogs.StartDialogEvent(OnStartDialogEnd);
     }
 
@@ -61,6 +63,39 @@ public class Main_Last_2 : MonoBehaviour
             if (Input.GetKey(KeyCode.N))
             {
                 StartCoroutine(IEndEvent());
+            }
+        }
+    }
+
+    private int dialogProgress;
+    private void OnNextDialog(int dialogNow)
+    {
+        if (dialogNow > dialogProgress)
+        {
+            dialogProgress = dialogNow;
+            switch (dialogNow)
+            {
+                case 2:
+                    Z2Animator.SetInteger("Part", 1);
+                    break;
+                case 11:
+                    Z2Animator.SetInteger("Part", 2);
+                    break;
+                case 12:
+                    Z2Animator.SetInteger("Part", 3);
+                    break;
+                case 14:
+                    Z2Animator.SetInteger("Part", 4);
+                    break;
+                case 18:
+                    Z2Animator.SetInteger("Part", 5);
+                    break;
+                case 25:
+                    Z2Animator.SetInteger("Part", 6);
+                    break;
+                case 27:
+                    Z2Image.SetActive(false);
+                    break;
             }
         }
     }
@@ -79,7 +114,6 @@ public class Main_Last_2 : MonoBehaviour
         isEnd = true;
         playerController.SetLockControl(false);
         GameAudio.StopAudioEvent();
-        Z2Image.SetActive(false);
         Z2Health.Kill();
         yield return new WaitForSeconds(timeToEnd);
         SceneController.LoadNextStoryScene();

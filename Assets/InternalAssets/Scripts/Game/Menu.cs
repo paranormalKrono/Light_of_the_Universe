@@ -14,7 +14,7 @@ public class Menu : MonoBehaviour
     private void Awake()
     {
         GameManager.Initialize();
-        GameAudio.StartAudiosEvent(audioClips, true);
+        GameAudio.StartAudiosEvent(audioClips, 1, true);
         GameMenu.DisactivateGameMenuEvent();
 
         ButtonStart.Select();
@@ -40,6 +40,15 @@ public class Menu : MonoBehaviour
         {
             isLoading = true;
             SceneController.LoadStory(); // Компания
+        }
+    }
+
+    public void StartAbyss() // --
+    {
+        if (!isLoading)
+        {
+            isLoading = true;
+            SceneController.LoadSceneWithTransition(Scenes.Abyss); // --
         }
     }
 

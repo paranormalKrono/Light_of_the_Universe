@@ -1111,3 +1111,9 @@ Assets/InternalAssets/Audio/
 Packages/
 Assets/ExternalAssets/
 Assets/InternalAssets/RenderTextures/
+Assets/InternalAssets/RenderPipelines/
+Assets/InternalAssets/RenderPipelines.meta
+Assets/InternalAssets/Post-Processing.meta
+Assets/InternalAssets/PhysicMaterials.meta
+Assets/InternalAssets/Post-Processing/
+Assets/InternalAssets/PhysicMaterials/

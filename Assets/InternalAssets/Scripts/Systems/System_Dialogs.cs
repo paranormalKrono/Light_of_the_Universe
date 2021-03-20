@@ -27,8 +27,9 @@ public class System_Dialogs : MonoBehaviour
     private int currentNodeID;
 
     internal delegate void Event();
-    internal event Event OnNextPage;
     internal Event EndEvent;
+    internal delegate void EventId(int curNode);
+    internal event EventId OnNextNode;
 
     private void Awake()
     {
@@ -48,7 +49,7 @@ public class System_Dialogs : MonoBehaviour
         currentName = names.names[currentNode.nameid];
         UpdateDialog();
         UpdateAnswers();
-        OnNextPage?.Invoke();
+        OnNextNode?.Invoke(currentNodeID);
     }
 
     private void UpdateDialog()

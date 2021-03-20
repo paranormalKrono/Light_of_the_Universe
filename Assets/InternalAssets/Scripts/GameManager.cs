@@ -16,4 +16,13 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(G);
         }
     }
+
+    [SerializeField] private GameAudio gameAudio;
+    [SerializeField] private GameSettingsMenu gameSettingsMenu;
+
+    private void Awake()
+    {
+        gameAudio.Initialise();
+        gameSettingsMenu.Initialise();
+    }
 }

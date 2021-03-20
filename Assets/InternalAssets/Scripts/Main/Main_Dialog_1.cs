@@ -13,9 +13,13 @@ public class Main_Dialog_1 : Main_Dialog
 
     protected override void bAwake()
     {
-        system_dialogs.gameObject.SetActive(false);
         characterKainAnimator.GetBehaviour<AnimationBehaviour>().OnStateEnterEvent += StartDialog;
         characterDictorAnimator.GetBehaviour<AnimationBehaviour>().OnStateExitEvent += GiveACard;
+    }
+    private IEnumerator Start()
+    {
+        yield return null;
+       system_dialogs.gameObject.SetActive(false);
     }
 
     private void StartDialog()
@@ -23,7 +27,7 @@ public class Main_Dialog_1 : Main_Dialog
         StartCoroutine(IStartDialog());
     }
 
-    private void OnNextPage()
+    private void OnNextPage(int curNode)
     {
         dialogPart += 1;
         if (dialogPart - 1 == dialogPart1)
@@ -48,8 +52,9 @@ public class Main_Dialog_1 : Main_Dialog
             yield return null;
         }
         characterDictorAnimator.SetFloat(characterDictorAnimator.GetParameter(parameterId).name, 1);
-        system_dialogs.OnNextPage += OnNextPage;
+        system_dialogs.OnNextNode += OnNextPage;
         system_dialogs.gameObject.SetActive(true);
+        dialogCanvas.Open();
     }
     private IEnumerator Answer()
     {

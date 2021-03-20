@@ -12,10 +12,11 @@ public class Main_Dialog_3 : Main_Dialog
 
     protected override void bAwake()
     {
-        system_dialogs.OnNextPage += OnNextPage;
+        system_dialogs.OnNextNode += OnNextPage;
+        dialogCanvas.Open();
     }
 
-    private void OnNextPage()
+    private void OnNextPage(int curNode)
     {
         dialogPart += 1;
         if (dialogPart - 1 == dialogPart1)

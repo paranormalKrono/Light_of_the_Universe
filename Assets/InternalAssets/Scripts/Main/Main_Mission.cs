@@ -31,7 +31,7 @@ public abstract class Main_Mission : MonoBehaviour
     {
         MStart();
 
-        GameAudio.StartAudioEvent(audioClip, 0.4f, true);
+        GameAudio.StartAudioEvent(audioClip, 0.3f, true);
         if (!StaticSettings.isRestart)
         {
             SetGameStop(true);

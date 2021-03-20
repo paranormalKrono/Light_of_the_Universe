@@ -79,7 +79,7 @@ public class Starship_AI : MonoBehaviour
                 {
                     if (isAttackPlayer)
                     {
-                        Shoot(playerTr);
+                        Shoot();
                     }
                     if (DistanceToPlayer() > minDistance)
                     {

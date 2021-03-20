@@ -22,6 +22,9 @@ public class Main_Meeting : MonoBehaviour
     [SerializeField] private float waitTime3 = 10f;
     [SerializeField] private Animator Z5animator;
 
+    [SerializeField] private GameObject Z2_Scene;
+    [SerializeField] private GameObject Z5_Scene;
+
     private System_Starships systemStarships;
     private Player_Starship_Controller playerController;
     private Player_Camera_Controller playerCamera;
@@ -147,16 +150,19 @@ public class Main_Meeting : MonoBehaviour
                     systemStarships.StarshipsTeams[1].SetStarshipsLock(false);
                     break;
                 case 5:
+                    Z5_Scene.SetActive(true);
                     Z5Image.SetActive(true);
                     break;
                 case 7:
                     Z5animator.SetFloat("Part(speed)", 1);
                     break;
                 case 8:
+                    Z2_Scene.SetActive(true);
                     Z2Image.SetActive(true);
                     break;
                 case 25:
                     Z5Image.SetActive(false);
+                    Z5_Scene.SetActive(false);
                     break;
             }
         }
@@ -166,6 +172,8 @@ public class Main_Meeting : MonoBehaviour
     {
         Z2Image.SetActive(false);
         Z5Image.SetActive(false);
+        Z2_Scene.SetActive(false);
+        Z5_Scene.SetActive(false);
         playerController.SetActiveCanvas(true);
         playerCamera.DisableTargetMove();
         Z2StarshipAI.SetTargetToFollowWithMaxDistance(PlayerStarshipTr);
@@ -196,7 +204,10 @@ public class Main_Meeting : MonoBehaviour
     }
     private IEnumerator IShowDialog()
     {
-        StopCoroutine(Wait);
+        if (Wait != null)
+        {
+            StopCoroutine(Wait);
+        }
         if (!isWaited)
         {
             if (!isWaited1)
@@ -233,16 +244,16 @@ public class Main_Meeting : MonoBehaviour
     private IEnumerator IWait1()
     {
         yield return new WaitForSeconds(waitTime1);
-        yield return GameDialogs.IShowInGameDialogEvent(2);
         isWaited1 = true;
+        yield return GameDialogs.IShowInGameDialogEvent(2);
         Wait = IWait2();
         StartCoroutine(Wait);
     }
     private IEnumerator IWait2()
     {
         yield return new WaitForSeconds(waitTime2);
-        yield return GameDialogs.IShowInGameDialogEvent(4);
         isWaited2 = true;
+        yield return GameDialogs.IShowInGameDialogEvent(4);
         Wait = IWait3();
         StartCoroutine(Wait);
     }
@@ -251,9 +262,9 @@ public class Main_Meeting : MonoBehaviour
         Z2StarshipAI.UnshowPath();
         Z2StarshipAI.SetTargetToFollow(Destination);
         yield return new WaitForSeconds(waitTime3);
+        isWaited3 = true;
         Z2StarshipAI.SetTargetToFollow(PlayerStarshipTr);
         Z2StarshipAI.SetTargetAndDestinationToShowPath(PlayerStarshipTr, Destination);
-        isWaited3 = true;
     }
     private IEnumerator IWaited()
     {

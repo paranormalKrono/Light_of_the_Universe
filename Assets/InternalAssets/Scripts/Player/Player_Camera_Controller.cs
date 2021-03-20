@@ -7,11 +7,18 @@ public class Player_Camera_Controller : MonoBehaviour
     [SerializeField] private float velocityKoef = 0.25f;
     [SerializeField] private float minDistanceToObstacle = 1f;
     [SerializeField] internal Vector3 offset;
+    [SerializeField] private float offsetModifierRange = 8;
+    [SerializeField] private float ScrollWheelSpeed = 120;
+    [SerializeField] private LayerMask offsetMask;
+
     private Transform starshipTr;
     private Rigidbody starshipRb;
     private Transform targetTr;
     private bool isLockMove = false;
     private bool isTargetMove = false;
+
+    private Vector3 currentOffset;
+    private float currentOffsetModifier = 0;
 
     private RaycastHit hitInfo;
 
@@ -20,26 +27,66 @@ public class Player_Camera_Controller : MonoBehaviour
         starshipTr = GameObject.FindGameObjectWithTag("Player").transform;
         starshipRb = starshipTr.GetComponent<Rigidbody>();
         starshipTr.GetComponent<Health>().OnDeath += PlayerDead;
+        currentOffset = offset;
     }
 
-    void Update()
+    private float mouseScrollWheel;
+    private Vector3 newOffset;
+
+    private void Update()
     {
         if (!isLockMove)
         {
-            if (SphereCast(starshipTr.position + offset, minDistanceToObstacle, starshipRb.velocity.normalized, out hitInfo, Vector3.Magnitude(starshipRb.velocity * velocityKoef)))
+            mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
+            if (mouseScrollWheel != 0)
             {
-                //Debug.DrawLine(starshipTr.position + offset, starshipTr.position + offset + Vector3.ClampMagnitude(starshipRb.velocity * velocityKoef, hitInfo.distance) + Vector3.up, Color.green, 0.1f); // newCameraPosition
-                //Debug.DrawLine(transform.position, transform.position + Vector3.up, Color.blue, 0.1f); // cameraPosition
-                //Debug.DrawLine(starshipTr.position + offset, starshipTr.position + offset + Vector3.up, Color.red, 0.1f); // StarshipPosition + offset
-                transform.position = Vector3.Lerp(transform.position, starshipTr.position + offset + Vector3.ClampMagnitude(starshipRb.velocity * velocityKoef, hitInfo.distance), Time.deltaTime * moveSpeed);
+                if (mouseScrollWheel < 0)
+                {
+                    if (currentOffsetModifier + Time.deltaTime * ScrollWheelSpeed < offsetModifierRange)
+                    {
+                        currentOffsetModifier += Time.deltaTime * ScrollWheelSpeed;
+                    }
+                    else
+                    {
+                        currentOffsetModifier = offsetModifierRange;
+                    }
+                }
+                else if (mouseScrollWheel > 0)
+                {
+                    if (currentOffsetModifier - Time.deltaTime * ScrollWheelSpeed > -offsetModifierRange)
+                    {
+                        currentOffsetModifier -= Time.deltaTime * ScrollWheelSpeed;
+                    }
+                    else
+                    {
+                        currentOffsetModifier = -offsetModifierRange;
+                    }
+                }
+                currentOffset.y = offset.y + currentOffsetModifier;
             }
-            else if (Raycast(starshipTr.position + offset, starshipRb.velocity.normalized, minDistanceToObstacle))
+            if (Raycast(starshipTr.position, currentOffset.normalized, out hitInfo, currentOffset.y + 1, offsetMask))
             {
-                transform.position = Vector3.Lerp(transform.position, starshipTr.position + offset, Time.deltaTime * moveSpeed);
+                newOffset = starshipTr.position;
+                newOffset.y = hitInfo.point.y - 1;
+                transform.position = newOffset;
+                newOffset = currentOffset;
+                newOffset.y = hitInfo.point.y - 1;
             }
             else
             {
-                transform.position = Vector3.Lerp(transform.position, starshipTr.position + offset + starshipRb.velocity * velocityKoef, Time.deltaTime * moveSpeed);
+                newOffset = currentOffset;
+            }
+            if (SphereCast(starshipTr.position + newOffset, minDistanceToObstacle, starshipRb.velocity.normalized, out hitInfo, Vector3.Magnitude(starshipRb.velocity * velocityKoef)))
+            {
+                transform.position = Vector3.Lerp(transform.position, starshipTr.position + newOffset + Vector3.ClampMagnitude(starshipRb.velocity * velocityKoef, hitInfo.distance), Time.deltaTime * moveSpeed);
+            }
+            else if (Raycast(starshipTr.position + newOffset, starshipRb.velocity.normalized, minDistanceToObstacle))
+            {
+                transform.position = Vector3.Lerp(transform.position, starshipTr.position + newOffset, Time.deltaTime * moveSpeed);
+            }
+            else
+            {
+                transform.position = Vector3.Lerp(transform.position, starshipTr.position + newOffset + starshipRb.velocity * velocityKoef, Time.deltaTime * moveSpeed);
             }
         }
         else if (isTargetMove)
@@ -50,11 +97,19 @@ public class Player_Camera_Controller : MonoBehaviour
     private void PlayerDead() => SetLockMove(true);
 
     internal void SetLockMove(bool t) => isLockMove = t;
-    internal void SetPositionWithOffset(Vector3 position) => transform.position = position + offset;
+    internal void SetPositionWithOffset(Vector3 position)
+    {
+        currentOffset = offset;
+        transform.position = position + offset;
+    }
 
-    internal void UpdatePlayerLookPosition() => transform.position = starshipTr.position + offset;
+    internal void UpdatePlayerLookPosition()
+    {
+        currentOffset = offset;
+        transform.position = starshipTr.position + offset;
+    }
 
-    internal void DisableTargetMove()
+        internal void DisableTargetMove()
     {
         SetLockMove(false);
         isTargetMove = false;

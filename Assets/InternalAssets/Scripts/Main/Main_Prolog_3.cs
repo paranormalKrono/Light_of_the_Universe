@@ -84,6 +84,7 @@ public class Main_Prolog_3 : Main_Prolog
         Checkpoint2Trigger.OnPlayerStarshipEnter -= DoCheckpoint2;
 
         Dialog4Trigger.OnPlayerStarshipEnter += Dialog4;
+        Dialog5Trigger.OnPlayerStarshipEnter += Dialog5;
         Checkpoint3Trigger.OnPlayerStarshipEnter += DoCheckpoint3;
 
         SetCheckpoint(2);
@@ -102,6 +103,7 @@ public class Main_Prolog_3 : Main_Prolog
     }
     private void OnButtonPushed()
     {
+        Dialog5Trigger.OnPlayerStarshipEnter -= Dialog5;
         physicButton.OnButtonPushed -= OnButtonPushed;
 
         Dialog7Trigger.OnPlayerStarshipEnter += Dialog7;

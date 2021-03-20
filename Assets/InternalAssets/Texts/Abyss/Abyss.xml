@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<gametext>
+  
+  <goals>
+    <goal>Выжить</goal>
+  </goals>
+
+  <ingamedialogs>
+    
+    <ingamedialog id ="0" time="6">
+      <dialogs>
+        <dialog nameid ="25">
+          <text>[Множество целей...]</text>
+        </dialog>
+        <dialog nameid ="26">
+          <text>Капитан.</text>
+        </dialog>
+        <dialog nameid ="24">
+          <text>Вижу. Прорвёмся.</text>
+        </dialog>
+        <dialog nameid ="25">
+          <text>[Опасное сближение...]</text>
+        </dialog>
+        <dialog nameid ="24">
+          <text>Что это!?</text>
+        </dialog>
+        <dialog nameid ="19">
+          <text>[Связь потеряна]</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+
+    <ingamedialog id ="1" time="5">
+      <dialogs>
+        <dialog nameid ="25">
+          <text>[Неверный код доступа...]</text>
+        </dialog>
+        <dialog nameid ="23">
+          <text>Что у вас происходит?</text>
+        </dialog>
+        <dialog nameid ="27">
+          <text>Прошлого... капитана, пришлось... заменить.</text>
+        </dialog>
+        <dialog nameid ="23">
+          <text>Кто говорит?</text>
+        </dialog>
+        <dialog nameid ="27">
+          <text>Сдав-вайтесь!</text>
+        </dialog>
+        <dialog nameid ="19">
+          <text>[Связь потеряна...]</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+    <ingamedialog id ="2" time="5">
+      <dialogs>
+        <dialog nameid ="23">
+          <text>Капитан.</text>
+        </dialog>
+        <dialog nameid ="23">
+          <text>Ответьте.</text>
+        </dialog>
+        <dialog nameid ="19">
+          <text>[Связи нет]</text>
+        </dialog>
+      </dialogs>
+    </ingamedialog>
+    
+  </ingamedialogs>
+
+  <startdialogs>
+    <dialog nameid ="24">
+      <text>Ответьте...</text>
+    </dialog>
+    <dialog nameid ="24">
+      <text>Где вы?</text>
+    </dialog>
+    <dialog nameid ="24">
+      <text>Ответьте.</text>
+    </dialog>
+    <dialog nameid ="23">
+      <text>Что вы здесь делаете?</text>
+    </dialog>
+    <dialog nameid ="24" id ="5">
+      <text>Мы нашли вас. Флот будет через 8 минут.</text>
+    </dialog>
+    <dialog nameid ="25">
+      <text>[Вход в гиперпространство через...]</text>
+    </dialog>
+    <dialog nameid ="24">
+      <text>Пока никого не видно. Лишь пустота.</text>
+    </dialog>
+    <dialog nameid ="23">
+      <text>Хорошо.</text>
+    </dialog>
+    <dialog nameid ="24">
+      <text>Продержитесь до нашего прихода.</text>
+    </dialog>
+    
+  </startdialogs>
+</gametext>

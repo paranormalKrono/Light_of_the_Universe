@@ -46,6 +46,7 @@ public class GameMenu : MonoBehaviour
     public void CloseMenu()
     {
         SetTimeScale(1);
+        GameAudio.UnPauseAudioEvent();
         MenusOpener.ClosesMenusEvent();
         mainGameMenu.SetActive(false);
         if (isGameCursorLock)
@@ -58,6 +59,7 @@ public class GameMenu : MonoBehaviour
     private void OpenMenu()
     {
         SetTimeScale(0);
+        GameAudio.PauseAudioEvent();
         isMenuOpened = true;
         mainGameMenu.SetActive(true);
         GameCursor.SetCursorLock(false, CursorLockMode.None);
@@ -80,7 +82,6 @@ public class GameMenu : MonoBehaviour
         {
             isDoSomething = true;
             CloseMenu();
-            GameTimer.DeactivateEvent();
             isDoSomething = false;
             StaticSettings.checkpointID = 0;
             SceneController.RestartScene();
@@ -93,7 +94,6 @@ public class GameMenu : MonoBehaviour
         {
             isDoSomething = true;
             CloseMenu();
-            GameTimer.DeactivateEvent();
             isDoSomething = false;
             SceneController.RestartScene();
         }
@@ -105,9 +105,8 @@ public class GameMenu : MonoBehaviour
         {
             isDoSomething = true;
             CloseMenu();
-            GameTimer.DeactivateEvent();
             isDoSomething = false;
-            SceneController.SceneTransitionTo(Scenes.Menu);
+            SceneController.SceneTransitionTo(Scenes.Menu, false);
         }
     }
 

@@ -33,18 +33,20 @@ public enum Scenes
     Slides,
     Equations,
     Space_Base,
-    Space_Base_Bar
+    Space_Base_Bar,
+    Abyss
 }
 
 public enum ScenesLocations
 {
-    SL_1_2Teams,
-    SL_2_3Teams,
+    SL_Mindime,
+    SL_Preservation,
     SL_3_Race1,
     SL_4_Race2,
     SL_5_Mission,
     SL_6_Meeting,
-    SL_7_End
+    SL_7_End,
+    L_Abyss
 }
 
 
@@ -63,7 +65,7 @@ public static class SceneController
     static private bool isMenu;
     static public bool IsMenu { get => isMenu; }
 
-    static private bool isStoryTransition;
+    static private bool isCreateSave;
 
 
     static public void Initialise()
@@ -79,13 +81,18 @@ public static class SceneController
     static public void RestartScene()
     {
         StaticSettings.isRestart = true;
-        SceneTransitionTo((Scenes)Enum.Parse(typeof(Scenes), SceneManager.GetActiveScene().name));
+        SceneTransitionTo((Scenes)Enum.Parse(typeof(Scenes), SceneManager.GetActiveScene().name), false);
     }
 
     static public void LoadStory()
     {
         StaticSettings.GameProgress = 0;
-        SceneTransitionTo(StoryScenesSequence[0]);
+        SceneTransitionTo(StoryScenesSequence[0], true);
+    }
+
+    static public void LoadSceneWithTransition(Scenes scene)
+    {
+        SceneTransitionTo(scene, false);
     }
 
     static public void LoadNextStoryScene()
@@ -143,22 +150,21 @@ public static class SceneController
         if (progress >= StoryScenesSequence.Length - 1)
         {
             PlayerPrefs.SetInt("GameComplete", Convert.ToInt32(true));
-            SceneTransitionTo(Scenes.Menu);
+            SceneTransitionTo(Scenes.Menu, false);
         }
         else
         {
             StaticSettings.GameProgress += 1;
             progress += 1;
-            isStoryTransition = true;
             if (StaticSettings.isEquations || StoryScenesSequence[progress] != Scenes.Equations)
             {
-                SceneTransitionTo(StoryScenesSequence[progress]);
+                SceneTransitionTo(StoryScenesSequence[progress],true);
             }
             else
             {
                 StaticSettings.GameProgress += 1;
                 progress += 1;
-                SceneTransitionTo(StoryScenesSequence[progress]);
+                SceneTransitionTo(StoryScenesSequence[progress], false);
             }
         }
 
@@ -170,14 +176,15 @@ public static class SceneController
         DefineRepeatingSceneID(ref slidesID, progress, Scenes.Slides);
         DefineRepeatingSceneID(ref equationsID, progress, Scenes.Equations);
         DefineRepeatingSceneID(ref spaceBaseID, progress, Scenes.Space_Base);
-        SceneTransitionTo(StoryScenesSequence[progress]);
+        SceneTransitionTo(StoryScenesSequence[progress], true);
     }
 
 
 
     static private Scenes sceneToLoad;
-    static public void SceneTransitionTo(Scenes scene)
+    static public void SceneTransitionTo(Scenes scene, bool isCreateSave)
     {
+        SceneController.isCreateSave = isCreateSave;
         sceneToLoad = scene;
         GameMenu.SetGameCursorLock(true, CursorLockMode.None);
         GameAudio.StopAudioEvent();
@@ -194,6 +201,7 @@ public static class SceneController
         {
             isMenu = false;
         }
+        GameTimer.DeactivateEvent();
 
         LoadScene(sceneToLoad);
     }
@@ -205,9 +213,9 @@ public static class SceneController
     }
     static private void OnTransparentEnd()
     {
-        if (isStoryTransition)
+        if (isCreateSave)
         {
-            isStoryTransition = false;
+            isCreateSave = false;
             Saves.CreateAutosaveFile();
         }
     }

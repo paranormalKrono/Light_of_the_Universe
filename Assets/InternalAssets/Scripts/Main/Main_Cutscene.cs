@@ -10,6 +10,8 @@ public class Main_Cutscene : MonoBehaviour
     [SerializeField] private int parameterId = 0;
     [SerializeField] private float KainSleepTime = 2;
 
+    private bool isEnd;
+
     private void Awake()
     {
         GameManager.Initialize();
@@ -17,11 +19,22 @@ public class Main_Cutscene : MonoBehaviour
 
         AnimationBehaviour[] animationBehaviours = characterZ2Animator.GetBehaviours<AnimationBehaviour>();
         animationBehaviours[0].OnStateExitEvent += KainSleep;
-        animationBehaviours[1].OnStateExitEvent += End;
+        animationBehaviours[1].OnStateExitEvent += AnimationEnd;
 
         characterKainAnimator.GetBehaviour<AnimationBehaviour>().OnStateExitEvent += OnKainShortToDoor;
 
         screenDark.SetDark(false);
+    }
+
+    private void Update()
+    {
+        if (!isEnd)
+        {
+            if (Input.GetKey(KeyCode.N))
+            {
+                End();
+            }
+        }
     }
 
     private void KainSleep()
@@ -42,10 +55,18 @@ public class Main_Cutscene : MonoBehaviour
         characterZ2Animator.SetFloat(characterZ2Animator.GetParameter(parameterId).name, 1);
     }
 
-    private void End()
+    private void AnimationEnd()
     {
         characterZ2Animator.gameObject.SetActive(false);
-        SceneController.LoadNextStoryScene();
+        End();
+    }
+    private void End()
+    {
+        if (!isEnd)
+        {
+            isEnd = true;
+            SceneController.LoadNextStoryScene();
+        }
     }
 
 }

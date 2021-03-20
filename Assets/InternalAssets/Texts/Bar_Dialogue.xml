@@ -1,339 +1,458 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<dialogue>
-  <!-- Встреча -->
-  <node id ="0" isDescription ="true">
-    <text>Странный бар. Здесь сидит довольно много людей. Все они чем-то заняты. Интересно, кто должен меня встретить? Наверное, мне стоит подойти к бару.</text>
-    <answers>
-      <answer tonode = "1"><text>Подойти к бару...</text></answer>
-    </answers>
-  </node>
-  <node id ="1" isDescription ="true">
-    <text>Я подошёл к барной стойке и сел на стул. За ней стоит человек среднего роста, в каком-то чёрно-красном костюмчике, который придаёт ему важный и немного злой вид. Он подошёл ко мне.</text>
-    <answers>
-      <answer tonode = "2"><text>Продолжить...</text></answer>
-    </answers>
-  </node>
   
-  <!-- Первая развилка -->
-  <node id ="2" nameid="0" isAnswer ="true">
-        <text>Вам чего-нибудь налить?</text>
+ <dialogue>
+  
+  <node id="0" isDescription="true">
+    <text>Не думал, что здесь будет так светло. Интересно, кто должен меня встретить? Наверное, мне стоит подойти к бару.</text>
+    <answers>
+      <answer tonode="1"><text>Подойти к бару...</text></answer>
+    </answers>
+  </node>
+  <node id="1" isDescription="true">
+    <text>Я подошёл к барной стойке и сел на стул.</text>
+    <answers>
+      <answer tonode="2"><text>...</text></answer>
+    </answers>
+  </node>
+  <node id="2" isDescription="true">
+    <text>Какая странная маска.</text>
+    <answers>
+      <answer tonode="3">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id="3" nameid="0">
+    <text>Удивлены не так ли?</text>
+    <answers>
+       <answer tonode="4"><text>...</text></answer>
+    </answers>
+  </node>
+  <node id="4" nameid="0">
+    <text>Многие не знают эту историю, так что я расскажу её вам. Я тогда работал на Земле. Также барменом. Это моё призвание. Лет 18 назад, после второй катастрофы, крепкая вера в ZERO стала ослабевать. Советники пропали, исчезли без следа. Конечно, мы и раньше не часто их видели, но теперь... а СМИ хранили при этом полное молчание.</text>
+    <answers>
+      <answer tonode="5">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id="5" nameid="0">
+    <text>Стояла тишина, но потом откуда-то сверху стали появляться приказы. Поговаривали, будто бы они вернулись, но мне слабо в это верится, ведь я не вижу больше той самоотверженности и смелости, какие проявлял Совет в своих действиях раньше. И потом я увидел лозунги сопротивления. Прямо у всех на виду. Слушая разных людей, со временем я и сам утратил веру.</text>
+    <answers>
+      <answer tonode="6">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id="6" nameid="0">
+    <text>Чёрт его знает, что творится в мире, но я продаю здесь напитки, и вроде бы хаос обошёл нас стороной. Нам повезло с руководителем, Разумником. Так вот, эта маска символ того, что ZERO рано или поздно падёт. Мне не запрещают её носить. Говорю, что это символ процветающего милитаризма, который у нас в приоритете, но мне кажется уже все знают правду, и даже посмеиваются.</text>
+    <answers>
+      <answer tonode="7">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id="7" nameid="0">
+    <text>Заболтался я. Но люди должны это знать. Особенно вы.</text>
+    <answers>
+      <answer tonode="8">
+        <text>...</text>
+      </answer>
+    </answers>
+  </node>
+  <node id="8" isAnswer="true" nameid="0">
+        <text>Так вам чего-нибудь налить?</text>
         <answers>
-            <answer tonode = "3"><text>А что у вас есть?</text></answer>
-            <answer tonode = "31"><text>Нет.</text></answer>
+            <answer tonode="9"><text>Да, пожалуйста.</text></answer>
+            <answer tonode="37"><text>Нет.</text></answer>
         </answers>
     </node>
   
-  <!-- Напитки -->
-  <node id ="3" nameid="0" isAnswer ="true">
-        <text>Есть Барракуда, лёгкий синий огненный напиток, Гипершнапс, храбрый золотой напиток, снесёт крышу от одной капли, Blue bird, таинственный синий напиток по секретному рецепту, ну и, конечно, Help, однако, он закончился. Все напитки натуральные и даже полезные. Пилоты, кстати, могут пить по одному напитку в день бесплатно, так что выбирайте.</text>
+  
+  <node id="9" isAnswer="true" nameid="0">
+        <text>Есть Барракуда, лёгкий напиток, Гипершнапс, храбрый напиток, снесёт крышу от одной капли, Blue bird, таинственная синяя микстура по секретному рецепту, ну и, конечно, Help, но он закончился. Все напитки натуральные и даже полезные. Пилоты, кстати, могут пить по одному напитку в день бесплатно, так что выбирайте.</text>
         <answers>
-            <answer tonode = "4"><text>Как вы узнали, что я пилот?</text></answer>
-            <answer tonode = "6"><text>Барракуду, пожалуйста.</text></answer>
-            <answer tonode = "9"><text>Гипершнапса.</text></answer>
-            <answer tonode = "12"><text>Blue bird-а.</text></answer>
-            <answer tonode = "31"><text>Нет спасибо, уже передумал.</text></answer>
+            <answer tonode="10"><text>Как вы узнали, что я пилот?</text></answer>
+            <answer tonode="12"><text>Барракуду, пожалуйста.</text></answer>
+            <answer tonode="15"><text>Гипершнапса.</text></answer>
+            <answer tonode="18"><text>Blue bird-а.</text></answer>
+            <answer tonode="37"><text>Нет спасибо, уже передумал.</text></answer>
         </answers>
     </node>
-  <node id ="4" nameid="0" isAnswer ="true">
+  <node id="10" isAnswer="true" nameid="0">
         <text>По форме конечно! У каждого рабочего здесь есть своя форма, кроме меня конечно.</text>
         <answers>
-            <answer tonode = "5"><text>Хорошо.</text></answer>
+            <answer tonode="11"><text>Хорошо.</text></answer>
         </answers>
     </node>
-  <node id ="5" nameid="0" isAnswer ="true">
+  <node id="11" isAnswer="true" nameid="0">
         <text>Ну так чего вам?</text>
         <answers>
-            <answer tonode = "6"><text>Барракуду, пожалуйста.</text></answer>
-            <answer tonode = "9"><text>Гипершнапса.</text></answer>
-            <answer tonode = "12"><text>Blue bird.</text></answer>
-            <answer tonode = "31"><text>Спасибо, но уже не хочу.</text></answer>
+            <answer tonode="12"><text>Барракуду, пожалуйста.</text></answer>
+            <answer tonode="15"><text>Гипершнапса.</text></answer>
+            <answer tonode="18"><text>Blue bird.</text></answer>
+            <answer tonode="37"><text>Спасибо, но уже не хочу.</text></answer>
         </answers>
     </node>
 
-  <!-- Барракуда -->
-  <node id ="6" nameid="0">
+  
+  <node id="12" nameid="0">
         <text>Барракуду значит... Хорошо! Сейчас будет!</text>
         <answers>
-            <answer tonode = "7"><text>Продолжить...</text></answer>
+            <answer tonode="13"><text>Продолжить...</text></answer>
         </answers>
     </node>
-  <node id ="7" isDescription ="true">
+  <node id="13" isDescription="true">
         <text>Бармен подошёл к висящим полкам, которые были у него за спиной, и взял какую-то тонкую бутыль с синим холодным оттенком. Он открыл её, и из горла бутыли пыхнул синий огонь. Он налил в стакан эту невероятно текучую жидкость, положил кубик льда и отошёл к другим посетителям. Интересно, что будет, если я это выпью?</text>
         <answers>
-            <answer tonode = "8"><text>Попробовать...</text></answer>
-            <answer tonode = "15"><text>Оставить...</text></answer>
+            <answer tonode="14"><text>Попробовать...</text></answer>
+            <answer tonode="21"><text>Оставить...</text></answer>
         </answers>
     </node>
-  <node id ="8" isDescription ="true">
+  <node id="14" isDescription="true">
         <text>Я взял стакан в руку, из которого то и дело пыхали голубые огоньки. Запах очень приятный, лёгкий. Я сделал небольшой глоток. На вкус не понятно что, то ли горячее, то ли холодное, то ли вкусное, то ли острое, но это не важно, от напитка мне стало как-то приятно на душе, пришло даже какое-то спокойствие, как будто я оказался у настоящего моря. Через некоторое время я выпил его весь и почувствовал невероятное облегчение.</text>
         <answers>
-            <answer tonode = "15"><text>Продолжить...</text></answer>
+            <answer tonode="21"><text>Продолжить...</text></answer>
         </answers>
     </node>
 
-  <!-- Гипершнапс -->
-  <node id ="9" nameid="0" isDescription ="false">
-        <text>Гипершнапс! Да у нас тут герой! Сейчас.</text>
+  
+  <node id="15" isDescription="false" nameid="0">
+        <text>Гипершнапс! Да у нас тут новичок-герой! Сейчас.</text>
         <answers>
-            <answer tonode = "10"><text>Продолжить...</text></answer>
+            <answer tonode="16"><text>Продолжить...</text></answer>
         </answers>
     </node>
-  <node id ="10" isDescription ="true">
+  <node id="16" isDescription="true">
         <text>Бармен пригнулся и взял из нижнего шкафчика какую-то толстую оранжево-золотую бутыль. Он открыл её, и из горла бутыли раздался громкий львиный рёв. Вокруг меня собрались несколько человек. Он налил в стакан эту светящуюся золотом жидкость, положил кубик льда и стал смотреть. Как-то даже страшно это пить.</text>
         <answers>
-            <answer tonode = "11"><text>Попробовать...</text></answer>
-            <answer tonode = "32"><text>Оставить...</text></answer>
+            <answer tonode="17"><text>Попробовать...</text></answer>
+            <answer tonode="38"><text>Оставить...</text></answer>
         </answers>
     </node>
-  <node id ="11" isDescription ="true">
+  <node id="17" isDescription="true">
         <text>Я взял гранёный стакан в руку. Рука начала дрожать под тяжестью стакана. Мне становится всё страшнее это пить. Все окружающие затихли. Запах придал мне уверенности. Я сделал небольшой глоток и... почувствовал себя настолько высоко, кажется, как будто я оказался на вершине высокой горы и никакой холод мне не страшен, и лучи Солнца пронзают меня насквозь. Через некоторое время действие напитка прошло, и все разошлись.</text>
         <answers>
-            <answer tonode = "15"><text>Продолжить...</text></answer>
+            <answer tonode="21"><text>Продолжить...</text></answer>
         </answers>
     </node>
-
-  <!-- Странник -->
-  <node id ="12" nameid="0">
+  
+  
+  <node id="18" nameid="0">
         <text>Blue Bird. Синяя птица! Сейчас будет!</text>
         <answers>
-            <answer tonode = "13"><text>Продолжить...</text></answer>
+            <answer tonode="19"><text>Продолжить...</text></answer>
         </answers>
     </node>
-  <node id ="13" isDescription ="true">
-        <text>Бармен отошёл и вернулся с какой-то странной светлой сине-тёмной микстурой. Он открыл её, и из горла вышел голубой туман. Он вылил в стакан синию жидкость, которая тут же охладилась и превратилась в лёд, положил на него красный светящийся кубик и ушёл к другим посетителям. Это можно пить?</text>
+  <node id="19" isDescription="true">
+        <text>Бармен отошёл и вернулся с какой-то странной светлой сине-тёмной микстурой. Он открыл её, и из горла вышел белый туман. Он вылил в стакан синию жидкость, которая тут же охладилась и превратилась в лёд, положил на него красный светящийся кубик и ушёл к другим посетителям. Это можно пить?</text>
         <answers>
-            <answer tonode = "14"><text>Попробовать...</text></answer>
-            <answer tonode = "15"><text>Оставить...</text></answer>
+            <answer tonode="20"><text>Попробовать...</text></answer>
+            <answer tonode="21"><text>Оставить...</text></answer>
         </answers>
     </node>
-  <node id ="14" isDescription ="true">
-        <text>Я взял длинный стакан, на поверхности которого стоял холодноватый белый туман. Красный кубик в мгновение беззвучно взорвался и влился в лёд, который через несколько мгновений издал настолько острый запах, что я чуть не упал. Я сделал небольшой глоток и оказался в тёмной пустоте. Я полетел, словно песок по ветру, в невесомости сквозь пространство и время и встретил синюю птичку. Она сказала мне: "&lt;color=#77DDE7>Я верю в чудо, а ты?&lt;/color>". Хороший напиток.</text>
+  <node id="20" isDescription="true">
+        <text>Я взял длинный стакан, на поверхности которого стоял холодноватый белый туман. Красный кубик в мгновение беззвучно взорвался и влился в лёд, который через несколько мгновений издал настолько острый запах, что я чуть не упал. Я сделал небольшой глоток и оказался в тёмной пустоте. Я полетел, словно песок по ветру, в невесомости сквозь пространство и время и встретил синюю птичку. Она сказала мне: "&lt;color=#77DDE7&gt;Я верю в чудо, а ты?&lt;/color&gt;". Хороший напиток.</text>
         <answers>
-            <answer tonode = "15"><text>Продолжить...</text></answer>
+            <answer tonode="21"><text>Продолжить...</text></answer>
         </answers>
     </node>
 
-  <!-- Продолжение истории -->
-  <node id ="15" isDescription ="true">
-    <text>Я подождал, пока не увидел странного человека, вошедшего в бар, в синей форме, которая всегда испачкана одной и той же грязью. Пилот C07. Его неопрятный вид может смутить любого. Он странно осмотрелся, будто ищет живую душу, и заметил меня. Он пошёл в мою сторону через столики. Споткнулся. Чуть не упал. Сел рядом со мной.</text>
+  
+  <node id="21" isDescription="true">
+    <text>Я подождал, пока не увидел странного человека, вошедшего в бар, в синей форме, которая всегда испачкана одной и той же грязью. Пилот C07. Его неопрятный вид может смутить любого. Он странно осмотрелся, будто ищет живую душу, и заметил меня. Он пошёл в мою сторону. Споткнулся. Чуть не упал. Сел рядом со мной.</text>
     <answers>
-      <answer tonode = "16"><text>Продолжить...</text></answer>
+      <answer tonode="22"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="16" nameid="3">
+  <node id="22" nameid="3">
     <text>Бармен! Дай Барракуды мне и моему другу.</text>
     <answers>
-      <answer tonode = "17"><text>Продолжить...</text></answer>
+      <answer tonode="23"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="17" nameid="0">
+  <node id="23" nameid="0">
     <text>Да... конечно... сейчас.</text>
     <answers>
-      <answer tonode = "18"><text>Продолжить...</text></answer>
+      <answer tonode="24"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="18" isDescription ="true">
+  <node id="24" isDescription="true">
     <text>Бармен сказал это мёртвым голосом, не желающим видеть грязь в своём заведении. Он медленно сделал напиток и испарился.</text>
     <answers>
-      <answer tonode = "19"><text>Продолжить...</text></answer>
+      <answer tonode="25"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="19" nameid="3">
+  <node id="25" nameid="3">
     <text>Я очень рад тебя видеть.</text>
     <answers>
-      <answer tonode = "20"><text>Продолжить...</text></answer>
+      <answer tonode="26"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="20" isDescription ="true">
+  <node id="26" isDescription="true">
     <text>Он немного выпил и продолжил.</text>
     <answers>
-      <answer tonode = "21"><text>Продолжить...</text></answer>
+      <answer tonode="27"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="21" nameid="3">
-    <text>Я пока не могу ответить на все твои вопросы, но кое-что всё-таки могу сказать и даже показать.</text>
+  <node id="27" nameid="3">
+    <text>Я пока не могу ответить на все твои вопросы, но кое-что могу сказать и даже показать.</text>
     <answers>
-      <answer tonode = "22"><text>Продолжить...</text></answer>
+      <answer tonode="28"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="22" isDescription ="true">
+  <node id="28" isDescription="true">
     <text>Вдруг, в бар вошла группа людей с оружием. Впереди них был Разумник. Бармен вышел из кладовки.</text>
     <answers>
-      <answer tonode = "23"><text>Продолжить...</text></answer>
+      <answer tonode="29"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="23" nameid="0">
+  <node id="29" nameid="0">
     <text>Ну вот, опять двадцать пять! Это мой бар!</text>
     <answers>
-      <answer tonode = "24"><text>Продолжить...</text></answer>
+      <answer tonode="30"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="24" isDescription ="true">
-    <text>Пилот встал с барного табурета и посмотрел на вошедшую группу.</text>
+  <node id="30" isDescription="true">
+    <text>Пилот встал с барного стула и посмотрел на вошедшую группу.</text>
     <answers>
-      <answer tonode = "25"><text>Продолжить...</text></answer>
+      <answer tonode="31"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="25" nameid="3">
+  <node id="31" nameid="3">
     <text>Как же вы меня достали.</text>
     <answers>
-      <answer tonode = "26"><text>Продолжить...</text></answer>
+      <answer tonode="32"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="26" isDescription ="true">
+  <node id="32" isDescription="true">
     <text>Сказал он тихим и немного злым голосом.</text>
     <answers>
-      <answer tonode = "27"><text>Продолжить...</text></answer>
+      <answer tonode="33"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="27" nameid="3">
+  <node id="33" nameid="3">
     <text>Вы меня ищете!?</text>
     <answers>
-      <answer tonode = "28"><text>Продолжить...</text></answer>
+      <answer tonode="34"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="28" nameid="2">
+  <node id="34" nameid="2">
     <text>Да. Как вы узнали?</text>
     <answers>
-      <answer tonode = "29"><text>Продолжить...</text></answer>
+      <answer tonode="35"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="29" nameid="3">
+  <node id="35" nameid="3">
     <text>Догадался.</text>
     <answers>
-      <answer tonode = "30"><text>Продолжить...</text></answer>
+      <answer tonode="36"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="30" nameid="2">
-    <text>Нам нужна ваша помощь в блоке Далго. Ему снова понадобилась ваша помощь. Приходите после празднования своей победы.</text>
+  <node id="36" nameid="2">
+    <text>Нужна ваша помощь в блоке Далго. Приходите после празднования победы.</text>
     <answers>
-      <answer tonode = "33"><text>Продолжить...</text></answer>
+      <answer tonode="39"><text>Продолжить...</text></answer>
     </answers>
   </node>
   
-  <!-- Лирическое отступление-->
-  <node id ="31" nameid="0">
+  
+  <node id="37" nameid="0">
         <text>Ладно.</text>
         <answers>
-            <answer tonode = "15"><text>Продолжить...</text></answer>
+            <answer tonode="21"><text>Продолжить...</text></answer>
         </answers>
     </node>
-  <node id ="32" isDescription ="true">
-    <text>Бармен и остальные наблюдатели стояли рядом, пока не поняли, что я не собираюсь пить. Они немного расстроились и разошлись.</text>
+  <node id="38" isDescription="true">
+    <text>Бармен и остальные наблюдатели стояли рядом, пока не поняли, что я не собираюсь это пить.</text>
     <answers>
-      <answer tonode = "15"><text>Продолжить...</text></answer>
+      <answer tonode="21"><text>Продолжить...</text></answer>
     </answers>
   </node>
 
   
-  <node id ="33" nameid="3">
+  <node id="39" nameid="3">
     <text>Хорошо!</text>
     <answers>
-      <answer tonode = "34">
+      <answer tonode="40">
         <text>Продолжить...</text>
       </answer>
     </answers>
   </node>
-  <node id ="34" isDescription ="true">
+  <node id="40" isDescription="true">
     <text>Они ушли. Пилот вернулся на своё место.</text>
     <answers>
-      <answer tonode = "35">
+      <answer tonode="41">
         <text>Продолжить...</text>
       </answer>
     </answers>
   </node>
-  <node id ="35" nameid="3" isAnswer ="true">
+  <node id="41" isAnswer="true" nameid="3">
     <text>Этот придурок хоть что-то может сделать без меня? Хотя, в прошлом он был мастером инженерных наук. Староват стал. Создатель приборов ночного видения Далго. Может быть, слышал. Чёрт! Барракуда согрелась. Вообще, я пришёл сюда не за этим. Твой наставник попросил меня помочь тебе.</text>
     <answers>
-      <answer tonode = "36">
+      <answer tonode="42">
         <text>Чем?</text>
       </answer>
     </answers>
   </node>
-  <node id ="36" nameid="3" isAnswer ="true">
+  <node id="42" isAnswer="true" nameid="3">
     <text>Он хочет, чтобы ты как можно скорее улетел с этой станции. У меня есть план, который позволит тебе это сделать.</text>
     <answers>
-      <answer tonode = "37"><text>Ага. Почему я должен тебе верить?</text></answer>
+      <answer tonode="43"><text>Ага. Почему я должен тебе верить?</text></answer>
     </answers>
   </node>
-  <node id ="37" nameid="3">
+  <node id="43" nameid="3">
     <text>Действительно. Вот, возьми, посмотри. Он сказал, ты поймёшь.</text>
     <answers>
-      <answer tonode = "38">
+      <answer tonode="44">
         <text>Взять что-то вроде письма.</text>
       </answer>
     </answers>
   </node>
-  <node id ="38" isDescription="true">
+  <node id="44" isDescription="true">
     <text>Я открыл письмо. Здесь что-то написано.</text>
     <answers>
-      <answer tonode = "39">
+      <answer tonode="45">
         <text>Продолжить...</text>
       </answer>
     </answers>
   </node>
-  <node id ="39" nameid="15">
-    <text>Я шёл через раздор и хаос к грани бездны. Я смог вернуться, но далеко не ушёл. Мы все движемся в бездну. Никто не может нырнуть в бездну и вынырнуть прежним. Никто не выжил. Я чувствую смерть рядом.
-      Харн подпись</text>
+  <node id="45" nameid="15">
+    <text>Я думал, вас больше нет. Думал, что остался один. Как хорошо, что это не так. Прошло много лет с тех пор и я хотел бы извиниться вновь. Я не знал, что мама пропала. Если бы я только мог, вновь вас увидеть, хоть за одно мгновенье отдал бы жизнь. Я хотел вернуться, но не мог. Я много странствовал по пустыням космоса и где-то там, в далёких созвездиях, повидал много красивых планет и был бы очень рад, если бы и ты когда-нибудь увидел их. Увы, я их больше не увижу. Лети, поймай свой ветер, и не забывай старика.  Харн</text>
     <answers>
-      <answer tonode = "40">
+      <answer tonode="46">
         <text>Продолжить...</text>
       </answer>
     </answers>
   </node>
-  <node id ="40" isDescription="true">
+  <node id="46" isDescription="true">
     <text>Не может быть! Это подпись моего отца!</text>
     <answers>
-      <answer tonode = "41">
+      <answer tonode="47">
         <text>Продолжить...</text>
       </answer>
     </answers>
   </node>
   
-  <node id ="41" nameid="3" isAnswer ="true">
-    <text>Вижу, ты удивлён. Я точно не знаю, что с ним случилось, но поговаривают, что он спятил, свихнулся. Причём, не так, как обычные сумасшедшие. Мне кажется, что так и есть, но, когда я разговаривал с ним до поступления сюда, он был нормален. Так вот, у меня есть план, как сбежать отсюда.</text>
+  <node id="47" isAnswer="true" nameid="3">
+    <text>Вижу, ты удивлён. Я точно не знаю, что с ним случилось, но поговаривают - он спятил, свихнулся. Причём, не так, как обычные сумасшедшие. Но мне кажется, это не так. Так вот, у меня есть план, как сбежать отсюда.</text>
     <answers>
-      <answer tonode = "42">
+      <answer tonode="48">
         <text>Ты поможешь мне из-за просьбы?</text>
       </answer>
     </answers>
   </node>
-  <node id ="42" nameid="3" isAnswer ="true">
-    <text>Нет, не совсем, когда-то давно он очень мне помог, хоть и забыл об этом. Он спас меня и мою семью с Земли. Мы жили в нищете и ничего не могли с этим поделать. Я связался с ним, и он помог нам. Сейчас наш дом находится очень далеко отсюда, и я могу не беспокоиться за семью, они в безопасности. Я хочу помочь тебе из чувства долга перед твоим отцом. Да и, похоже, у него больше нет друзей.</text>
+  <node id="48" isAnswer="true" nameid="3">
+    <text>Нет, не совсем, когда-то давно он очень мне помог, хоть и забыл об этом. Он спас меня и мою семью с Земли. Мы жили в нищете. Я связался с ним, и он помог нам. Сейчас наш дом находится очень далеко отсюда, и я могу не беспокоиться за семью, они в безопасности. Я хочу помочь тебе из чувства долга перед твоим отцом. Да и, похоже, у него больше нет друзей.</text>
     <answers>
-      <answer tonode = "43"><text>А зачем ты стал пилотом?</text></answer>
-      <answer tonode = "44"><text>Хорошо.</text></answer>
+      <answer tonode="49"><text>А зачем ты стал пилотом?</text></answer>
+      <answer tonode="50"><text>Хорошо.</text></answer>
     </answers>
   </node>
-  <node id ="43" nameid="3" isAnswer ="true">
+  <node id="49" isAnswer="true" nameid="3">
     <text>Иначе я не смог бы следить за тобой. А так, я - инженер. Почти с самого начала, как ты сюда прилетел, я был здесь, рядом. Возможно, ты не заметил.</text>
     <answers>
-      <answer tonode = "44"><text>Хорошо.</text></answer>
+      <answer tonode="50"><text>Хорошо.</text></answer>
     </answers>
   </node>
-  <node id ="44" nameid="3" isAnswer ="true">
-    <text>План состоит в том, чтобы сбежать отсюда, когда мы будем участвовать в настоящем сражении. Когда в бою начнётся суматоха, ты постараешься незаметно улететь к ближайшей пиратской станции. Я передам тебе её координаты. Там ты встретишь человека по имени Ёрш.</text>
+  <node id="50" isAnswer="true" nameid="3">
+    <text>План состоит в том, чтобы сбежать отсюда, когда мы будем участвовать в настоящем сражении. Когда в бою начнётся суматоха, ты постараешься незаметно улететь к ближайшей пиратской станции. Я передам тебе её координаты.</text>
     <answers>
-      <answer tonode = "45"><text>Я могу тебе доверять?</text></answer>
+      <answer tonode="51"><text>Я могу тебе доверять?</text></answer>
     </answers>
   </node>
-  <node id ="45" nameid="3" isAnswer ="false">
+  <node id="51" isAnswer="false" nameid="3">
     <text>Не знаю, решай сам.</text>
     <answers>
-      <answer tonode = "46"><text>Продолжить...</text></answer>
+      <answer tonode="52"><text>Продолжить...</text></answer>
     </answers>
   </node>
-  <node id ="46" isDescription ="true" isAnswer ="true">
-    <text>Другой такой шанс мне врядли встретится.</text>
+  <node id="52" isAnswer="true" isDescription="true">
+    <text>Раз отец доверился, то и мне стоит.</text>
     <answers>
-      <answer tonode = "47"><text>Хорошо. Я согласен.</text></answer>
+      <answer tonode="53"><text>Хорошо. Я согласен.</text></answer>
     </answers>
   </node>
-  <node id ="47" nameid="3">
+  <node id="53" nameid="3">
     <text>Отлично!</text>
     <answers>
-      <answer><text>Уйти из бара...</text><end>true</end></answer>
+      <answer tonode="54"><text>...</text></answer>
     </answers>
   </node>
+   <node id="54" isAnswer="true" nameid="3">
+     <text>Ещё вот хотел узнать.</text>
+     <answers>
+       <answer tonode="55">
+         <text>Что?</text>
+       </answer>
+     </answers>
+   </node>
+   <node id="55" nameid="3">
+     <text>Тебя прозвали грозой пилотов, но меня немного обеспокоили некоторые слухи. Вообще мне многое рассказывали, но это...</text>
+     <answers>
+       <answer tonode="56">
+         <text>...</text>
+       </answer>
+     </answers>
+   </node>
+   <node id="56" isDescription="true" nameid="3">
+     <text>Он заговорил шёпотом.</text>
+     <answers>
+       <answer tonode="57">
+         <text>...</text>
+       </answer>
+     </answers>
+   </node>
+   <node id="57" isAnswer="true" nameid="3">
+     <text>Поговаривают, ты связывался с Zero.</text>
+     <answers>
+       <answer tonode="58">
+         <text>Что!?</text>
+       </answer>
+     </answers>
+   </node>
+   <node id="58" nameid="3">
+     <text>Дааа, я думал неправда, пока до меня не дошёл тот билет. Он повторно проходил через систему сканирования здесь на станции, а я, как ты уже знаешь, инженер по специальности.</text>
+     <answers>
+       <answer tonode="59">
+         <text>...</text>
+       </answer>
+     </answers>
+   </node>
+   <node id="59" nameid="3">
+     <text>Так вот, сканирующая система сломалась. И во время починки я заметил этот странный синий билет. На нём было твоё имя и имя Z-2. И я не думаю, что это просто нелепое совпадение.</text>
+     <answers>
+       <answer tonode="60">
+         <text>...</text>
+       </answer>
+     </answers>
+   </node>
+   <node id="60" nameid="3">
+     <text>Если не хочешь ничего говорить, не говори. Мне это не так важно. А вот остальным ещё как. Представляешь, какой был бы фурор. Вновь увидеть этих великих существ.</text>
+     <answers>
+       <answer tonode="61">
+         <text>Рассказать всё, что знаю.</text>
+       </answer>
+       <answer tonode="61">
+         <text>Ничего не рассказывать.</text>
+       </answer>
+     </answers>
+   </node>
+   <node id="61" nameid="5">
+     <text>Я ничего не знаю.</text>
+     <answers>
+       <answer tonode="62">
+         <text>...</text>
+       </answer>
+     </answers>
+   </node>
+   <node id="62" nameid="3">
+     <text>Ладно. До завтра.</text>
+     <answers>
+       <answer>
+         <text>Уйти из бара...</text>
+         <end>true</end>
+       </answer>
+     </answers>
+   </node>
 </dialogue>
