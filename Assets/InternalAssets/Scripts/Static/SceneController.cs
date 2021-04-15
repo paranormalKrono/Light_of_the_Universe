@@ -299,26 +299,28 @@ public static class SceneController
    };
 
 
-    static public Scenes[] StoryScenesSequence = new Scenes[62]
+    static public Scenes[] StoryScenesSequence = new Scenes[64]
     {
 
         // Story 1
 
         Scenes.Origin,
         Scenes.Slides,
+        Scenes.Equations, // 0 Введение
         Scenes.Dialog_1,
         Scenes.Slides,
         Scenes.Prologue_1,
-        Scenes.Equations,
+        Scenes.Equations, // 1 Теория по двоичной системе счисления
 
         Scenes.Dialog_2,
+        Scenes.Equations, // 2 Практика по двоичной системе счисления
         Scenes.Slides,
-        Scenes.Equations,
         Scenes.Prologue_2,
 
+        Scenes.Equations, // 3 Практика по двоичной системе счисления
         Scenes.Slides,
-        Scenes.Equations,
         Scenes.Prologue_3,
+        Scenes.Equations, // 4 Практика по двоичной системе счисления
         Scenes.Dialog_3,
         Scenes.Slides,
         Scenes.Cutscene,
@@ -329,52 +331,52 @@ public static class SceneController
         Scenes.Slides,
         Scenes.Space_Base,
         Scenes.SM_0_TimeRace1,
-        Scenes.Equations,
+        Scenes.Equations, // 5 Теория по восьмеричной системе счисления
         Scenes.Slides,
 
         Scenes.Space_Base,
 
         Scenes.SM_1_1vs1,
-        Scenes.Equations,
+        Scenes.Equations, // 6 Практика по восьмеричной системе счисления
         Scenes.SM_2_3vs3,
-        Scenes.Equations,
+        Scenes.Equations, // 7 Практика по восьмеричной системе счисления
 
         Scenes.Space_Base,
 
         Scenes.SM_3_5vs5,
-        Scenes.Equations,
+        Scenes.Equations, // 8 Практика по восьмеричной системе счисления
         Scenes.SM_4_Race6,
-        Scenes.Equations,
+        Scenes.Equations, // 9 Практика по восьмеричной и двоичной системам счисления
         Scenes.SM_5_Tactic_4vs4,
-        Scenes.Equations,
+        Scenes.Equations, // 10 Практика по восьмеричной и двоичной системам счисления
 
         Scenes.Space_Base,
 
         Scenes.SM_6_3vs3vs1,
-        Scenes.Equations,
 
         Scenes.Space_Base,
         Scenes.Slides,
         Scenes.Space_Base,
 
         Scenes.SM_7_TimeRace2,
-        Scenes.Equations,
+        Scenes.Equations, // 11 Теория по шестнадцатеричной системе счисления
         Scenes.SM_8_3vs8,
-        Scenes.Equations,
+        Scenes.Equations, // 12 Практика по шестнадцатеричной системе счисления
 
         Scenes.Slides,
 
         Scenes.Space_Base,
 
         Scenes.SM_9_6vs4vs4vs4,
-        Scenes.Equations,
+        Scenes.Equations, // 13 Практика по шестнадцатеричной системе счисления
         Scenes.SM_10_Race8,
-        Scenes.Equations,
+        Scenes.Equations, // 14 Практика по шестнадцатеричной системе счисления
         Scenes.SM_11_3vs3vs3,
-        Scenes.Equations,
+        Scenes.Equations, // 15 Практика по шестнадцатеричной, восьмеричной и двоичной системам счисления
 
         Scenes.Space_Base,
         Scenes.Space_Base_Bar,
+        Scenes.Equations, // 16 Практика по всем системам счисления
         Scenes.Space_Base,
 
         Scenes.SM_12_End,

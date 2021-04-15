@@ -20,7 +20,7 @@ public class Menu : MonoBehaviour
         ButtonStart.Select();
         if (PlayerPrefs.HasKey("GameComplete"))
         {
-            StaticSettings.isGameComplete = Convert.ToBoolean(PlayerPrefs.GetInt("GameCompete"));
+            StaticSettings.isGameComplete = Convert.ToBoolean(PlayerPrefs.GetInt("GameComplete"));
         }
         if (StaticSettings.isGameComplete)
         {

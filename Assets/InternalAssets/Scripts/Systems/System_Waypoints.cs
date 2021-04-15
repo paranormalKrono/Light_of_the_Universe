@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class System_Waypoints
@@ -49,6 +50,23 @@ public static class System_Waypoints
             return curPoint;
         }
     }
+
+    private static SortedDictionary<float, Transform> pointsDictionary = new SortedDictionary<float, Transform>();
+    internal static KeyValuePair<float, Transform>[] GetPointsClose(Transform V3) => GetPointsClose(V3.position);
+    internal static KeyValuePair<float, Transform>[] GetPointsClose(Vector3 Target)
+    {
+        pointsDictionary.Clear();
+        for (int i = 0; i < Points.Length; ++i)
+        {
+            distance = Vector3.Distance(Target, Points[i].position);
+            if (!pointsDictionary.ContainsKey(distance))
+            {
+                pointsDictionary.Add(distance, Points[i]);
+            }
+        }
+        return pointsDictionary.ToArray();
+    }
+
     internal static Transform GetClosestPoint(Transform V3)
     {
         curPoint = V3;
@@ -65,20 +83,6 @@ public static class System_Waypoints
         return curPoint;
     }
 
-    internal static Vector3 GetClosestToTargetPointPosition(Vector3 Target)
-    {
-        distance = float.MaxValue;
-        for (int i = 0; i < Points.Length; ++i)
-        {
-            pointToTargetDistance = Vector3.Distance(Target, Points[i].position);
-            if (pointToTargetDistance < distance)
-            {
-                curPoint = Points[i];
-                distance = pointToTargetDistance;
-            }
-        }
-        return curPoint.position;
-    }
 
     internal static Transform GetNextPoint(Transform currentPoint, Transform previousPoint)
     {

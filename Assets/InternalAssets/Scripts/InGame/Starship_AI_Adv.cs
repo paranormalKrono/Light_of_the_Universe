@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(Guns), typeof(Rigidbody))]
@@ -161,6 +162,8 @@ public class Starship_AI_Adv : MonoBehaviour
         Guns guns = GetComponent<Guns>();
         Shoot = guns.GetShootEvent();
         maxShootSpeed = guns.GetGunsMaxShootSpeed();
+
+        GetComponent<Health>().OnHealthChange += OnHealthChange;
 
         flightModeSwitcher = GetComponent<StarshipFlightModeSwitcher>();
     }
@@ -384,6 +387,16 @@ public class Starship_AI_Adv : MonoBehaviour
     }
     private void MoveToTarget() => Move(MoveDirectionConsideringAngle(1, AngleTo(MoveTargetV3 - velocityWithCons()))); // Двигаемся 
 
+
+    private void OnHealthChange(float nowHp, float maxHp)
+    {
+        if (!isFindEnemy)
+        {
+            isFindEnemy = Physics.SphereCast(transform.position, 1, (EnemyTargetV3 - transform.position).normalized, out enemyRaycastHitInfo) && enemyRaycastHitInfo.transform.parent == EnemyTarget
+                && Vector3.Distance(EnemyTarget.position, transform.position) < findDistance / 2;
+        }
+    }
+
     private bool FindEnemy() => Vector3.Distance(EnemyTarget.position, transform.position) < findDistance &&
             AngleTo(EnemyTargetV3) < seeAngle &&
             Physics.SphereCast(transform.position, 1, (EnemyTargetV3 - transform.position).normalized, out enemyRaycastHitInfo) && enemyRaycastHitInfo.transform.parent == EnemyTarget;
@@ -436,35 +449,46 @@ public class Starship_AI_Adv : MonoBehaviour
         NextTarget = System_Waypoints.GetBetterPointInDistance(transform, betterPointMinDistance); 
     }
 
-    int v;
-    int breaki = 0;
+    int i;
+    private KeyValuePair<float, Transform>[] pointsPairs;
     private void UpdatePath(Vector3 Target)
     {
-        v = 0;
+        i = 0;
 
         NavMesh.CalculatePath(transform.position, Target, NavMesh.AllAreas, NavMeshPath);
 
         if (NavMeshPath.status != NavMeshPathStatus.PathInvalid)
         {
-            breaki = 0;
-            while (v < NavMeshPath.corners.Length - 1 && Vector3.Distance(NavMeshPath.corners[v], transform.position) < MinDistanceToNavMeshCorner)
-            {
-                v += 1;
-            }
-            if (NavMeshPath.corners.Length > 0)
-            {
-                MoveTargetV3 = NavMeshPath.corners[v];
-            }
-            //for (int i = 1; i < NavMeshPath.corners.Length; ++i)
-            //{
-            //    Debug.DrawLine(NavMeshPath.corners[i-1], NavMeshPath.corners[i], Color.blue);
-            //}
+            MoveTargetOnNavMesh();
         }
-        else if (breaki < 2)
+        else
         {
-            breaki += 1;
-            UpdatePath(System_Waypoints.GetClosestToTargetPointPosition(Target));
+            pointsPairs = System_Waypoints.GetPointsClose(Target);
+            while (i < pointsPairs.Length && NavMeshPath.status == NavMeshPathStatus.PathInvalid)
+            {
+                NavMesh.CalculatePath(transform.position, pointsPairs[i].Value.position, NavMesh.AllAreas, NavMeshPath);
+                i += 1;
+            }
+            MoveTargetOnNavMesh();
         }
+    }
+
+    int v;
+    private void MoveTargetOnNavMesh()
+    {
+        v = 0;
+        while (v < NavMeshPath.corners.Length - 1 && Vector3.Distance(NavMeshPath.corners[v], transform.position) < MinDistanceToNavMeshCorner)
+        {
+            v += 1;
+        }
+        if (NavMeshPath.corners.Length > 0)
+        {
+            MoveTargetV3 = NavMeshPath.corners[v];
+        }
+        //for (int i = 1; i < NavMeshPath.corners.Length; ++i)
+        //{
+        //    Debug.DrawLine(NavMeshPath.corners[i-1], NavMeshPath.corners[i], Color.blue);
+        //}
     }
 
     #endregion

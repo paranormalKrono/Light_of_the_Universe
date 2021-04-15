@@ -6,6 +6,7 @@ public class Equation : MonoBehaviour
     internal string equation;
     internal string task;
 
+    internal bool isWrong;
     internal bool isRight;
     internal Text taskText;
     internal Text text;
@@ -14,7 +15,9 @@ public class Equation : MonoBehaviour
     internal Text nothingText;
     internal Text rightText;
     internal Text wrongText;
+    internal Text expirienceText;
 
+    [SerializeField] internal TheoryThemes theoryTheme = TheoryThemes.Binary;
     [SerializeField] internal int FirstOperandRange1 = 10;
     [SerializeField] internal int FirstOperandRange2 = 50;
     [SerializeField] internal NumberSystem FirstOperandNumberSystem = NumberSystem.Binary;
@@ -32,11 +35,12 @@ public class Equation : MonoBehaviour
     [SerializeField] internal NumberSystem AnswerNumberSystem = NumberSystem.Decimal;
     internal string AnswerText;
 
-    internal delegate void CheckAnswersDelegate();
-    internal CheckAnswersDelegate checkAnswersEvent;
+    private float difficultyKoef;
 
-    internal void Initialise(int ID)
+    internal void Initialise(int ID, float difficultyKoef)
     {
+        this.difficultyKoef = difficultyKoef;
+
         taskText = transform.Find("Text Task").GetComponent<Text>();
         text = transform.Find("Text Equation").GetComponent<Text>();
         inputField = transform.GetComponentInChildren<InputField>();
@@ -44,8 +48,10 @@ public class Equation : MonoBehaviour
         nothingText = transform.Find("Text Gray").GetComponent<Text>();
         rightText = transform.Find("Text Right").GetComponent<Text>();
         wrongText = transform.Find("Text Wrong").GetComponent<Text>();
+        expirienceText = transform.Find("Text Expirience").GetComponent<Text>();
+        expirienceText.text = "ничего";
 
-        Answer = NumberSystemManager.RandomDecimal(FirstOperandRange1, FirstOperandRange2);
+        Answer = NumberSystemManager.RandomDecimal((int)(FirstOperandRange1 * difficultyKoef), (int)(FirstOperandRange2 * difficultyKoef));
         task = (ID + 1) + " выражение: (" + NumberSystemManager.NumberSystemToRussian(FirstOperandNumberSystem) + ")";
         equation = NumberSystemManager.DecimalTo(Answer, FirstOperandNumberSystem) + "(" + NumberSystemManager.NumberSystemToInt(FirstOperandNumberSystem) + ")";
 
@@ -53,7 +59,7 @@ public class Equation : MonoBehaviour
         {
             int newOperand;
             string Number;
-            NumberSystemManager.RandomDecimalTo(operand.Range1, operand.Range2, out newOperand, out Number, operand.OperandNumberSystem);
+            NumberSystemManager.RandomDecimalTo((int)(operand.Range1 * difficultyKoef), (int)(operand.Range2 * difficultyKoef), out newOperand, out Number, operand.OperandNumberSystem);
             switch (operand.operation)
             {
                 case Operation.Plus:
@@ -96,15 +102,43 @@ public class Equation : MonoBehaviour
 
                 inputField.interactable = false;
                 button.interactable = false;
-                isRight = true;
                 nothingText.enabled = false;
                 wrongText.enabled = false;
                 rightText.enabled = true;
 
-                checkAnswersEvent();
+                isRight = true;
+                if (isWrong)
+                {
+                    expirienceText.text = "Опыт получен +" + (int)(7.5f * difficultyKoef) + " (допущена ошибка)";
+                }
+                else
+                {
+                    expirienceText.text = "Опыт получен +" + (int)(10 * difficultyKoef);
+                }
+                EducationStatistics.statistics.Experience += (int)(10 * difficultyKoef);
+
+                EducationStatistics.statistics.ThemeTasksDatas[(int)theoryTheme].CorrectAnswers += 1;
+
+                EducationStatistics.SaveStatistics();
             }
             else
             {
+                if (!isWrong)
+                {
+
+                    if (EducationStatistics.statistics.Experience - (int)(2.5f * difficultyKoef) > 0)
+                    {
+                        expirienceText.text = "Опыт потерян -" + (int)(2.5f * difficultyKoef);
+                        EducationStatistics.statistics.Experience -= (int)(2.5f * difficultyKoef);
+                    }
+                    else
+                    {
+                        expirienceText.text = "Опыт не потерян";
+                    }
+                    EducationStatistics.statistics.ThemeTasksDatas[(int)theoryTheme].WrongAnswers += 1;
+                    EducationStatistics.SaveStatistics();
+                    isWrong = true;
+                }
                 nothingText.enabled = false;
                 wrongText.enabled = true;
             }

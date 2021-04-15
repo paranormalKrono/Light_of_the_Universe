@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
         {
             isCreated = true;
             Saves.Initialise();
+            EducationStatistics.Initialise();
             SceneController.Initialise();
             GameObject G = Instantiate(Resources.Load<GameObject>(GameManagerPath));
             DontDestroyOnLoad(G);

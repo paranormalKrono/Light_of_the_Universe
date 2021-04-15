@@ -2,33 +2,26 @@
 
 public class System_Equation : MonoBehaviour
 {
-    internal delegate void EquationsRightDelegate();
-    internal EquationsRightDelegate RightEvent;
     internal Equation[] Equations;
 
-    void Awake()
+    private void Awake()
     {
         Equations = GetComponentsInChildren<Equation>();
+        float dk = EducationStatistics.statistics.GeneralDifficultyCoefficient();
         for (int i = 0; i < Equations.Length; ++i)
         {
-            Equations[i].checkAnswersEvent = CheckRight;
-            Equations[i].Initialise(i);
+            Equations[i].Initialise(i, dk);
         }
     }
     internal void CheckRight()
     {
-        bool b = true;
         foreach (Equation Eq in Equations)
         {
-            if (!Eq.isRight)
+            if (Eq.isRight == false && Eq.isWrong == false)
             {
-                b = false;
-                break;
+                EducationStatistics.statistics.ThemeTasksDatas[(int)Eq.theoryTheme].WrongAnswers += 1;
             }
         }
-        if (b)
-        {
-            RightEvent();
-        }
+        EducationStatistics.SaveStatistics();
     }
 }
